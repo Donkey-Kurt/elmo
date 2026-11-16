@@ -164,15 +164,15 @@ export const CachedPromptChart = memo(function CachedPromptChart({
 										<div className="h-2 w-2 rounded-full bg-muted-foreground/30 animate-pulse [animation-delay:0.2s]" />
 										<div className="h-2 w-2 rounded-full bg-muted-foreground/30 animate-pulse [animation-delay:0.4s]" />
 									</div>
-									<p className="text-sm font-medium text-muted-foreground">Evaluating for the first time</p>
-									<p className="text-xs text-muted-foreground/70 mt-1">Results will appear here shortly.</p>
+									<p className="text-sm font-medium text-muted-foreground">首次评估中</p>
+									<p className="text-xs text-muted-foreground/70 mt-1">结果稍后将在此处显示。</p>
 								</>
 							) : (
 								<>
 									<PlaceholderBars heights={[20, 35, 15, 45, 25, 40, 30, 50, 20, 35, 45, 28]} />
-									<p className="text-sm font-medium text-muted-foreground">No data in selected time range</p>
+									<p className="text-sm font-medium text-muted-foreground">所选时间范围内暂无数据</p>
 									<p className="text-xs text-muted-foreground/70 mt-1">
-										Try selecting a longer time period to see historical data.
+										请尝试选择更长的时间范围以查看历史数据。
 									</p>
 								</>
 							)}
@@ -196,9 +196,9 @@ export const CachedPromptChart = memo(function CachedPromptChart({
 						<div className="h-[250px] flex items-center justify-center">
 							<div className="flex flex-col items-center text-center max-w-xs">
 								<PlaceholderBars heights={[10, 15, 8, 12, 10, 14, 8, 12, 10, 15, 12, 9]} />
-								<p className="text-sm font-medium text-muted-foreground">No brands found in responses</p>
+								<p className="text-sm font-medium text-muted-foreground">回答中未发现品牌</p>
 								<p className="text-xs text-muted-foreground/70 mt-1">
-									Your brand and competitors weren't mentioned in the evaluated responses for this prompt.
+									该提示词的 AI 回答中未提及你的品牌和竞品。
 								</p>
 							</div>
 						</div>
@@ -231,7 +231,7 @@ export const CachedPromptChart = memo(function CachedPromptChart({
 							variant={visibilityBadgeProps(lastBrandVisibility).variant}
 							className={visibilityBadgeProps(lastBrandVisibility).className}
 						>
-							{lastBrandVisibility}% Visibility
+							{lastBrandVisibility}% 可见度
 						</Badge>
 					)}
 				</CardHeader>

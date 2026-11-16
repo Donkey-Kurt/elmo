@@ -20,8 +20,8 @@ const OPENAPI_PATH = "/api/v1/openapi.json";
 const ApiReference = lazy(() => import("@/components/api-reference"));
 
 export const Route = createFileRoute("/_authed/app/org/$org/settings/api")({
-	staticData: { crumb: "API Docs" },
-	head: pageHead({ description: "Browse the REST API this deployment serves." }),
+	staticData: { crumb: "API 文档" },
+	head: pageHead({ description: "浏览本部署提供的 REST API。" }),
 	component: ApiSettingsPage,
 });
 
@@ -34,15 +34,15 @@ function ApiSettingsPage() {
 	return (
 		<div className="space-y-6">
 			<header className="space-y-1">
-				<h1 className="text-3xl font-bold">API Docs</h1>
-				<p className="max-w-2xl text-muted-foreground">Programmatic interface for {appName}.</p>
+				<h1 className="text-3xl font-bold">API 文档</h1>
+				<p className="max-w-2xl text-muted-foreground">以编程方式访问 {appName} 的接口。</p>
 			</header>
 
-			<DemoModeAlert>API access is disabled in demo mode.</DemoModeAlert>
+			<DemoModeAlert>演示模式下已禁用 API 访问。</DemoModeAlert>
 
 			<div className="max-w-xl space-y-2">
-				<span className="text-sm font-medium">Base URL</span>
-				<CopyField value={baseUrl} label="Base URL" />
+				<span className="text-sm font-medium">基础 URL</span>
+				<CopyField value={baseUrl} label="基础 URL" />
 			</div>
 
 			{/* The SDKs are published under Elmo's name, so a whitelabel deployment doesn't advertise them. */}
@@ -92,9 +92,9 @@ function SdkSection({ baseUrl }: { baseUrl: string }) {
 	return (
 		<section className="max-w-4xl space-y-3">
 			<div className="space-y-1">
-				<h2 className="text-lg font-semibold">SDKs</h2>
+				<h2 className="text-lg font-semibold">SDK</h2>
 				<p className="text-sm text-muted-foreground">
-					Typed clients for this API. Set the base URL — the SDKs can't know which deployment to call.
+					本 API 的类型化客户端。请先设置基础 URL —— SDK 无法自行判断该调用哪个部署。
 				</p>
 			</div>
 			<Tabs defaultValue={sdks[0].value}>

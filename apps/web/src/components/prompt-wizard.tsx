@@ -52,7 +52,7 @@ const EditableTagsInput = memo(
 	({
 		items,
 		onValueChange,
-		placeholder = "Add item...",
+		placeholder = "添加项…",
 		maxItems = 10,
 		normalizeValue,
 		pasteSplitter,
@@ -81,7 +81,7 @@ const EditableTagsInput = memo(
 				<strong>
 					{items.length}/{maxItems}
 				</strong>{" "}
-				{items.length >= maxItems ? "items added. Remove an item to add a new one." : "items entered."}
+				{items.length >= maxItems ? "项已达上限，移除一项后可再添加。" : "项已输入。"}
 			</p>
 		</div>
 	),
@@ -111,7 +111,7 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 	const analysis = usePolledBrandJob({
 		queryKey: ["analyze-brand", brandId],
 		start: () => {
-			if (!brand?.id || !brand.website) throw new Error("Brand isn't loaded yet.");
+			if (!brand?.id || !brand.website) throw new Error("品牌信息尚未加载完成。");
 			return startAnalyzeBrandFn({ data: { brandId: brand.id, website: brand.website, brandName: brand.name } });
 		},
 		poll: () => getAnalyzeBrandStatusFn({ data: { brandId: brandId! } }),
@@ -145,8 +145,8 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 			});
 		},
 		onError: setError,
-		startErrorFallback: "Analysis failed",
-		timeoutMessage: "Brand analysis timed out. Please try again.",
+		startErrorFallback: "分析失败",
+		timeoutMessage: "品牌分析超时，请重试。",
 	});
 
 	const handleAnalyze = () => {
@@ -224,7 +224,7 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 
 			onComplete();
 		} catch (err) {
-			setSubmitError(writeError(err, "Failed to save"));
+			setSubmitError(writeError(err, "保存失败"));
 		} finally {
 			setIsSaving(false);
 		}
@@ -234,8 +234,8 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 		return (
 			<div className="max-w-2xl mx-auto space-y-3">
 				<p className="text-sm text-muted-foreground">
-					We'll analyze <strong>{brand?.website}</strong> using web search to suggest competitors, additional
-					domains/aliases, and a starter set of AI prompts to track.
+					我们将通过网络搜索分析 <strong>{brand?.website}</strong>，为你推荐竞品、额外域名/别名，以及一组可供追踪的初始 AI
+					提示词。
 				</p>
 				{error && (
 					<div className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-2 text-sm text-red-800">
@@ -253,17 +253,17 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 					>
 						{analysis.running ? (
 							<>
-								<Spinner /> Analyzing brand…
+								<Spinner /> 正在分析品牌…
 							</>
 						) : (
 							<>
-								<Play className="h-4 w-4" /> Analyze brand
+								<Play className="h-4 w-4" /> 分析品牌
 							</>
 						)}
 					</Button>
 					{analysis.running && (
 						<Button variant="outline" onClick={analysis.cancel} className="cursor-pointer">
-							Cancel
+							取消
 						</Button>
 					)}
 				</div>
@@ -274,17 +274,15 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 	return (
 		<div className="max-w-2xl mx-auto space-y-6">
 			<div className="space-y-2">
-				<h2 className="text-2xl font-bold">Brand details</h2>
-				<p className="text-muted-foreground">
-					Confirm the brand identity, additional domains, and aliases used for tracking.
-				</p>
+				<h2 className="text-2xl font-bold">品牌详情</h2>
+				<p className="text-muted-foreground">确认用于追踪的品牌身份、额外域名与别名。</p>
 				<div className="space-y-3">
 					<div>
-						<p className="text-xs text-muted-foreground">Brand name</p>
-						<Input value={data.brandName} onChange={(e) => updateBrandName(e.target.value)} placeholder="Brand name" />
+						<p className="text-xs text-muted-foreground">品牌名称</p>
+						<Input value={data.brandName} onChange={(e) => updateBrandName(e.target.value)} placeholder="品牌名称" />
 					</div>
 					<div>
-						<p className="text-xs text-muted-foreground">Website URL</p>
+						<p className="text-xs text-muted-foreground">网站链接地址</p>
 						<Input
 							type="url"
 							value={data.website}
@@ -293,11 +291,11 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 						/>
 					</div>
 					<div>
-						<p className="text-xs text-muted-foreground">Additional domains</p>
+						<p className="text-xs text-muted-foreground">额外域名</p>
 						<EditableTagsInput
 							items={data.additionalDomains}
 							onValueChange={updateAdditionalDomains}
-							placeholder="Add domain..."
+							placeholder="添加域名…"
 							maxItems={10}
 							normalizeValue={normalizeDomain}
 							pasteSplitter={DOMAIN_PASTE_SPLITTER}
@@ -305,11 +303,11 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 						/>
 					</div>
 					<div>
-						<p className="text-xs text-muted-foreground">Aliases</p>
+						<p className="text-xs text-muted-foreground">别名</p>
 						<EditableTagsInput
 							items={data.aliases}
 							onValueChange={updateAliases}
-							placeholder="Add alias..."
+							placeholder="添加别名…"
 							maxItems={10}
 						/>
 					</div>
@@ -320,8 +318,8 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 
 			<div className="space-y-3">
 				<div>
-					<h2 className="text-2xl font-bold">Competitors</h2>
-					<p className="text-muted-foreground">Companies you want tracked alongside your brand.</p>
+					<h2 className="text-2xl font-bold">竞品</h2>
+					<p className="text-muted-foreground">希望与你的品牌一同追踪的公司。</p>
 				</div>
 				<CompetitorsEditor competitors={data.competitors} onChange={updateCompetitors} disabled={isSaving} />
 			</div>
@@ -330,10 +328,9 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 
 			<div className="space-y-3">
 				<div>
-					<h2 className="text-2xl font-bold">Prompts</h2>
+					<h2 className="text-2xl font-bold">提示词</h2>
 					<p className="text-muted-foreground">
-						Pick which AI tracking prompts to start with. Untick any you don't want, edit tags, or add your own at the
-						bottom.
+						选择要开始追踪的 AI 提示词。取消勾选不需要的项、编辑标签，或在底部添加自定义提示词。
 					</p>
 				</div>
 				<PromptsListEditor prompts={data.prompts} onChange={updatePrompts} showSystemTags={false} />
@@ -355,11 +352,11 @@ export default function PromptWizard({ onComplete }: PromptWizardProps) {
 			>
 				{isSaving ? (
 					<>
-						<Spinner /> Saving…
+						<Spinner /> 保存中…
 					</>
 				) : (
 					<>
-						<Rocket className="h-4 w-4" /> Start tracking ({previewCounts.totalNew} new prompts)
+						<Rocket className="h-4 w-4" /> 开始追踪（{previewCounts.totalNew} 条新提示词）
 					</>
 				)}
 			</Button>

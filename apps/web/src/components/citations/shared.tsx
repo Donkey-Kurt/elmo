@@ -64,7 +64,7 @@ export function UnderlineTabs<T extends string>({
 	onSelect: (key: T) => void;
 }) {
 	return (
-		<nav className="-mb-px flex gap-4 overflow-x-auto border-b border-border" aria-label="Tabs">
+		<nav className="-mb-px flex gap-4 overflow-x-auto border-b border-border" aria-label="标签页">
 			{tabs.map(({ key, label }) => (
 				<button
 					key={key}

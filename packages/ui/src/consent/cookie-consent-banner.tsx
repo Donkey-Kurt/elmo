@@ -67,7 +67,7 @@ export function CookieConsentBanner({ consentRequired, policyHref }: { consentRe
 
 	return (
 		<section
-			aria-label="Cookie consent"
+			aria-label="Cookie 同意"
 			className="fixed inset-x-3 bottom-3 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200 sm:inset-x-auto sm:bottom-4 sm:left-4 sm:max-w-sm"
 		>
 			<div className="rounded-lg border bg-popover p-4 text-popover-foreground shadow-lg">

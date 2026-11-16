@@ -780,9 +780,9 @@ describe("getSoVColor", () => {
 
 describe("getSoVLevel", () => {
 	it("returns correct levels for SoV ranges", () => {
-		expect(getSoVLevel(null).label).toBe("No Data");
-		expect(getSoVLevel(10).label).toBe("Low");
-		expect(getSoVLevel(30).label).toBe("Moderate");
-		expect(getSoVLevel(50).label).toBe("Strong");
+		expect(getSoVLevel(null).label).toBe("无数据");
+		expect(getSoVLevel(10).label).toBe("偏低");
+		expect(getSoVLevel(30).label).toBe("中等");
+		expect(getSoVLevel(50).label).toBe("强势");
 	});
 });

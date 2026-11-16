@@ -27,8 +27,8 @@ export function DefaultErrorComponent({ error }: ErrorComponentProps) {
 
 	return (
 		<FullPageCard
-			title="Something went wrong"
-			subtitle="An unexpected error occurred while loading this page."
+			title="出错了"
+			subtitle="加载本页时发生了意外错误。"
 			showBackButton={true}
 		/>
 	);

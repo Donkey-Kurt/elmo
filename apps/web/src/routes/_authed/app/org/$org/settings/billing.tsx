@@ -60,7 +60,7 @@ function BillingSettingsPage() {
 			returnUrl: window.location.href,
 		});
 		if (portalError) {
-			setError(portalError.message ?? "Could not open the billing portal");
+			setError(portalError.message ?? "无法打开计费门户");
 			setBusy(null);
 		}
 	};
@@ -80,7 +80,7 @@ function BillingSettingsPage() {
 			disableRedirect: false,
 		});
 		if (upgradeError) {
-			setError(upgradeError.message ?? "Could not change the plan");
+			setError(upgradeError.message ?? "无法变更套餐");
 		}
 		setBusy(null);
 		router.invalidate();
@@ -93,8 +93,8 @@ function BillingSettingsPage() {
 	return (
 		<div className="max-w-6xl space-y-8">
 			<div>
-				<h1 className="text-3xl font-bold">Billing</h1>
-				<p className="text-muted-foreground">Your plan, what it costs, and how much of it you're using.</p>
+				<h1 className="text-3xl font-bold">计费</h1>
+				<p className="text-muted-foreground">你的套餐、费用与用量。</p>
 			</div>
 
 			<StandingAlerts state={state} error={error} />
@@ -143,33 +143,30 @@ function StandingAlerts({ state, error }: { state: BillingState; error: string |
 		<div className="space-y-3">
 			{entitlements.standing === "grace" && (
 				<Alert variant="destructive">
-					<AlertTitle>Payment failed</AlertTitle>
+					<AlertTitle>支付失败</AlertTitle>
 					<AlertDescription>
-						We couldn't renew your subscription. Tracking continues for a few more days while Stripe retries — update
-						your card in the billing portal to avoid a pause.
+						我们无法续订你的订阅。Stripe 重试期间追踪还会继续几天 —— 请在计费门户中更新银行卡，以免追踪暂停。
 					</AlertDescription>
 				</Alert>
 			)}
 			{entitlements.standing === "paused" && (
 				<Alert variant="destructive">
-					<AlertTitle>Tracking paused</AlertTitle>
+					<AlertTitle>追踪已暂停</AlertTitle>
 					<AlertDescription>
-						Payment is more than a week overdue, so prompt tracking is paused. Your data stays readable; fix the payment
-						in the billing portal and tracking resumes automatically.
+						付款已逾期一周以上，因此提示词追踪已暂停。你的数据仍可查看；在计费门户中补上付款后，追踪会自动恢复。
 					</AlertDescription>
 				</Alert>
 			)}
 			{entitlements.standing === "none" && (
 				<Alert variant="destructive">
-					<AlertTitle>No active subscription</AlertTitle>
-					<AlertDescription>Tracking is stopped until a plan is chosen.</AlertDescription>
+					<AlertTitle>没有生效中的订阅</AlertTitle>
+					<AlertDescription>选择套餐前，追踪将保持停止。</AlertDescription>
 				</Alert>
 			)}
 			{cancelling && (
 				<Alert>
 					<AlertDescription>
-						Your subscription is set to cancel on {formatDate(subscription.periodEnd)}. You can restore it from the
-						billing portal.
+					你的订阅已设为在 {formatDate(subscription.periodEnd)} 取消。你可以从计费门户恢复订阅。
 					</AlertDescription>
 				</Alert>
 			)}
@@ -260,7 +257,7 @@ function SubscriptionSummary({
 			<div className="space-y-1">
 				<div className="flex flex-wrap items-center gap-2">
 					<h2 className="font-semibold">
-						{entitlements.planKey === null ? "No plan" : `${planDisplayName(entitlements.planKey)} plan`}
+						{entitlements.planKey === null ? "无套餐" : `${planDisplayName(entitlements.planKey)} plan`}
 					</h2>
 					{subscription && (
 						<Badge variant={entitlements.standing === "active" ? "secondary" : "destructive"}>
@@ -297,7 +294,7 @@ function SubscriptionSummary({
 					/>
 				</div>
 			) : (
-				<p className="text-sm text-muted-foreground">Only organization admins can change the plan.</p>
+				<p className="text-sm text-muted-foreground">只有组织管理员才能变更套餐。</p>
 			)}
 		</div>
 	);
@@ -312,8 +309,8 @@ function UsagePanel({ state }: { state: BillingState }) {
 	return (
 		<div className="flex flex-col gap-5 border-t p-6 md:border-t-0 md:border-l">
 			<h2 className="font-semibold">Usage</h2>
-			<UsageMeter label="Brands" used={state.usage.brands} limit={entitlements.maxBrands} />
-			<UsageMeter label="Tracked prompts" used={state.usage.enabledPrompts} limit={entitlements.maxPrompts} />
+			<UsageMeter label="品牌" used={state.usage.brands} limit={entitlements.maxBrands} />
+			<UsageMeter label="追踪的提示词" used={state.usage.enabledPrompts} limit={entitlements.maxPrompts} />
 			{entitlements.premiumPool > 0 && (
 				<UsageMeter
 					label={
@@ -389,7 +386,7 @@ function PremiumAddonSection({
 		<div className="space-y-4 border-t p-6">
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<div>
-					<h2 className="font-semibold">Extra premium pairings</h2>
+					<h2 className="font-semibold">额外的高级配对</h2>
 					<p className="text-sm text-muted-foreground">
 						{hasSubscription
 							? `$${PREMIUM_ADDON_MONTHLY_USD} per pairing per month, beyond what your plan includes.`
@@ -398,7 +395,7 @@ function PremiumAddonSection({
 				</div>
 				<div className="flex items-center gap-2">
 					<Input
-						aria-label="Purchased pairings"
+						aria-label="已购买配对"
 						type="number"
 						min={0}
 						max={1000}

@@ -25,19 +25,19 @@ const score = (value: number) => `${Math.round(value * 100)}`;
 
 export const METRIC_META: Record<LandscapeMetric, MetricMeta> = {
 	visibility: {
-		label: "AI Visibility",
-		short: "Visibility",
-		info: "The share of AI answers to your prompts that mention your brand.",
+		label: "AI 可见度",
+		short: "可见度",
+		info: "在所有针对你提示词的 AI 回答中，提及你品牌的比例。",
 		format: percent,
 		formatChange: points,
 		grade: (value) => (value > 0.75 ? "good" : value > 0.45 ? "fair" : "poor"),
 		page: "/app/org/$org/brand/$brand/visibility",
 	},
 	share: {
-		label: "Share of Voice",
-		short: "Share of Voice",
+		label: "声量份额",
+		short: "声量份额",
 		abbr: "SoV",
-		info: "Your brand's share of every mention of you and your tracked competitors.",
+		info: "在你与所追踪竞品的全部提及中，你的品牌所占的份额。",
 		format: percent,
 		formatChange: points,
 		// A raw share depends on how many competitors are tracked, so it's judged by standing instead.
@@ -45,9 +45,9 @@ export const METRIC_META: Record<LandscapeMetric, MetricMeta> = {
 		page: "/app/org/$org/brand/$brand/share-of-voice",
 	},
 	sentiment: {
-		label: "Sentiment",
-		short: "Sentiment",
-		info: "How favorably AI talks about your brand when it mentions you, from 0 to 100. 50 is neutral; higher means more praise than criticism, lower means more criticism than praise.",
+		label: "情绪倾向",
+		short: "情绪倾向",
+		info: "AI 提及你品牌时的正面程度，0 到 100。50 为中性；越高表示褒多于贬，越低表示贬多于褒。",
 		format: score,
 		formatChange: (change) => `${Math.abs(Math.round(change * 100))}`,
 		// Neutral answers alone score 50: fair, since only criticism outweighing praise is poor.
@@ -55,9 +55,9 @@ export const METRIC_META: Record<LandscapeMetric, MetricMeta> = {
 		page: "/app/org/$org/brand/$brand/sentiment",
 	},
 	position: {
-		label: "Position",
-		short: "Position",
-		info: "Where your brand comes among the tracked companies an answer names, averaged over each prompt's latest answers. 1 means named first.",
+		label: "排名位置",
+		short: "位置",
+		info: "在回答所提及的受追踪公司中，你的品牌排第几位，按各提示词的最新回答取平均。1 表示被排在首位。",
 		format: (value) => value.toFixed(1),
 		formatChange: (change) => Math.abs(change).toFixed(1),
 		grade: (value) => (value <= 1.5 ? "good" : value <= 2.5 ? "fair" : "poor"),

@@ -158,7 +158,7 @@ export function SentimentFilterCard({
 						{clear > 0 ? (
 							<span className="font-semibold tabular-nums">{percent(counts.positive, clear)} positive</span>
 						) : (
-							<span className="font-semibold">No sentiment yet</span>
+							<span className="font-semibold">还没有情绪数据</span>
 						)}
 						<span className="text-muted-foreground"> across {counts.all.toLocaleString()} answers</span>
 					</div>
@@ -183,7 +183,7 @@ export function SentimentFilterCard({
 						dimmed={Boolean(value) && value !== "unmentioned"}
 						onClick={() => toggle("unmentioned")}
 						dot={<span className="size-2 rounded-full border border-muted-foreground/60" />}
-						label="Doesn't mention you"
+						label="未提及你"
 						count={counts.unmentioned}
 					/>
 				</div>

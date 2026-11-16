@@ -34,7 +34,7 @@ export const Route = createFileRoute("/auth/register")({
 	head: ({ match }) => {
 		const appName = getAppName(match);
 		return {
-			meta: [{ title: buildTitle("Sign up", { appName }) }, { name: "description", content: "Create an account." }],
+			meta: [{ title: buildTitle("注册", { appName }) }, { name: "description", content: "创建账户。" }],
 		};
 	},
 	component: RegisterPage,
@@ -99,7 +99,7 @@ export function RegisterForm({
 
 			if (result.error) {
 				setError(
-					isCaptchaRejection(result.error) ? CAPTCHA_FAILED_MESSAGE : (result.error.message ?? "Registration failed"),
+					isCaptchaRejection(result.error) ? CAPTCHA_FAILED_MESSAGE : (result.error.message ?? "注册失败"),
 				);
 				setLoading(false);
 				return;
@@ -113,7 +113,7 @@ export function RegisterForm({
 
 			navigate({ to: returnTo ?? "/app" });
 		} catch (err) {
-			setError(err instanceof CaptchaError ? err.message : "Something went wrong. Please try again.");
+			setError(err instanceof CaptchaError ? err.message : "出错了，请重试。");
 			setLoading(false);
 		}
 	}
@@ -124,11 +124,11 @@ export function RegisterForm({
 
 	return (
 		<AuthSplitLayout
-			title={isCloud ? "Start tracking your AI visibility" : "Create your admin account"}
+			title={isCloud ? "开始追踪你的 AI 可见度" : "创建你的管理员账户"}
 			subtitle={
 				isCloud
-					? `Plans start at $${CLOUD_ENTRY_PRICE_USD}/mo. Cancel any time.`
-					: "This is the owner account for your self-hosted instance."
+					? `套餐每月 $${CLOUD_ENTRY_PRICE_USD} 起，随时可取消。`
+					: "这是你的自托管实例的所有者账户。"
 			}
 			pitch={<SalesPanel variant={isCloud ? "cloud" : "self-hosted"} source={source} />}
 			footer={<SalesFooterLinks source={source} />}
@@ -142,12 +142,12 @@ export function RegisterForm({
 						onClick={() => authClient.signIn.social({ provider: "google", callbackURL: safeReturnTo(returnTo) })}
 					>
 						<IconBrandGoogle className="size-4" />
-						Continue with Google
+						使用 Google 继续
 					</Button>
 					<LegalConsentNotice action="continuing with Google" />
 					<div className="flex items-center gap-3">
 						<Separator className="flex-1" />
-						<span className="text-xs text-muted-foreground">or</span>
+						<span className="text-xs text-muted-foreground">或</span>
 						<Separator className="flex-1" />
 					</div>
 				</div>
@@ -159,11 +159,11 @@ export function RegisterForm({
 					</Alert>
 				)}
 				<div className="space-y-2">
-					<Label htmlFor="name">Name</Label>
+					<Label htmlFor="name">姓名</Label>
 					<Input
 						id="name"
 						type="text"
-						placeholder="Your name"
+						placeholder="你的姓名"
 						value={name}
 						onChange={(e) => setName(e.target.value)}
 						required
@@ -172,7 +172,7 @@ export function RegisterForm({
 					/>
 				</div>
 				<div className="space-y-2">
-					<Label htmlFor="email">Email</Label>
+					<Label htmlFor="email">邮箱</Label>
 					<Input
 						id="email"
 						type="email"
@@ -184,11 +184,11 @@ export function RegisterForm({
 					/>
 				</div>
 				<div className="space-y-2">
-					<Label htmlFor="password">Password</Label>
+					<Label htmlFor="password">密码</Label>
 					<Input
 						id="password"
 						type="password"
-						placeholder="Create a password"
+						placeholder="设置密码"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						required
@@ -198,19 +198,19 @@ export function RegisterForm({
 				</div>
 				{turnstile.widget}
 				<Button type="submit" className="w-full" disabled={loading}>
-					{loading ? "Creating account..." : "Create account"}
+					{loading ? "正在创建账户…" : "创建账户"}
 				</Button>
 				<LegalConsentNotice action="creating an account" />
 			</form>
 			{hasUsers && (
 				<p className="text-sm text-muted-foreground pt-4">
-					Already have an account?{" "}
+					已有账户？{" "}
 					<Link
 						to="/auth/login"
 						search={{ ...(returnTo ? { returnTo } : {}), ...attribution }}
 						className="text-primary hover:underline font-medium"
 					>
-						Sign in
+						登录
 					</Link>
 				</p>
 			)}
@@ -233,19 +233,19 @@ function CheckYourEmail({ email, returnTo }: { email: string; returnTo?: string 
 				fetchOptions: { headers: await turnstile.getCaptchaHeaders() },
 			});
 			if (isCaptchaRejection(result.error)) setResendError(CAPTCHA_FAILED_MESSAGE);
-			else if (result.error) setResendError(result.error.message ?? "Couldn't resend the email. Please try again.");
+			else if (result.error) setResendError(result.error.message ?? "重新发送邮件失败，请重试。");
 		} catch (err) {
-			setResendError(err instanceof CaptchaError ? err.message : "Something went wrong. Please try again.");
+			setResendError(err instanceof CaptchaError ? err.message : "出错了，请重试。");
 		} finally {
 			setResending(false);
 		}
 	}
 
 	return (
-		<FullPageCard title="Check your email" subtitle={`We sent a verification link to ${email}`}>
+		<FullPageCard title="查收邮箱" subtitle={`我们已向 ${email} 发送了一条验证链接`}>
 			<div className="space-y-4 w-full">
 				<p className="text-sm text-muted-foreground text-center">
-					Click the link in the email to verify your address and get started. The link expires, so verify soon.
+					点击邮件中的链接验证你的邮箱地址并开始使用。链接会过期，请尽快验证。
 				</p>
 				{resendError && (
 					<Alert variant="destructive">
@@ -254,7 +254,7 @@ function CheckYourEmail({ email, returnTo }: { email: string; returnTo?: string 
 				)}
 				{turnstile.widget}
 				<Button type="button" variant="outline" className="w-full" onClick={handleResend} disabled={resending}>
-					{resending ? "Sending..." : "Resend verification email"}
+					{resending ? "发送中…" : "重新发送验证邮件"}
 				</Button>
 			</div>
 		</FullPageCard>

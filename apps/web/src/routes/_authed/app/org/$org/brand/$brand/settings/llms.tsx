@@ -33,7 +33,7 @@ import { getModelPickerStateFn, type ModelPickerState, updateEnabledModelsFn } f
 import { getPremiumPoolFn, type PremiumPool } from "@/server/premium-tracking";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/settings/llms")({
-	staticData: { crumb: "LLMs" },
+	staticData: { crumb: "模型" },
 	loader: async ({ context }): Promise<{ picker: ModelPickerState; premium: PremiumPool }> => {
 		const [picker, premium] = await Promise.all([
 			getModelPickerStateFn({ data: { brandId: context.brandId } }),
@@ -41,7 +41,7 @@ export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/setting
 		]);
 		return { picker, premium };
 	},
-	head: pageHead({ description: "Choose which AI models this brand is tracked against." }),
+	head: pageHead({ description: "选择该品牌要在哪些 AI 模型上追踪。" }),
 	component: LlmsSettingsPage,
 });
 
@@ -72,7 +72,7 @@ function RetiredTargetsAlert({ targets }: { targets: ModelPickerState["retiredTa
 	return (
 		<Alert>
 			<IconAlertTriangle />
-			<AlertTitle>Some Scrape Targets No Longer Run</AlertTitle>
+			<AlertTitle>部分抓取目标已不再运行</AlertTitle>
 			<AlertDescription>
 				<p>
 					Elmo skips these <code className="font-mono text-xs">SCRAPE_TARGETS</code> entries, so they collect no new
@@ -104,10 +104,10 @@ function NoPlatformsCard() {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Tracked platforms</CardTitle>
+				<CardTitle>追踪的平台</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<p className="text-sm text-muted-foreground">This brand is not tracked on any platform yet.</p>
+				<p className="text-sm text-muted-foreground">该品牌尚未在任何平台追踪。</p>
 			</CardContent>
 		</Card>
 	);
@@ -275,7 +275,7 @@ function UpgradePanel({ options }: { options: ModelPickerState["upgradeOptions"]
 	const organizationParams = useOrganizationParams();
 	return (
 		<div className="space-y-3 rounded-md border border-dashed p-4">
-			<p className="text-sm font-medium">Upgrade to track more platforms</p>
+			<p className="text-sm font-medium">升级以追踪更多平台</p>
 			<div className="space-y-2.5">
 				{groupPlatformOptions(options).map((group) => (
 					<div key={group.id} className="space-y-1.5">
@@ -390,7 +390,7 @@ function AddPlatformsCard({ platforms }: { platforms: ModelPickerState["unconfig
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Track more platforms</CardTitle>
+				<CardTitle>追踪更多平台</CardTitle>
 				<CardDescription>
 					Add these to <code className="font-mono text-xs">SCRAPE_TARGETS</code> to start tracking them. One account is
 					enough, but which kind you pick changes the data: a scraper reads the product a visitor uses, an API asks the

@@ -15,8 +15,8 @@ export const Route = createFileRoute("/_authed/change-password")({
 		const appName = getAppName(match);
 		return {
 			meta: [
-				{ title: buildTitle("Change Password", { appName }) },
-				{ name: "description", content: "Change the password for your account." },
+				{ title: buildTitle("修改密码", { appName }) },
+				{ name: "description", content: "修改你账户的密码。" },
 			],
 		};
 	},
@@ -29,11 +29,11 @@ function ChangePasswordPage() {
 	if (clientConfig?.mode === "demo" || clientConfig?.mode === "whitelabel") {
 		return (
 			<FullPageCard
-				title="Change Password"
+				title="修改密码"
 				subtitle={
 					clientConfig.mode === "demo"
-						? "Password changes are disabled for the demo."
-						: "Change your password with your provider."
+						? "演示模式下无法修改密码。"
+						: "请在你的身份提供商处修改密码。"
 				}
 				showBackButton
 			/>
@@ -57,9 +57,9 @@ function PasswordAccountGate() {
 
 	if (accounts.data && !accounts.data.some((account) => account.providerId === "credential")) {
 		return (
-			<FullPageCard title="Change Password" subtitle="You don't have a password yet." showBackButton>
+			<FullPageCard title="修改密码" subtitle="你还没有设置密码。" showBackButton>
 				<Link to="/auth/forgot-password" className={buttonVariants({ className: "w-full" })}>
-					Set a Password
+					设置密码
 				</Link>
 			</FullPageCard>
 		);
@@ -80,7 +80,7 @@ function ChangePasswordForm() {
 		e.preventDefault();
 		setError(null);
 		if (newPassword !== confirmPassword) {
-			setError("Passwords do not match");
+			setError("两次输入的密码不一致");
 			return;
 		}
 		setLoading(true);
@@ -88,29 +88,29 @@ function ChangePasswordForm() {
 		try {
 			const result = await authClient.changePassword({ currentPassword, newPassword, revokeOtherSessions: true });
 			if (result.error) {
-				setError(result.error.message ?? "Failed to change password");
+				setError(result.error.message ?? "修改密码失败");
 				setLoading(false);
 				return;
 			}
 			setUpdated(true);
 		} catch {
-			setError("Something went wrong. Please try again.");
+			setError("出错了，请重试。");
 			setLoading(false);
 		}
 	}
 
 	if (updated) {
 		return (
-			<FullPageCard title="Password Updated" subtitle="Your password has been changed.">
+			<FullPageCard title="密码已更新" subtitle="你的密码已修改。">
 				<Link to="/app" className={buttonVariants({ className: "w-full" })}>
-					Continue
+					继续
 				</Link>
 			</FullPageCard>
 		);
 	}
 
 	return (
-		<FullPageCard title="Change Password" subtitle="Enter your current password and choose a new one.">
+		<FullPageCard title="修改密码" subtitle="输入当前密码并设置新密码。">
 			<form onSubmit={handleSubmit} className="space-y-4 w-full">
 				{error && (
 					<Alert variant="destructive">
@@ -118,11 +118,11 @@ function ChangePasswordForm() {
 					</Alert>
 				)}
 				<div className="space-y-2">
-					<Label htmlFor="current-password">Current Password</Label>
+					<Label htmlFor="current-password">当前密码</Label>
 					<Input
 						id="current-password"
 						type="password"
-						placeholder="Current password"
+						placeholder="当前密码"
 						value={currentPassword}
 						onChange={(e) => setCurrentPassword(e.target.value)}
 						required
@@ -131,11 +131,11 @@ function ChangePasswordForm() {
 					/>
 				</div>
 				<div className="space-y-2">
-					<Label htmlFor="new-password">New Password</Label>
+					<Label htmlFor="new-password">新密码</Label>
 					<Input
 						id="new-password"
 						type="password"
-						placeholder="New password"
+						placeholder="新密码"
 						value={newPassword}
 						onChange={(e) => setNewPassword(e.target.value)}
 						required
@@ -144,11 +144,11 @@ function ChangePasswordForm() {
 					/>
 				</div>
 				<div className="space-y-2">
-					<Label htmlFor="confirm-password">Confirm New Password</Label>
+					<Label htmlFor="confirm-password">确认新密码</Label>
 					<Input
 						id="confirm-password"
 						type="password"
-						placeholder="Confirm new password"
+						placeholder="确认新密码"
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
 						required
@@ -157,7 +157,7 @@ function ChangePasswordForm() {
 					/>
 				</div>
 				<Button type="submit" className="w-full" disabled={loading}>
-					{loading ? "Changing..." : "Change Password"}
+					{loading ? "正在修改…" : "修改密码"}
 				</Button>
 			</form>
 		</FullPageCard>

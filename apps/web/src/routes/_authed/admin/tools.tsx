@@ -37,7 +37,7 @@ function AnalyzeBrandDialog() {
 
 	const handleAnalyze = async () => {
 		if (!website.trim()) {
-			setError("Please enter a website URL");
+			setError("请输入网站 URL");
 			return;
 		}
 		setError(null);
@@ -52,7 +52,7 @@ function AnalyzeBrandDialog() {
 			});
 			setResult(data);
 		} catch (err) {
-			setError(writeError(err, "An error occurred"));
+			setError(writeError(err, "发生错误"));
 		} finally {
 			setIsLoading(false);
 		}
@@ -84,18 +84,18 @@ function AnalyzeBrandDialog() {
 		<Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose())}>
 			<DialogTrigger render={<Button variant="outline" className="cursor-pointer w-full" />}>
 				<Sparkles className="h-4 w-4 mr-2" />
-				Analyze brand
+				分析品牌
 			</DialogTrigger>
 			<DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
 				<DialogHeader>
-					<DialogTitle>Analyze brand</DialogTitle>
-					<DialogDescription>Run the onboarding analysis for any website.</DialogDescription>
+					<DialogTitle>分析品牌</DialogTitle>
+					<DialogDescription>对任意网站运行入驻分析。</DialogDescription>
 				</DialogHeader>
 
 				<div className="space-y-4 py-4">
 					<div className="grid grid-cols-2 gap-4">
 						<div className="space-y-2">
-							<Label htmlFor="analyze-website">Website URL</Label>
+							<Label htmlFor="analyze-website">网站 URL</Label>
 							<Input
 								id="analyze-website"
 								placeholder="https://example.com"
@@ -105,10 +105,10 @@ function AnalyzeBrandDialog() {
 							/>
 						</div>
 						<div className="space-y-2">
-							<Label htmlFor="analyze-brand">Brand name (optional)</Label>
+							<Label htmlFor="analyze-brand">品牌名称（可选）</Label>
 							<Input
 								id="analyze-brand"
-								placeholder="Auto-detected from URL"
+								placeholder="根据 URL 自动识别"
 								value={brandName}
 								onChange={(e) => setBrandName(e.target.value)}
 								disabled={isLoading}
@@ -120,10 +120,10 @@ function AnalyzeBrandDialog() {
 						{isLoading ? (
 							<>
 								<Spinner className="mr-2" />
-								Analyzing… (this may take a minute)
+								分析中…（可能需要一分钟）
 							</>
 						) : (
-							"Analyze"
+							"开始分析"
 						)}
 					</Button>
 
@@ -137,22 +137,22 @@ function AnalyzeBrandDialog() {
 									<Button variant="ghost" size="sm" onClick={handleCopyPrompts} className="cursor-pointer">
 										{copied === "prompts" ? (
 											<>
-												<Check className="h-4 w-4 mr-1" /> Copied
+												<Check className="h-4 w-4 mr-1" /> 已复制
 											</>
 										) : (
 											<>
-												<Copy className="h-4 w-4 mr-1" /> Copy prompts
+												<Copy className="h-4 w-4 mr-1" /> 复制提示词
 											</>
 										)}
 									</Button>
 									<Button variant="ghost" size="sm" onClick={handleCopy} className="cursor-pointer">
 										{copied === "json" ? (
 											<>
-												<Check className="h-4 w-4 mr-1" /> Copied
+												<Check className="h-4 w-4 mr-1" /> 已复制
 											</>
 										) : (
 											<>
-												<Copy className="h-4 w-4 mr-1" /> Copy JSON
+												<Copy className="h-4 w-4 mr-1" /> 复制 JSON
 											</>
 										)}
 									</Button>
@@ -160,18 +160,16 @@ function AnalyzeBrandDialog() {
 							</div>
 
 							<div className="grid grid-cols-2 gap-4 text-sm">
-								<Stat label="Competitors" value={result.competitors.length} />
-								<Stat label="Prompts" value={result.suggestedPrompts.length} />
+								<Stat label="竞争对手" value={result.competitors.length} />
+								<Stat label="提示词" value={result.suggestedPrompts.length} />
 							</div>
 
-							{result.additionalDomains.length > 0 && (
-								<TagSection title="Additional domains" items={result.additionalDomains} />
-							)}
-							{result.aliases.length > 0 && <TagSection title="Aliases" items={result.aliases} />}
+							{result.additionalDomains.length > 0 && <TagSection title="附加域名" items={result.additionalDomains} />}
+							{result.aliases.length > 0 && <TagSection title="别名" items={result.aliases} />}
 
 							{result.competitors.length > 0 && (
 								<div className="space-y-2">
-									<Label className="text-muted-foreground">Competitors</Label>
+									<Label className="text-muted-foreground">竞争对手</Label>
 									<div className="space-y-1 text-sm">
 										{result.competitors.map((c) => (
 											<div key={c.name} className="flex items-center gap-2">
@@ -185,7 +183,7 @@ function AnalyzeBrandDialog() {
 
 							{result.suggestedPrompts.length > 0 && (
 								<div className="space-y-2">
-									<Label className="text-muted-foreground">Prompts</Label>
+									<Label className="text-muted-foreground">提示词</Label>
 									<div className="max-h-60 overflow-y-auto border rounded-md p-2 space-y-1 text-sm">
 										{result.suggestedPrompts.map((p, i) => (
 											<div key={p.prompt} className="flex items-start gap-2 py-1 border-b last:border-0">
@@ -236,8 +234,8 @@ function TagSection({ title, items }: { title: string; items: string[] }) {
 }
 
 export const Route = createFileRoute("/_authed/admin/tools")({
-	staticData: { crumb: "Tools" },
-	head: pageHead({ description: "Brand onboarding analysis." }),
+	staticData: { crumb: "工具" },
+	head: pageHead({ description: "品牌入驻分析。" }),
 	component: ToolsPage,
 });
 
@@ -245,10 +243,10 @@ function ToolsPage() {
 	return (
 		<div className="space-y-8">
 			<div className="space-y-2">
-				<h1 className="text-3xl font-bold tracking-tight">Tools</h1>
+				<h1 className="text-3xl font-bold tracking-tight">工具</h1>
 				<p className="text-muted-foreground">
-					Run the onboarding analysis for any brand without creating it. Same pipeline as the wizard and
-					<code className="mx-1 rounded bg-muted px-1">POST /api/v1/tools/analyze</code>.
+					无需创建品牌即可对其运行入驻分析，与向导使用同一流程，等同于
+					<code className="mx-1 rounded bg-muted px-1">POST /api/v1/tools/analyze</code>。
 				</p>
 			</div>
 
@@ -257,11 +255,10 @@ function ToolsPage() {
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2">
 							<Sparkles className="h-5 w-5" />
-							Brand analysis
+							品牌分析
 						</CardTitle>
 						<CardDescription>
-							Analyze a website to discover its competitors, additional brand domains, aliases, and suggested AI
-							tracking prompts. Works with any configured LLM provider.
+							分析网站以发现其竞争对手、附加品牌域名、别名以及建议的 AI 追踪提示词。支持任意已配置的 LLM 提供商。
 						</CardDescription>
 					</CardHeader>
 					<CardContent>

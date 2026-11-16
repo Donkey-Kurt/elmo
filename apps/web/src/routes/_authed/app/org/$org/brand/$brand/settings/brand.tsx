@@ -21,8 +21,8 @@ import { useWriteErrorMessage } from "@/lib/write-errors";
 import { updateBrandFn } from "@/server/brands";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/settings/brand")({
-	staticData: { crumb: "Brand" },
-	head: pageHead({ title: "Brand Settings", description: "Manage your brand name and website." }),
+	staticData: { crumb: "品牌" },
+	head: pageHead({ title: "品牌设置", description: "管理品牌名称与网站。" }),
 	component: BrandSettingsPage,
 });
 
@@ -61,7 +61,7 @@ function BrandSettingsPage() {
 		return (
 			<div className="space-y-6">
 				<div>
-					<h1 className="text-3xl font-bold">Brand</h1>
+					<h1 className="text-3xl font-bold">品牌</h1>
 					<p className="text-muted-foreground">Loading...</p>
 				</div>
 			</div>
@@ -72,8 +72,8 @@ function BrandSettingsPage() {
 		return (
 			<div className="space-y-6">
 				<div>
-					<h1 className="text-3xl font-bold">Brand</h1>
-					<p className="text-destructive">Brand not found</p>
+					<h1 className="text-3xl font-bold">品牌</h1>
+					<p className="text-destructive">未找到品牌</p>
 				</div>
 			</div>
 		);
@@ -120,7 +120,7 @@ function BrandSettingsPage() {
 					: undefined,
 			);
 		} catch (err) {
-			setError(writeError(err, "Failed to save the brand."));
+			setError(writeError(err, "保存品牌失败。"));
 		} finally {
 			setIsSubmitting(false);
 		}
@@ -129,29 +129,29 @@ function BrandSettingsPage() {
 	return (
 		<div className="space-y-6 max-w-2xl">
 			<div>
-				<h1 className="text-3xl font-bold">Brand</h1>
-				<p className="text-muted-foreground">Manage your brand name and website</p>
+				<h1 className="text-3xl font-bold">品牌</h1>
+				<p className="text-muted-foreground">管理品牌名称与网站</p>
 			</div>
 
 			<form action={handleSubmit} className="space-y-6">
 				<div className="space-y-4">
 					<div className="space-y-2">
-						<Label htmlFor="name">Brand Name</Label>
+						<Label htmlFor="name">品牌名称</Label>
 						<Input
 							id="name"
 							name="name"
 							type="text"
-							placeholder="Brand Name"
+							placeholder="品牌名称"
 							defaultValue={brand.name}
 							required
 							disabled={isSubmitting}
 						/>
-						<p className="text-xs text-muted-foreground">Enter your brand&apos;s name</p>
+						<p className="text-xs text-muted-foreground">输入你的品牌名称</p>
 					</div>
 
 					<SlugField
 						id="brand-slug"
-						label="Brand Slug"
+						label="品牌标识"
 						prefix={brandSlugPrefix(organization)}
 						value={slug}
 						onChange={setSlug}
@@ -159,7 +159,7 @@ function BrandSettingsPage() {
 					/>
 
 					<div className="space-y-2">
-						<Label htmlFor="website">Website</Label>
+						<Label htmlFor="website">网站</Label>
 						<Input
 							id="website"
 							name="website"
@@ -169,26 +169,25 @@ function BrandSettingsPage() {
 							required
 							disabled={isSubmitting}
 						/>
-						<p className="text-xs text-muted-foreground">Your brand&apos;s primary website</p>
+						<p className="text-xs text-muted-foreground">你的品牌主网站</p>
 					</div>
 
 					<div className="space-y-2">
 						<Label className="flex items-center gap-1.5">
-							Additional Domains
+							附加域名
 							<Tooltip>
 								<TooltipTrigger render={<IconInfoCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />} />
 								<TooltipContent className="max-w-xs text-xs font-normal">
-									Other domains your brand owns, like example.co.uk. Subdomains are covered automatically. Changes apply
-									to existing citations too.
+									你的品牌还拥有的其他域名，例如 example.co.uk。子域名会自动涵盖。修改同样会应用到已有的引用记录。
 								</TooltipContent>
 							</Tooltip>
 						</Label>
 						<TagsInput
 							value={additionalDomains}
 							onValueChange={setAdditionalDomains}
-							placeholder="Add domain..."
+							placeholder="添加域名..."
 							pasteSplitter={/[\n,\t]+/}
-							searchPlaceholder="Add domain..."
+							searchPlaceholder="添加域名..."
 							maxItems={10}
 							normalizeValue={(raw) => cleanAndValidateDomain(raw) ?? raw.trim()}
 							onValidate={validateDomain}
@@ -197,21 +196,19 @@ function BrandSettingsPage() {
 
 					<div className="space-y-2">
 						<Label className="flex items-center gap-1.5">
-							Brand Aliases
+							品牌别名
 							<Tooltip>
 								<TooltipTrigger render={<IconInfoCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />} />
 								<TooltipContent className="max-w-xs text-xs font-normal">
-									Alternative names for your brand (sub-brands, product lines, abbreviations). Used for mention
-									detection in <strong>future</strong> prompt runs only &mdash; does not apply retroactively to past
-									results.
+									品牌的替代名称（子品牌、产品线、缩写）。仅用于<strong>今后</strong>的提示词采样做提及识别 &mdash; 不会回溯应用到历史结果。
 								</TooltipContent>
 							</Tooltip>
 						</Label>
 						<TagsInput
 							value={aliases}
 							onValueChange={handleAliasesChange}
-							placeholder="Add alias..."
-							searchPlaceholder="Add alias..."
+							placeholder="添加别名..."
+							searchPlaceholder="添加别名..."
 							maxItems={10}
 						/>
 					</div>
@@ -226,7 +223,7 @@ function BrandSettingsPage() {
 
 				<div className="flex gap-2">
 					<Button type="submit" disabled={isSubmitting} className="cursor-pointer">
-						{isSubmitting ? "Saving..." : "Save Changes"}
+						{isSubmitting ? "保存中..." : "保存更改"}
 					</Button>
 				</div>
 			</form>

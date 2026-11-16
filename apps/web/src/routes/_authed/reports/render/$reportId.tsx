@@ -83,7 +83,7 @@ export const Route = createFileRoute("/_authed/reports/render/$reportId")({
 		return { report };
 	},
 	head: () => ({
-		meta: [{ title: "AI Share of Voice Report" }, { name: "robots", content: "noindex, nofollow" }],
+		meta: [{ title: "AI 声量份额报告" }, { name: "robots", content: "noindex, nofollow" }],
 	}),
 	component: ReportRenderPage,
 });
@@ -357,7 +357,7 @@ function OpportunitiesTable({
 	if (opportunities.length === 0) {
 		return (
 			<div className="border border-slate-200 rounded-lg p-6 text-center">
-				<p className="text-slate-500 text-sm">{brandName} leads or matches competitors across all tested prompts.</p>
+				<p className="text-slate-500 text-sm">在全部测试提示词中，{brandName} 领先或与竞品持平。</p>
 			</div>
 		);
 	}
@@ -367,11 +367,11 @@ function OpportunitiesTable({
 			<table className="w-full">
 				<thead>
 					<tr className="bg-slate-50 border-b border-slate-200">
-						<TH align="left">Prompt</TH>
-						<TH align="center">Current SoV</TH>
-						<TH align="center">Top Competitor SoV</TH>
-						<TH align="center">Goal SoV</TH>
-						<TH align="left">Recommendation</TH>
+						<TH align="left">提示词</TH>
+						<TH align="center">当前声量份额</TH>
+						<TH align="center">最高竞品声量份额</TH>
+						<TH align="center">目标声量份额</TH>
+						<TH align="left">建议</TH>
 					</tr>
 				</thead>
 				<tbody className="divide-y divide-slate-100">
@@ -386,7 +386,7 @@ function OpportunitiesTable({
 							<td className="py-2.5 px-4 text-center text-xs font-semibold text-slate-600">{o.maxCompSoV}%</td>
 							<td className="py-2.5 px-4 text-center text-xs font-semibold text-emerald-600">{o.goalSoV}%</td>
 							<td className="py-2.5 px-4 text-xs text-slate-600">
-								Write {o.articleCount} LLM-friendly articles on &ldquo;{o.promptValue}&rdquo;
+								围绕 &ldquo;{o.promptValue}&rdquo; 撰写 {o.articleCount} 篇对 LLM 友好的文章
 							</td>
 						</tr>
 					))}
@@ -417,13 +417,13 @@ function CoverPage({
 				<div className="flex items-center justify-between mb-16">
 					<Logo iconClassName="!size-5" textClassName="text-sm font-semibold text-slate-400" />
 					<span className="text-xs tracking-wide text-slate-400">
-						{new Date(report.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+						{new Date(report.createdAt).toLocaleDateString("zh-CN", { year: "numeric", month: "long", day: "numeric" })}
 					</span>
 				</div>
 
 				<div className="flex-1 flex flex-col justify-center">
 					<div className="text-[10px] font-semibold tracking-[0.25em] uppercase text-slate-400 mb-4">
-						AI Share of Voice Report
+						AI 声量份额报告
 					</div>
 					<h1 className="text-4xl font-bold tracking-tight mb-2">{report.brandName}</h1>
 					<div className="w-16 h-[2px] bg-slate-800 mb-12" />
@@ -431,10 +431,10 @@ function CoverPage({
 					<div className="bg-slate-50 rounded-xl p-8 max-w-md mb-12">
 						<div className="flex items-baseline gap-4">
 							<span className={`text-6xl font-extrabold tracking-tighter ${sovColor}`}>
-								{overallSoV !== null ? `${overallSoV}%` : "N/A"}
+								{overallSoV !== null ? `${overallSoV}%` : "暂无数据"}
 							</span>
 							<div>
-								<div className="text-sm font-semibold">Share of Voice</div>
+								<div className="text-sm font-semibold">声量份额</div>
 								<div className="text-xs text-slate-500">
 									{sovLevel.label} &mdash; {sovLevel.description}
 								</div>
@@ -449,9 +449,9 @@ function CoverPage({
 					</div>
 
 					<div className="grid grid-cols-3 gap-6 max-w-lg">
-						<CoverStat value={String(totalPrompts)} label="Prompts Tested" />
-						<CoverStat value={String(promptsWithMentions)} label="Brand Mentions" />
-						<CoverStat value={String(filteredCompetitors.length)} label="Competitors" />
+						<CoverStat value={String(totalPrompts)} label="测试提示词数" />
+						<CoverStat value={String(promptsWithMentions)} label="品牌被提及次数" />
+						<CoverStat value={String(filteredCompetitors.length)} label="竞品数" />
 					</div>
 				</div>
 
@@ -488,8 +488,8 @@ function CompetitiveOverviewPage({
 				<RunningHeader brand={report.brandName} />
 
 				<Section
-					title="AI Engine Performance"
-					subtitle={`Brand mention rate across ${engineBreakdown.reduce((s, e) => s + e.totalRuns, 0)} evaluations`}
+					title="AI 引擎表现"
+					subtitle={`在 ${engineBreakdown.reduce((s, e) => s + e.totalRuns, 0)} 次评估中的品牌提及率`}
 				/>
 				<div className="grid grid-cols-3 gap-3 mb-8">
 					{engineBreakdown.map((eng) => (
@@ -497,7 +497,7 @@ function CompetitiveOverviewPage({
 							<div className="text-[11px] font-medium text-slate-500 mb-2">{eng.engine}</div>
 							<div className={`text-3xl font-bold ${getSoVColor(eng.mentionRate)}`}>{eng.mentionRate}%</div>
 							<div className="text-[10px] text-slate-400 mt-1">
-								{eng.brandMentions} of {eng.totalRuns} runs
+								{eng.totalRuns} 次运行中 {eng.brandMentions} 次
 							</div>
 							<div className="mt-2.5 w-full bg-slate-100 rounded-full h-1.5">
 								<div
@@ -509,18 +509,14 @@ function CompetitiveOverviewPage({
 					))}
 				</div>
 
-				<Section title="Competitive Landscape" subtitle="Share of voice comparison across all tested prompts" />
+				<Section title="竞品格局" subtitle="全部测试提示词下的声量份额对比" />
 				<div className="border border-slate-200 rounded-lg overflow-hidden mb-8 print:pb-px">
 					<table className="w-full">
 						<thead>
 							<tr className="bg-slate-50 border-b border-slate-200">
-								<TH align="left">Brand</TH>
-								<TH align="right" className="w-16">
-									SoV
-								</TH>
-								<TH align="left" className="w-[40%]">
-									Share
-								</TH>
+								<TH align="left">品牌</TH>
+								<TH align="right" className="w-16">声量份额</TH>
+								<TH align="left" className="w-[40%]">份额</TH>
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-slate-100">
@@ -554,16 +550,16 @@ function CompetitiveOverviewPage({
 				{competitorFreq.length > 0 && (
 					<>
 						<Section
-							title="Mention Rate"
-							subtitle="Each prompt is evaluated multiple times across AI engines — mentions show total appearances, unique prompts show how many distinct prompts include the brand"
+							title="提及率"
+							subtitle="每条提示词会在多个 AI 引擎上多次评估——提及次数表示总出现次数，独立提示词数表示有多少条不同提示词包含该品牌"
 						/>
 						<div className="border border-slate-200 rounded-lg overflow-hidden print:pb-px">
 							<table className="w-full">
 								<thead>
 									<tr className="bg-slate-50 border-b border-slate-200">
-										<TH align="left">Brand</TH>
-										<TH align="center">Mentions</TH>
-										<TH align="center">Unique Prompts</TH>
+										<TH align="left">品牌</TH>
+										<TH align="center">提及次数</TH>
+										<TH align="center">独立提示词数</TH>
 									</tr>
 								</thead>
 								<tbody className="divide-y divide-slate-100">
@@ -633,11 +629,11 @@ function PromptChartPages({
 
 					{pageIndex === 0 ? (
 						<Section
-							title="Prompt Analysis"
-							subtitle="Share of voice for representative prompts — strengths and growth opportunities"
+							title="提示词分析"
+							subtitle="代表性提示词的声量份额——优势与增长机会"
 						/>
 					) : (
-						<div className="text-xs text-slate-400 italic mb-4">Prompt Analysis (continued)</div>
+						<div className="text-xs text-slate-400 italic mb-4">提示词分析（续）</div>
 					)}
 
 					<div className="flex-1 flex flex-col gap-5">
@@ -686,8 +682,8 @@ function OpportunitiesPage({
 				<RunningHeader brand={report.brandName} />
 
 				<Section
-					title="Content Gaps"
-					subtitle={`Prompts where competitors appear but ${report.brandName} does not — highest-value opportunities`}
+					title="内容缺口"
+					subtitle={`竞品出现但 ${report.brandName} 未出现的提示词——价值最高的机会`}
 				/>
 
 				{contentGaps.length > 0 ? (
@@ -695,10 +691,8 @@ function OpportunitiesPage({
 						<table className="w-full">
 							<thead>
 								<tr className="bg-slate-50 border-b border-slate-200">
-									<TH align="left">Prompt</TH>
-									<TH align="left" className="w-[50%]">
-										Competitors Found
-									</TH>
+									<TH align="left">提示词</TH>
+									<TH align="left" className="w-[50%]">发现的竞品</TH>
 								</tr>
 							</thead>
 							<tbody className="divide-y divide-slate-100">
@@ -730,7 +724,7 @@ function OpportunitiesPage({
 				) : (
 					<div className="border border-slate-200 rounded-lg p-6 text-center mb-8">
 						<p className="text-slate-500 text-sm">
-							{report.brandName} appears in all prompts where competitors are mentioned.
+							在竞品被提及的全部提示词中，{report.brandName} 均有出现。
 						</p>
 					</div>
 				)}
@@ -738,20 +732,16 @@ function OpportunitiesPage({
 				{topSearchQueries.length > 0 && (
 					<>
 						<Section
-							title="Top AI Search Queries"
-							subtitle="Common web search queries AI models run when answering prompts in your category"
+							title="AI 搜索查询词排行"
+							subtitle="AI 模型回答本类目提示词时常见的网络搜索查询词"
 						/>
 						<div className="border border-slate-200 rounded-lg overflow-hidden">
 							<table className="w-full">
 								<thead>
 									<tr className="bg-slate-50 border-b border-slate-200">
-										<TH align="left">Query</TH>
-										<TH align="center" className="w-28">
-											Competitors Found
-										</TH>
-										<TH align="center" className="w-24">
-											Brand Mentioned
-										</TH>
+										<TH align="left">查询词</TH>
+										<TH align="center" className="w-28">发现的竞品</TH>
+										<TH align="center" className="w-24">品牌被提及</TH>
 									</tr>
 								</thead>
 								<tbody className="divide-y divide-slate-100">
@@ -788,22 +778,22 @@ function sovOpportunity(overallSoV: number | null) {
 	const sov = overallSoV ?? 0;
 	if (sov < 20) {
 		return {
-			label: "High",
+			label: "高",
 			badgeClass: "bg-rose-50 text-rose-700",
-			recommendation: "Prioritize content creation to establish AI presence",
+			recommendation: "优先创作内容，建立在 AI 中的存在感",
 		};
 	}
 	if (sov < 40) {
 		return {
-			label: "Medium",
+			label: "中",
 			badgeClass: "bg-amber-50 text-amber-700",
-			recommendation: "Expand content to increase brand share of voice",
+			recommendation: "扩充内容，提升品牌的声量份额",
 		};
 	}
 	return {
-		label: "Low",
+		label: "低",
 		badgeClass: "bg-emerald-50 text-emerald-700",
-		recommendation: "Maintain leadership and defend competitive position",
+		recommendation: "保持领先，守住竞争位置",
 	};
 }
 
@@ -825,19 +815,19 @@ function NextStepsPage({
 				<RunningHeader brand={report.brandName} />
 
 				<Section
-					title="Share of Voice Opportunity"
-					subtitle="Overview of your current AI share of voice and growth potential"
+					title="声量份额机会"
+					subtitle="当前 AI 声量份额与增长潜力总览"
 				/>
 
 				<div className="border border-slate-200 rounded-lg overflow-hidden mb-8">
 					<table className="w-full">
 						<thead>
 							<tr className="bg-slate-50 border-b border-slate-200">
-								<TH align="center">Prompts With Mentions</TH>
-								<TH align="center">Total Prompts Tested</TH>
-								<TH align="center">Overall SoV</TH>
-								<TH align="center">Opportunity</TH>
-								<TH align="left">Recommendation</TH>
+								<TH align="center">有提及的提示词数</TH>
+								<TH align="center">测试提示词合计</TH>
+								<TH align="center">整体声量份额</TH>
+								<TH align="center">机会</TH>
+								<TH align="left">建议</TH>
 							</tr>
 						</thead>
 						<tbody>
@@ -861,8 +851,8 @@ function NextStepsPage({
 				</div>
 
 				<Section
-					title="What Should I Do Next?"
-					subtitle={`Prompts where competitors outperform ${report.brandName} — your biggest growth opportunities`}
+					title="下一步该做什么？"
+					subtitle={`竞品表现优于 ${report.brandName} 的提示词——你最大的增长机会`}
 				/>
 
 				<OpportunitiesTable promptSoVs={promptSoVs} promptMap={promptMap} brandName={report.brandName} />
@@ -881,9 +871,9 @@ function CallToActionPage({ branding }: { branding?: ClientConfig["branding"] })
 			{/* ===== CTA ===== */}
 			<div className="print:break-before-page print:h-[9.5in] print:flex print:flex-col print:justify-center p-10 print:p-0">
 				<div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-10 text-center">
-					<h2 className="text-2xl font-bold text-slate-800 mb-2">Ready to Optimize Your AI Visibility?</h2>
+					<h2 className="text-2xl font-bold text-slate-800 mb-2">准备好提升你的 AI 可见度了吗？</h2>
 					<p className="text-slate-600 text-base mb-8">
-						Take your brand's AI presence to the next level with {branding?.name || "Elmo"}
+						借助 {branding?.name || "Elmo"}，把品牌的 AI 表现提升到新高度
 					</p>
 
 					<div className="grid grid-cols-3 gap-6 mb-8">
@@ -891,36 +881,36 @@ function CallToActionPage({ branding }: { branding?: ClientConfig["branding"] })
 							<div className="flex justify-center mb-3">
 								<Target className="h-8 w-8 text-slate-600" />
 							</div>
-							<h3 className="font-semibold text-slate-800 mb-2">Strategic Optimization</h3>
+							<h3 className="font-semibold text-slate-800 mb-2">策略优化</h3>
 							<p className="text-sm text-slate-600 leading-relaxed">
-								Develop content strategies that increase your brand's share of voice in AI responses
+								制定内容策略，在 AI 回答中提升品牌的声量份额
 							</p>
 						</div>
 						<div className="text-center p-4">
 							<div className="flex justify-center mb-3">
 								<BarChart3 className="h-8 w-8 text-slate-600" />
 							</div>
-							<h3 className="font-semibold text-slate-800 mb-2">Continuous Monitoring</h3>
+							<h3 className="font-semibold text-slate-800 mb-2">持续监测</h3>
 							<p className="text-sm text-slate-600 leading-relaxed">
-								Track your AI share of voice across hundreds of relevant prompts and topics
+								跟踪数百条相关提示词与话题中的 AI 声量份额
 							</p>
 						</div>
 						<div className="text-center p-4">
 							<div className="flex justify-center mb-3">
 								<Rocket className="h-8 w-8 text-slate-600" />
 							</div>
-							<h3 className="font-semibold text-slate-800 mb-2">Competitive Advantage</h3>
+							<h3 className="font-semibold text-slate-800 mb-2">竞争优势</h3>
 							<p className="text-sm text-slate-600 leading-relaxed">
-								Stay ahead of competitors in the rapidly evolving AI search landscape
+								在快速演变的 AI 搜索格局中保持对竞品的领先
 							</p>
 						</div>
 					</div>
 
 					<div className="pt-6 border-t border-blue-200">
-						<p className="text-slate-800 font-medium mb-2">Get started with {branding?.name || "Elmo"} today</p>
+						<p className="text-slate-800 font-medium mb-2">立即开始使用 {branding?.name || "Elmo"}</p>
 						<p className="text-slate-600 text-sm text-balance">
-							Visit <strong>{branding?.url || "elmo.chat"}</strong> to learn more about our AI visibility platform and
-							services.
+							访问 <strong>{branding?.url || "elmo.chat"}</strong> 了解我们的 AI 可见度平台与
+							服务。
 						</p>
 					</div>
 				</div>
@@ -938,7 +928,7 @@ function ReportRenderPage() {
 		return (
 			<div className="max-w-3xl mx-auto p-8 text-center">
 				<p className="text-slate-500">
-					Report status: <span className="font-medium">{report.status}</span>
+					报告状态：<span className="font-medium">{report.status}</span>
 				</p>
 			</div>
 		);
@@ -967,7 +957,7 @@ function RunningHeader({ brand }: { brand: string }) {
 	return (
 		<div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-100">
 			<span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-slate-400">
-				AI Share of Voice Report
+				AI 声量份额报告
 			</span>
 			<span className="text-[10px] font-medium text-slate-400">{brand}</span>
 		</div>
@@ -1026,7 +1016,7 @@ function Badge({ category }: { category: PromptCategory }) {
 			: "bg-amber-50 text-amber-700 border-amber-200";
 	return (
 		<span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold border ${cls}`}>
-			{category === "strength" ? "Strength" : "Opportunity"}
+			{category === "strength" ? "优势" : "机会"}
 		</span>
 	);
 }

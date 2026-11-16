@@ -157,7 +157,7 @@ export function GoogleShoppingCard({
 
 				{googleModule.search.queryCount > 0 && (
 					<div>
-						<h4 className="text-sm font-medium mb-2">Search queries</h4>
+						<h4 className="text-sm font-medium mb-2">搜索查询</h4>
 						<div className={`divide-y divide-border/50 transition-opacity ${queries.isFetching ? "opacity-60" : ""}`}>
 							{queries.items.map((q) => {
 								const isExpanded = expandedQuery === q.query;

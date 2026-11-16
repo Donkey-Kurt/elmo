@@ -12,15 +12,18 @@ import { pageHead } from "@/lib/route-head";
 import { useWriteErrorMessage } from "@/lib/write-errors";
 import { cancelInvitationFn, inviteTeamMemberFn, listTeamFn, removeTeamMemberFn, type TeamData } from "@/server/team";
 
+/** 角色值来自后端（member / admin），展示时映射为中文；未知值原样显示。 */
+const ROLE_LABELS: Record<string, string> = { member: "成员", admin: "管理员" };
+
 export const Route = createFileRoute("/_authed/app/org/$org/settings/members")({
-	staticData: { crumb: "Team" },
+	staticData: { crumb: "团队" },
 	beforeLoad: ({ context }) => {
 		if (context.clientConfig && !context.clientConfig.features.teamInvites) {
 			throw notFound();
 		}
 	},
 	loader: ({ context }): Promise<TeamData> => listTeamFn({ data: { organizationId: context.organization.id } }),
-	head: pageHead({ description: "Invite teammates and manage team members." }),
+	head: pageHead({ description: "邀请同事并管理团队成员。" }),
 	component: TeamSettingsPage,
 });
 
@@ -45,7 +48,7 @@ function TeamSettingsPage() {
 			setInviteRole("member");
 			await router.invalidate();
 		} catch (err) {
-			setError(writeError(err, "Failed to send invitation"));
+			setError(writeError(err, "发送邀请失败"));
 		} finally {
 			setInviting(false);
 		}
@@ -57,7 +60,7 @@ function TeamSettingsPage() {
 			await removeTeamMemberFn({ data: { organizationId, memberId } });
 			await router.invalidate();
 		} catch (err) {
-			setError(writeError(err, "Failed to remove member"));
+			setError(writeError(err, "移除成员失败"));
 		}
 	}
 
@@ -67,13 +70,13 @@ function TeamSettingsPage() {
 			await cancelInvitationFn({ data: { organizationId, invitationId } });
 			await router.invalidate();
 		} catch (err) {
-			setError(writeError(err, "Failed to cancel invitation"));
+			setError(writeError(err, "取消邀请失败"));
 		}
 	}
 
 	return (
 		<div className="space-y-6">
-			<h1 className="text-3xl font-bold">Team</h1>
+			<h1 className="text-3xl font-bold">团队</h1>
 
 			{error && (
 				<Alert variant="destructive">
@@ -85,7 +88,7 @@ function TeamSettingsPage() {
 
 			<form onSubmit={handleInvite} className="flex flex-wrap items-end gap-3">
 				<div className="flex flex-col gap-2">
-					<Label htmlFor="invite-email">Email</Label>
+					<Label htmlFor="invite-email">邮箱</Label>
 					<Input
 						id="invite-email"
 						type="email"
@@ -101,9 +104,9 @@ function TeamSettingsPage() {
 					/>
 				</div>
 				<div className="flex flex-col gap-2">
-					<Label htmlFor="invite-role">Role</Label>
+					<Label htmlFor="invite-role">角色</Label>
 					<Select
-						items={{ member: "Member", admin: "Admin" }}
+						items={{ member: "成员", admin: "管理员" }}
 						value={inviteRole}
 						onValueChange={(value) => setInviteRole(value as "member" | "admin")}
 					>
@@ -111,18 +114,18 @@ function TeamSettingsPage() {
 							<SelectValue />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="member">Member</SelectItem>
-							<SelectItem value="admin">Admin</SelectItem>
+							<SelectItem value="member">成员</SelectItem>
+							<SelectItem value="admin">管理员</SelectItem>
 						</SelectContent>
 					</Select>
 				</div>
 				<Button type="submit" disabled={inviting}>
-					{inviting ? "Inviting..." : "Invite"}
+					{inviting ? "邀请中..." : "邀请"}
 				</Button>
 			</form>
 
 			<div className="space-y-3">
-				<h2 className="text-lg font-semibold">Members</h2>
+				<h2 className="text-lg font-semibold">成员</h2>
 				<div className="divide-y rounded-md border">
 					{members.map((m) => (
 						<div key={m.id} className="flex items-center justify-between gap-3 p-3">
@@ -131,10 +134,10 @@ function TeamSettingsPage() {
 								<p className="truncate text-sm text-muted-foreground">{m.email}</p>
 							</div>
 							<div className="flex shrink-0 items-center gap-3">
-								<Badge variant="secondary">{m.role}</Badge>
+								<Badge variant="secondary">{ROLE_LABELS[m.role] ?? m.role}</Badge>
 								{m.userId !== currentUserId && (
 									<Button type="button" variant="outline" size="sm" onClick={() => handleRemove(m.id)}>
-										Remove
+										移除
 									</Button>
 								)}
 							</div>
@@ -145,20 +148,20 @@ function TeamSettingsPage() {
 
 			{invitations.length > 0 && (
 				<div className="space-y-3">
-					<h2 className="text-lg font-semibold">Pending invitations</h2>
+					<h2 className="text-lg font-semibold">待处理的邀请</h2>
 					<div className="divide-y rounded-md border">
 						{invitations.map((inv) => (
 							<div key={inv.id} className="flex items-center justify-between gap-3 p-3">
 								<div className="min-w-0">
 									<p className="truncate font-medium">{inv.email}</p>
 									<p className="text-sm text-muted-foreground">
-										Expires {new Date(inv.expiresAt).toLocaleDateString()}
+										到期：{new Date(inv.expiresAt).toLocaleDateString("zh-CN")}
 									</p>
 								</div>
 								<div className="flex shrink-0 items-center gap-3">
-									<Badge variant="secondary">{inv.role ?? "member"}</Badge>
+									<Badge variant="secondary">{ROLE_LABELS[inv.role ?? "member"] ?? (inv.role ?? "member")}</Badge>
 									<Button type="button" variant="outline" size="sm" onClick={() => handleCancel(inv.id)}>
-										Cancel
+										取消
 									</Button>
 								</div>
 							</div>

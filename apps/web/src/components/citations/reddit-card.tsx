@@ -58,7 +58,7 @@ export function RedditCard({ subreddits }: { subreddits: Subreddit[] }) {
 										{!sub.allNew && sub.newPages > 0 && (
 											<span className="text-[10px] text-green-600 whitespace-nowrap">+{sub.newPages} new</span>
 										)}
-										{sub.hasDropped && <span className="text-[10px] text-red-500 whitespace-nowrap">some dropped</span>}
+										{sub.hasDropped && <span className="text-[10px] text-red-500 whitespace-nowrap">部分被丢弃</span>}
 									</button>
 									<div className="flex items-center gap-2 shrink-0 ml-3">
 										<span className="text-sm font-semibold tabular-nums">{sub.count.toLocaleString()}</span>

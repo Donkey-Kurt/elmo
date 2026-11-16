@@ -29,7 +29,7 @@ export const Route = createFileRoute("/auth/authorize")({
 		if (!context.viewer || !deps.clientId) return { client: null };
 		return { client: await getMcpClientFn({ data: { clientId: deps.clientId } }) };
 	},
-	head: ({ match }) => ({ meta: [{ title: buildTitle("Authorize", { appName: getAppName(match) }) }] }),
+	head: ({ match }) => ({ meta: [{ title: buildTitle("授权", { appName: getAppName(match) }) }] }),
 	component: AuthorizePage,
 });
 
@@ -40,14 +40,14 @@ function AuthorizePage() {
 	const [connecting, setConnecting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const label = client?.name?.trim() || "An MCP client";
+	const label = client?.name?.trim() || "一个 MCP 客户端";
 
 	async function respond(accept: boolean) {
 		setConnecting(true);
 		setError(null);
 		const { data, error: failure } = await authClient.oauth2.consent({ accept });
 		if (!data?.redirect || !data.url) {
-			setError(failure?.message || "The authorization server refused the request.");
+			setError(failure?.message || "授权服务器拒绝了该请求。");
 			setConnecting(false);
 			return;
 		}
@@ -56,10 +56,10 @@ function AuthorizePage() {
 
 	if (!viewer) {
 		return (
-			<FullPageCard title="You're signed out" subtitle="Start the connection from your MCP client again.">
+			<FullPageCard title="你已退出登录" subtitle="请从你的 MCP 客户端重新发起连接。">
 				<Alert variant="destructive">
 					<AlertDescription>
-						This request was made for a session that has since ended, and signing back in won't revive it.
+						该请求针对的会话已经结束，重新登录也无法恢复它。
 					</AlertDescription>
 				</Alert>
 			</FullPageCard>
@@ -68,9 +68,9 @@ function AuthorizePage() {
 
 	if (!search.client_id) {
 		return (
-			<FullPageCard title="Nothing to authorize" subtitle="Start the connection from your MCP client.">
+			<FullPageCard title="没有可授权的请求" subtitle="请从你的 MCP 客户端发起连接。">
 				<Alert variant="destructive">
-					<AlertDescription>This link is missing the client it was meant to authorize.</AlertDescription>
+					<AlertDescription>该链接缺少它要授权的客户端。</AlertDescription>
 				</Alert>
 			</FullPageCard>
 		);
@@ -78,10 +78,10 @@ function AuthorizePage() {
 
 	if (!client) {
 		return (
-			<FullPageCard title="Connect to Elmo" subtitle="This client isn't registered with this instance.">
+			<FullPageCard title="连接到 Elmo" subtitle="该客户端未在此实例注册。">
 				<Alert variant="destructive">
 					<AlertDescription>
-						Continuing will not work — start the connection from your MCP client again.
+						继续也不会成功——请从你的 MCP 客户端重新发起连接。
 					</AlertDescription>
 				</Alert>
 			</FullPageCard>
@@ -89,7 +89,7 @@ function AuthorizePage() {
 	}
 
 	return (
-		<FullPageCard title="Connect to Elmo" subtitle={`${label} is asking to read and manage your Elmo data.`}>
+		<FullPageCard title="连接到 Elmo" subtitle={`${label} 请求读取并管理你的 Elmo 数据。`}>
 			<div className="w-full space-y-4">
 				{error && (
 					<Alert variant="destructive">
@@ -98,20 +98,20 @@ function AuthorizePage() {
 				)}
 				<dl className="rounded-lg border bg-muted/40 p-4 text-sm space-y-2">
 					<div className="flex flex-wrap items-baseline gap-x-2">
-						<dt className="text-muted-foreground">Client</dt>
+						<dt className="text-muted-foreground">客户端</dt>
 						<dd className="font-medium break-all">{label}</dd>
 					</div>
 					<div className="flex flex-wrap items-baseline gap-x-2">
-						<dt className="text-muted-foreground">Identity</dt>
+						<dt className="text-muted-foreground">身份</dt>
 						{client.publisherHost ? (
 							<dd className="font-mono text-xs break-all">{client.publisherHost}</dd>
 						) : (
-							<dd>Unverified — it named itself</dd>
+							<dd>未验证——该名称由它自行声明</dd>
 						)}
 					</div>
 					{client.redirectHosts.length ? (
 						<div className="flex flex-wrap items-baseline gap-x-2">
-							<dt className="text-muted-foreground">Sends you back to</dt>
+							<dt className="text-muted-foreground">跳转回</dt>
 							<dd className="font-mono text-xs break-all">{client.redirectHosts.join(", ")}</dd>
 						</div>
 					) : null}
@@ -119,24 +119,22 @@ function AuthorizePage() {
 				{client.loopbackOnly && (
 					<Alert>
 						<AlertDescription>
-							This client runs on your computer, so Elmo can't tell which program is asking. Continue only if you just
-							started this from a client you trust.
+							这个客户端运行在你自己的电脑上，所以 Elmo 无法判断是哪个程序在发起请求。只有在你刚刚从信任的客户端发起此连接时才继续。
 						</AlertDescription>
 					</Alert>
 				)}
 				<p className="text-sm text-muted-foreground">
 					{client.publisherHost
-						? `Its name and callback address come from a document it publishes at ${client.publisherHost}. `
+						? `它的名称和回调地址来自它发布在 ${client.publisherHost} 的文档。`
 						: null}
-					It will act as you, in the workspaces you belong to. Revoke it by signing out of the client or removing its
-					access from your account.
+					它将以你的身份行事，范围是你所属的工作区。要撤销授权，请退出该客户端的登录，或从你的账户中移除它的访问权限。
 				</p>
 				<div className="flex gap-2">
 					<Button className="flex-1" onClick={() => respond(true)} disabled={connecting}>
-						{connecting ? "Connecting…" : `Allow ${label}`}
+						{connecting ? "连接中…" : `允许 ${label}`}
 					</Button>
 					<Button className="flex-1" variant="outline" onClick={() => respond(false)} disabled={connecting}>
-						Deny
+						拒绝
 					</Button>
 				</div>
 			</div>

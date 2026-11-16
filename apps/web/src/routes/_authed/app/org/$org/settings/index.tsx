@@ -12,7 +12,7 @@ import { useWriteErrorMessage } from "@/lib/write-errors";
 import { updateOrganizationFn } from "@/server/organizations";
 
 export const Route = createFileRoute("/_authed/app/org/$org/settings/")({
-	head: pageHead({ title: "Organization", description: "The organization's name and URL." }),
+	head: pageHead({ title: "组织", description: "组织的名称与链接地址。" }),
 	component: OrganizationSettingsPage,
 });
 
@@ -49,7 +49,7 @@ function OrganizationSettingsPage() {
 					: undefined,
 			);
 		} catch (err) {
-			setError(writeError(err, "Failed to save the organization."));
+			setError(writeError(err, "保存组织失败。"));
 		} finally {
 			setSaving(false);
 		}
@@ -57,11 +57,11 @@ function OrganizationSettingsPage() {
 
 	return (
 		<div className="max-w-2xl space-y-6">
-			<h1 className="text-3xl font-bold">Organization</h1>
+			<h1 className="text-3xl font-bold">组织</h1>
 
 			<form onSubmit={handleSave} className="space-y-4">
 				<div className="space-y-2">
-					<Label htmlFor="organization-name">Organization Name</Label>
+					<Label htmlFor="organization-name">组织名称</Label>
 					<Input
 						id="organization-name"
 						value={name}
@@ -73,7 +73,7 @@ function OrganizationSettingsPage() {
 
 				<SlugField
 					id="organization-slug"
-					label="Organization Slug"
+					label="组织标识"
 					prefix={ORG_URL_PREFIX}
 					value={slug}
 					onChange={setSlug}
@@ -87,7 +87,7 @@ function OrganizationSettingsPage() {
 				)}
 
 				<Button type="submit" disabled={saving || !isDirty || !isComplete}>
-					{saving ? "Saving..." : "Save"}
+					{saving ? "保存中..." : "保存"}
 				</Button>
 			</form>
 		</div>

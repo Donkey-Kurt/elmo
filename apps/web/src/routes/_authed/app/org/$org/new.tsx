@@ -121,7 +121,7 @@ function NewBrandPage() {
 
 	if (step === "platforms" && platformState) {
 		return (
-			<FullPageCard title={`Create ${details.brandName}`} subtitle="Choose which AI platforms to track">
+			<FullPageCard title={`Create ${details.brandName}`} subtitle="选择要追踪的 AI 平台">
 				<PlatformSelectionStep
 					state={platformState}
 					selected={selected}
@@ -137,10 +137,10 @@ function NewBrandPage() {
 	}
 
 	return (
-		<FullPageCard title="Create a new brand" subtitle={`Start tracking a brand in ${organizationName}`} showBackButton>
+		<FullPageCard title="创建新品牌" subtitle={`Start tracking a brand in ${organizationName}`} showBackButton>
 			<form action={handleDetailsSubmit} className="space-y-4">
 				<div className="space-y-2">
-					<Label htmlFor="brandName">Brand Name</Label>
+					<Label htmlFor="brandName">品牌名称</Label>
 					<Input
 						id="brandName"
 						name="brandName"

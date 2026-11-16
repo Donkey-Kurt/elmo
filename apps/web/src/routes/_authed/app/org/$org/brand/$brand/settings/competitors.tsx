@@ -15,8 +15,8 @@ import { useWriteErrorMessage } from "@/lib/write-errors";
 import { updateCompetitors } from "@/server/brands";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/settings/competitors")({
-	staticData: { crumb: "Competitors" },
-	head: pageHead({ description: "Manage your tracked competitors." }),
+	staticData: { crumb: "竞品" },
+	head: pageHead({ description: "管理你追踪的竞品。" }),
 	component: CompetitorsSettingsPage,
 });
 
@@ -84,7 +84,7 @@ function CompetitorsSettingsPage() {
 		return (
 			<div className="space-y-6">
 				<h1 className="text-3xl font-bold">Competitors</h1>
-				<p className="text-destructive">Brand not found</p>
+				<p className="text-destructive">未找到品牌</p>
 			</div>
 		);
 	}
@@ -109,7 +109,7 @@ function CompetitorsSettingsPage() {
 		<div className="max-w-2xl space-y-6">
 			<div>
 				<h1 className="text-3xl font-bold">Competitors</h1>
-				<p className="text-muted-foreground">Manage your competitive landscape for reputation tracking.</p>
+				<p className="text-muted-foreground">管理你的竞争格局，用于口碑追踪。</p>
 			</div>
 
 			<Alert variant="default" className="border-yellow-200 bg-yellow-50 text-yellow-800">

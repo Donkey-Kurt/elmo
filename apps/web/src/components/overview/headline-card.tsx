@@ -20,7 +20,7 @@ function Change({ metric, change, className }: { metric: LandscapeMetric; change
 	return (
 		<span
 			className={cn("inline-flex items-center text-sm font-medium", className)}
-			title="Change over the selected period"
+			title="所选期间的变化"
 		>
 			<Icon className="size-4" />
 			{meta.formatChange(change)}

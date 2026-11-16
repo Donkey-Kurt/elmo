@@ -32,10 +32,10 @@ function DownloadButton({ onDownload, isDownloading }: { onDownload: () => void;
 			size="sm"
 			variant="secondary"
 			className="text-xs cursor-pointer h-6 flex items-center px-2"
-			title="Download chart as PNG"
+			title="下载图表为 PNG 图片"
 		>
 			<Download className="size-3 mr-0.5" />
-			<span className="text-xs font-normal">{isDownloading ? "Exporting..." : "Export (PNG)"}</span>
+			<span className="text-xs font-normal">{isDownloading ? "导出中..." : "导出 (PNG)"}</span>
 		</Button>
 	);
 }

@@ -19,13 +19,19 @@ import { type Crumb, useBreadcrumbs } from "@/lib/breadcrumbs";
 // the menu take their hover at once, and a crumb easing into one reads as lag.
 const CRUMB = "block rounded-md px-2 py-1 leading-tight transition-none";
 
+/** 面包屑上方的小字标签：值来自路由类型（Organization | Brand），展示时映射为中文。 */
+const CRUMB_KIND_LABELS: Record<NonNullable<Crumb["kind"]>, string> = {
+	Organization: "组织",
+	Brand: "品牌",
+};
+
 function CrumbLabel({ crumb }: { crumb: Crumb }) {
 	if (!crumb.kind) return <>{crumb.label}</>;
 
 	return (
 		<>
 			<span className="mb-0.5 block text-[10px] font-medium uppercase leading-none tracking-wider text-muted-foreground/70">
-				{crumb.kind}
+				{CRUMB_KIND_LABELS[crumb.kind]}
 			</span>
 			{crumb.label}
 		</>

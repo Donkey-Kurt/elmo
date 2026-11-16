@@ -52,7 +52,7 @@ function SeriesLegend({
 	return (
 		<div
 			role="toolbar"
-			aria-label="Chart series"
+			aria-label="图表系列"
 			className="flex shrink-0 flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-2"
 			onMouseLeave={() => onHover(null)}
 		>
@@ -235,7 +235,7 @@ export function BaseChart({
 									// value is already a properly bucketed date string like "2025-07-21"
 									const [year, month, day] = value.split("-").map(Number);
 									const date = new Date(year, month - 1, day); // Create local date
-									return date.toLocaleDateString("en-US", {
+									return date.toLocaleDateString("zh-CN", {
 										month: "short",
 										day: "numeric",
 									});
@@ -259,7 +259,7 @@ export function BaseChart({
 										labelFormatter={(value) => {
 											const [year, month, day] = String(value).split("-").map(Number);
 											const date = new Date(year, month - 1, day);
-											return date.toLocaleDateString("en-US", {
+											return date.toLocaleDateString("zh-CN", {
 												month: "short",
 												day: "numeric",
 											});
@@ -320,7 +320,7 @@ export function BaseChart({
 									// value is already a properly bucketed date string like "2025-07-21"
 									const [year, month, day] = value.split("-").map(Number);
 									const date = new Date(year, month - 1, day); // Create local date
-									return date.toLocaleDateString("en-US", {
+									return date.toLocaleDateString("zh-CN", {
 										month: "short",
 										day: "numeric",
 									});
@@ -355,7 +355,7 @@ export function BaseChart({
 
 									const [year, month, day] = (label as string).split("-").map(Number);
 									const date = new Date(year, month - 1, day);
-									const formattedDate = date.toLocaleDateString("en-US", {
+									const formattedDate = date.toLocaleDateString("zh-CN", {
 										month: "short",
 										day: "numeric",
 									});

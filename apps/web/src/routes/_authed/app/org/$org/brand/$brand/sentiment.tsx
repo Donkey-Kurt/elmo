@@ -31,8 +31,8 @@ import { SENTIMENT_STYLES, SENTIMENTS, sentimentTotal } from "@/lib/sentiment";
 import type { PromptSentiment, SentimentQuote } from "@/server/analytics-core";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/sentiment")({
-	staticData: { crumb: "Sentiment" },
-	head: pageHead({ description: "See how AI answers describe your brand when they mention it." }),
+	staticData: { crumb: "情绪倾向" },
+	head: pageHead({ description: "AI 回答提及你的品牌时如何描述它。" }),
 	component: SentimentPage,
 });
 
@@ -45,7 +45,7 @@ function TitleWithInfo({ title, children }: { title: string; children: React.Rea
 			{title}
 			<Tooltip>
 				<TooltipTrigger
-					aria-label={`About ${title}`}
+					aria-label={`关于${title}`}
 					render={<IconInfoCircle className="size-3.5 cursor-help text-muted-foreground" />}
 				/>
 				<TooltipContent className="max-w-xs text-sm font-normal">{children}</TooltipContent>
@@ -61,9 +61,9 @@ function SentimentOverview({ landscape, colors }: { landscape: Landscape; colors
 		<>
 			<Card>
 				<CardHeader>
-					<TitleWithInfo title="Sentiment">
-						How AI answers that mention you describe you, from each prompt's latest answers. The number in the middle is
-						your score out of 100: 50 is neutral, higher means more praise than criticism.
+					<TitleWithInfo title="情绪倾向">
+						提及你的 AI 回答如何描述你，取自每条提示词的最新回答。中间的分数是满分 100 分的得分：50
+						分为中性，越高表示称赞多于批评。
 					</TitleWithInfo>
 				</CardHeader>
 				<CardContent>
@@ -80,9 +80,8 @@ function SentimentOverview({ landscape, colors }: { landscape: Landscape; colors
 			</Card>
 			<Card>
 				<CardHeader>
-					<TitleWithInfo title="Sentiment Trends">
-						Your sentiment score each day beside your closest competitors'. A company only has a score on days when an
-						answer mentions it.
+					<TitleWithInfo title="情绪倾向趋势">
+						你的情绪倾向得分每天与你最接近的竞品的对比。某家公司只有在当天有回答提及它时才有得分。
 					</TitleWithInfo>
 				</CardHeader>
 				<CardContent>
@@ -104,12 +103,19 @@ function SentimentOverview({ landscape, colors }: { landscape: Landscape; colors
 }
 
 const QUOTE_SIDES = {
-	praise: "No positive answers in this period.",
-	mixed: "No mixed answers in this period.",
-	criticism: "No negative answers in this period.",
+	praise: "该时间段内暂无正面回答。",
+	mixed: "该时间段内暂无混合回答。",
+	criticism: "该时间段内暂无负面回答。",
 } as const;
 
 type QuoteSide = keyof typeof QUOTE_SIDES;
+
+/** Tab labels are display-only: the keys are the payload fields that index the quotes. */
+const QUOTE_SIDE_LABELS: Record<QuoteSide, string> = {
+	praise: "正面",
+	mixed: "混合",
+	criticism: "负面",
+};
 
 function Quotes({ quotesBySide }: { quotesBySide: Record<QuoteSide, SentimentQuote[]> }) {
 	const [side, setSide] = useState<QuoteSide>("praise");
@@ -117,11 +123,10 @@ function Quotes({ quotesBySide }: { quotesBySide: Record<QuoteSide, SentimentQuo
 	return (
 		<Card>
 			<CardHeader className={`${ROW_HEADER} flex-wrap justify-between gap-4`}>
-				<TitleWithInfo title="What AI Says About You">
-					The passages from this period where AI speaks of you most clearly, at most one per prompt. Click a prompt to
-					see the full answer.
+				<TitleWithInfo title="AI 如何评价你">
+					该时间段内 AI 对你描述最清晰的片段，每条提示词最多取一条。点击提示词可查看完整回答。
 				</TitleWithInfo>
-				<div role="tablist" aria-label="Sentiment" className="inline-flex rounded-lg bg-muted p-0.5 text-sm">
+				<div role="tablist" aria-label="情绪倾向" className="inline-flex rounded-lg bg-muted p-0.5 text-sm">
 					{(Object.keys(QUOTE_SIDES) as QuoteSide[]).map((value) => (
 						<button
 							key={value}
@@ -134,7 +139,7 @@ function Quotes({ quotesBySide }: { quotesBySide: Record<QuoteSide, SentimentQuo
 								side === value ? "bg-background font-medium shadow-sm" : "text-muted-foreground hover:text-foreground",
 							)}
 						>
-							{value}
+							{QUOTE_SIDE_LABELS[value]}
 						</button>
 					))}
 				</div>
@@ -178,7 +183,7 @@ function QuoteRow({ quote }: { quote: SentimentQuote }) {
 						search={{ tab: "responses", sentiment: quote.sentiment }}
 						className="truncate hover:text-foreground hover:underline"
 					>
-						{quote.prompt || "(untitled prompt)"}
+						{quote.prompt || "(未命名提示词)"}
 					</BrandPromptLink>
 					<span>·</span>
 					<span className="shrink-0">{new Date(quote.createdAt).toLocaleDateString()}</span>
@@ -250,7 +255,7 @@ function SentimentAnswersLink({ prompt, sentiment }: { prompt: PromptSentiment; 
 			search={(prev) => ({ ...prev, prompts: prompt.promptId, sentiment })}
 			className={cn("whitespace-nowrap hover:underline", SENTIMENT_STYLES[sentiment].text)}
 		>
-			{count} {count === 1 ? "answer" : "answers"}
+			{count} 个回答
 		</Link>
 	);
 }
@@ -270,42 +275,24 @@ function PromptTable({ prompts }: { prompts: PromptSentiment[] }) {
 	return (
 		<Card>
 			<CardHeader>
-				<TitleWithInfo title="Sentiment by Prompt">
-					Every answer in the period that mentions you, grouped by prompt. Mentions counts those answers, the score is
-					out of 100 as above, and the bar splits them into positive, neutral, mixed and negative.
+				<TitleWithInfo title="各提示词的情绪倾向">
+					该时间段内所有提及你的回答，按提示词分组。「提及」统计这些回答的数量；得分为满分 100
+					分的得分，与上文一致；色条把它们拆分为正面、中性、混合和负面。
 				</TitleWithInfo>
 			</CardHeader>
 			<CardContent>
 				{prompts.length === 0 ? (
-					<p className="py-8 text-center text-sm text-muted-foreground">No prompt mentions you yet.</p>
+					<p className="py-8 text-center text-sm text-muted-foreground">暂无提示词提及你。</p>
 				) : (
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead className="w-[40%]">Prompt</TableHead>
-								<TableHead className="w-[24%] max-sm:min-w-16">Sentiment</TableHead>
-								<SortableHead
-									className="max-sm:hidden"
-									sortKey="mentions"
-									label="Mentions"
-									sort={sort}
-									onSort={onSort}
-								/>
-								<SortableHead sortKey="score" label="Score" sort={sort} onSort={onSort} />
-								<SortableHead
-									className="max-sm:hidden"
-									sortKey="positive"
-									label="Positive"
-									sort={sort}
-									onSort={onSort}
-								/>
-								<SortableHead
-									className="max-sm:hidden"
-									sortKey="negative"
-									label="Negative"
-									sort={sort}
-									onSort={onSort}
-								/>
+								<TableHead className="w-[40%]">提示词</TableHead>
+								<TableHead className="w-[24%] max-sm:min-w-16">情绪倾向</TableHead>
+								<SortableHead className="max-sm:hidden" sortKey="mentions" label="提及" sort={sort} onSort={onSort} />
+								<SortableHead sortKey="score" label="得分" sort={sort} onSort={onSort} />
+								<SortableHead className="max-sm:hidden" sortKey="positive" label="正面" sort={sort} onSort={onSort} />
+								<SortableHead className="max-sm:hidden" sortKey="negative" label="负面" sort={sort} onSort={onSort} />
 							</TableRow>
 						</TableHeader>
 						<TableBody>
@@ -317,7 +304,7 @@ function PromptTable({ prompts }: { prompts: PromptSentiment[] }) {
 											search={{ tab: "responses" }}
 											className="font-medium hover:underline"
 										>
-											{p.value || "(untitled prompt)"}
+											{p.value || "(未命名提示词)"}
 										</BrandPromptLink>
 										{p.tags.length > 0 && <div className="text-xs text-muted-foreground">{p.tags.join(" · ")}</div>}
 									</TableCell>
@@ -359,12 +346,12 @@ function SentimentPage() {
 
 	const infoContent = (
 		<div className="space-y-2">
-			<p>When an AI answer mentions your brand, it's read as positive, neutral, mixed or negative toward you.</p>
+			<p>当 AI 回答提及你的品牌时，会被判读为对你正面、中性、混合或负面。</p>
 			<p>
-				The score turns those into a number out of 100: positive answers count 100, neutral and mixed 50, negative 0. So
-				50 means neutral overall, and above 50 means more praise than criticism.
+				得分会把上述判断换算成满分 100 分的数字：正面回答计 100 分，中性与混合计 50 分，负面计 0 分。因此 50
+				分表示整体中性，高于 50 分表示称赞多于批评。
 			</p>
-			<p>Answers that don't mention you aren't counted.</p>
+			<p>未提及你的回答不计入统计。</p>
 		</div>
 	);
 
@@ -373,7 +360,7 @@ function SentimentPage() {
 		content = (
 			<Card>
 				<CardContent className="py-8 text-center text-muted-foreground">
-					Couldn't load sentiment right now. Reload the page to try again.
+					暂时无法加载情绪倾向数据，请刷新页面重试。
 				</CardContent>
 			</Card>
 		);
@@ -382,9 +369,7 @@ function SentimentPage() {
 	} else if (!data || brandOf(landscape).totals.sentiment === null) {
 		content = (
 			<Card>
-				<CardContent className="py-8 text-center text-muted-foreground">
-					No answers mention you for the selected filters yet.
-				</CardContent>
+				<CardContent className="py-8 text-center text-muted-foreground">所选筛选条件下暂无提及你的回答。</CardContent>
 			</Card>
 		);
 	} else {
@@ -395,9 +380,9 @@ function SentimentPage() {
 						<SentimentOverview landscape={landscape} colors={colors} />
 						<Card>
 							<CardHeader className={ROW_HEADER}>
-								<TitleWithInfo title="Sentiment by Model">
-									Each company's sentiment score in each AI model's latest answers. "All" combines every model. A dash
-									means that model hasn't mentioned the company.
+								<TitleWithInfo title="各模型的情绪倾向">
+									每家公司分别在各个 AI
+									模型最新回答中的情绪倾向得分。「全部」为所有模型的汇总。短横线表示该模型未提及该公司。
 								</TitleWithInfo>
 							</CardHeader>
 							{/* A long field of competitors scrolls in place rather than stretching the page. */}
@@ -414,11 +399,7 @@ function SentimentPage() {
 	}
 
 	return (
-		<PageHeader
-			title="Sentiment"
-			subtitle="How AI answers describe your brand when they mention it."
-			infoContent={infoContent}
-		>
+		<PageHeader title="情绪倾向" subtitle="AI 回答提及你的品牌时如何描述它。" infoContent={infoContent}>
 			<FilterSection>
 				<FilterBar
 					availableTags={promptsSummary?.availableTags ?? []}

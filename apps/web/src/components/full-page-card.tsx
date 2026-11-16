@@ -81,7 +81,7 @@ export default function FullPageCard({
 			<div className={`mx-auto ${className}`}>
 				<div className="flex items-center justify-center space-x-3">
 					{markHref ? (
-						<Link to={markHref} aria-label="Go to your organizations">
+						<Link to={markHref} aria-label="前往你的组织">
 							<Logo />
 						</Link>
 					) : (

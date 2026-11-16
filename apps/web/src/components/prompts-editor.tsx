@@ -120,9 +120,9 @@ export function PromptsEditor({ initialPrompts, brandId, pageTitle, pageDescript
 	const suggestions = usePromptSuggestions({ brandId, prompts, setPrompts });
 	const isDirty = changedKeys.size > 0 || removedCount > 0;
 	const summary = [
-		addedCount && `${addedCount} added`,
-		editedCount && `${editedCount} edited`,
-		removedCount && `${removedCount} removed`,
+		addedCount && `${addedCount} 项已添加`,
+		editedCount && `${editedCount} 项已编辑`,
+		removedCount && `${removedCount} 项已移除`,
 	]
 		.filter(Boolean)
 		.join(" · ");
@@ -169,7 +169,7 @@ export function PromptsEditor({ initialPrompts, brandId, pageTitle, pageDescript
 			invalidatePromptsSummary(brandId);
 		} catch (err) {
 			console.error("Error saving prompts:", err);
-			setError(writeError(err, "Failed to save prompts."));
+			setError(writeError(err, "保存提示词失败。"));
 		} finally {
 			setIsSaving(false);
 			saveInProgress.current = false;
@@ -190,7 +190,7 @@ export function PromptsEditor({ initialPrompts, brandId, pageTitle, pageDescript
 					disabled={suggestions.running || filledValues.length >= MAX_PROMPTS || suggestions.remaining === 0}
 					className="flex shrink-0 items-center gap-2 cursor-pointer"
 				>
-					<Sparkles className="h-4 w-4" /> Suggest Prompts
+					<Sparkles className="h-4 w-4" /> 生成提示词建议
 				</Button>
 			</div>
 

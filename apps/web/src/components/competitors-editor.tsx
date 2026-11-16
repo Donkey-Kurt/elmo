@@ -47,7 +47,7 @@ export function newCompetitorEntry(partial?: Partial<CompetitorEntry>): Competit
 export function CompetitorsEditor({ competitors, onChange, disabled }: CompetitorsEditorProps) {
 	const validateDomain = useCallback((val: string): true | string => {
 		const cleaned = cleanAndValidateDomain(val);
-		if (!cleaned) return `"${val}" is not a valid domain`;
+		if (!cleaned) return `"${val}" 不是有效的域名`;
 		return true;
 	}, []);
 
@@ -72,7 +72,7 @@ export function CompetitorsEditor({ competitors, onChange, disabled }: Competito
 							{competitor.name ? (
 								<span className="text-sm font-medium">{competitor.name}</span>
 							) : (
-								<span className="text-sm text-muted-foreground italic">Unnamed competitor</span>
+								<span className="text-sm text-muted-foreground italic">未命名竞品</span>
 							)}
 							{competitor.domains.some(Boolean) && (
 								<span className="text-xs text-muted-foreground ml-2">{competitor.domains.filter(Boolean)[0]}</span>
@@ -104,14 +104,13 @@ export function CompetitorsEditor({ competitors, onChange, disabled }: Competito
 						<div className="px-3 pb-3 pt-0 space-y-3 border-t bg-muted/30">
 							<div className="space-y-1.5 pt-3">
 								<Label className="text-xs font-medium flex items-center gap-1.5">
-									Name
+									名称
 									<Tooltip>
 										<TooltipTrigger
 											render={<IconInfoCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />}
 										/>
 										<TooltipContent className="max-w-xs text-xs font-normal">
-											The primary name used to detect this competitor in AI responses. Mention detection applies to{" "}
-											<strong>future</strong> prompt runs only.
+											用于在 AI 回答中识别该竞品的主要名称。提及检测仅适用于<strong>未来</strong>的提示词运行。
 										</TooltipContent>
 									</Tooltip>
 								</Label>
@@ -119,7 +118,7 @@ export function CompetitorsEditor({ competitors, onChange, disabled }: Competito
 									type="text"
 									value={competitor.name}
 									onChange={(e) => update(competitor._key, { name: e.target.value })}
-									placeholder="Competitor name"
+									placeholder="竞品名称"
 									className="bg-background"
 									disabled={disabled}
 								/>
@@ -127,21 +126,20 @@ export function CompetitorsEditor({ competitors, onChange, disabled }: Competito
 
 							<div className="space-y-1.5">
 								<Label className="text-xs font-medium flex items-center gap-1.5">
-									Domains
+									域名
 									<Tooltip>
 										<TooltipTrigger
 											render={<IconInfoCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />}
 										/>
 										<TooltipContent className="max-w-xs text-xs font-normal">
-											All domains owned by this competitor. Citation categorization updates retroactively &mdash;
-											existing citations from these domains will immediately be classified as &quot;competitor&quot;.
+											该竞品拥有的所有域名。引用分类会追溯更新 —— 来自这些域名的现有引用将立即被归类为 &quot;竞品&quot;。
 										</TooltipContent>
 									</Tooltip>
 								</Label>
 								<TagsInput
 									value={competitor.domains.filter(Boolean)}
 									onValueChange={(values) => update(competitor._key, { domains: values })}
-									placeholder="Add domain..."
+									placeholder="添加域名..."
 									maxItems={10}
 									normalizeValue={(raw) => cleanAndValidateDomain(raw) ?? raw.trim()}
 									pasteSplitter={/[\n,\t]+/}
@@ -151,21 +149,20 @@ export function CompetitorsEditor({ competitors, onChange, disabled }: Competito
 
 							<div className="space-y-1.5">
 								<Label className="text-xs font-medium flex items-center gap-1.5">
-									Aliases
+									别名
 									<Tooltip>
 										<TooltipTrigger
 											render={<IconInfoCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />}
 										/>
 										<TooltipContent className="max-w-xs text-xs font-normal">
-											Alternative names for this competitor (sub-brands, product names, abbreviations). Used for mention
-											detection in <strong>future</strong> prompt runs only &mdash; does not apply retroactively.
+											该竞品的其他名称（子品牌、产品名称、缩写）。仅用于<strong>未来</strong>提示词运行的提及检测 —— 不会追溯生效。
 										</TooltipContent>
 									</Tooltip>
 								</Label>
 								<TagsInput
 									value={competitor.aliases}
 									onValueChange={(values) => update(competitor._key, { aliases: values })}
-									placeholder="Add alias..."
+									placeholder="添加别名..."
 									maxItems={10}
 								/>
 							</div>
@@ -183,13 +180,13 @@ export function CompetitorsEditor({ competitors, onChange, disabled }: Competito
 					className="flex items-center gap-2 cursor-pointer"
 					disabled={disabled}
 				>
-					<Plus className="h-4 w-4" /> Add Competitor
+					<Plus className="h-4 w-4" /> 添加竞品
 				</Button>
 			)}
 
 			{competitors.length >= MAX_COMPETITORS && (
 				<p className="text-xs text-muted-foreground">
-					Maximum of {MAX_COMPETITORS} competitors allowed. Remove a competitor to add a new one.
+					最多允许 {MAX_COMPETITORS} 个竞品。请移除一个以添加新竞品。
 				</p>
 			)}
 
@@ -197,7 +194,7 @@ export function CompetitorsEditor({ competitors, onChange, disabled }: Competito
 				<strong>
 					{validCount}/{MAX_COMPETITORS}
 				</strong>{" "}
-				competitors configured
+				个竞品已配置
 			</p>
 		</div>
 	);

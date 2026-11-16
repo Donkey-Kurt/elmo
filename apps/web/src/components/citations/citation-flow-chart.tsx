@@ -195,9 +195,9 @@ function FlowTooltip({
 				{pct(node.value, flow.totalCitations)} of {flow.domain}
 			</div>
 			{node.kind !== "engine" && <EngineBreakdown byModel={node.byModel} engines={flow.engines} colors={colors} />}
-			{node.kind === "page" && <div className="text-muted-foreground">Click to open the page</div>}
-			{node.kind === "engine" && <div className="text-muted-foreground">Click to highlight its citations</div>}
-			{node.kind === "more" && canExpand && <div className="text-muted-foreground">Click to show all pages</div>}
+			{node.kind === "page" && <div className="text-muted-foreground">点击打开该页面</div>}
+			{node.kind === "engine" && <div className="text-muted-foreground">点击高亮它的引用</div>}
+			{node.kind === "more" && canExpand && <div className="text-muted-foreground">点击显示全部页面</div>}
 		</>
 	);
 }

@@ -43,7 +43,7 @@ export function NavAppInfo() {
 				</Tooltip>
 				{showsLegalLinks(mode) && (
 					<DropdownMenu>
-						<DropdownMenuTrigger className={linkClass} aria-label="Legal" title="Legal">
+						<DropdownMenuTrigger className={linkClass} aria-label="法律条款" title="法律条款">
 							<IconScale className="size-4" />
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="start" side="top" className="w-48">
@@ -59,7 +59,7 @@ export function NavAppInfo() {
 							{isElmoHosted(mode) && (
 								<>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem onClick={openCookiePreferences}>Cookie Preferences</DropdownMenuItem>
+									<DropdownMenuItem onClick={openCookiePreferences}>Cookie 偏好设置</DropdownMenuItem>
 								</>
 							)}
 						</DropdownMenuContent>
@@ -71,7 +71,7 @@ export function NavAppInfo() {
 					>
 						<IconBrandGithub className="size-4" />
 					</TooltipTrigger>
-					<TooltipContent>View on GitHub</TooltipContent>
+					<TooltipContent>在 GitHub 上查看</TooltipContent>
 				</Tooltip>
 			</div>
 		</div>

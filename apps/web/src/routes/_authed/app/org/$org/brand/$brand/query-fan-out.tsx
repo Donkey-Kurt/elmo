@@ -27,12 +27,12 @@ const FANOUT_TABS = ["fanout", "top-queries", "words"] as const;
 type FanoutTab = (typeof FANOUT_TABS)[number];
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/query-fan-out")({
-	staticData: { crumb: "Query Fan-Out" },
+	staticData: { crumb: "查询扩展" },
 	validateSearch: (search: Record<string, unknown>): { tab?: FanoutTab } => ({
 		tab: FANOUT_TABS.includes(search.tab as FanoutTab) ? (search.tab as FanoutTab) : undefined,
 	}),
 	head: pageHead({
-		description: "See the web searches AI engines run when answering your prompts, and how they rewrite your wording.",
+		description: "查看 AI 引擎在回答你的提示词时执行的网页搜索，以及它们如何改写你的措辞。",
 	}),
 	component: QueryFanoutPage,
 });
@@ -64,9 +64,7 @@ function QueryFanoutPage() {
 
 	const infoContent = (
 		<p>
-			When an AI engine with web search capabilities responds to a prompt, it may choose to make a number of web
-			searches before creating its answer. These underlying web searches, or web queries, are only available for some
-			engines.
+			具备网页搜索能力的 AI 引擎在回答提示词时，可能会在生成回答前先执行若干次网页搜索。这些底层的网页搜索（即网页查询词）只在部分引擎上可获取。
 		</p>
 	);
 
@@ -74,7 +72,7 @@ function QueryFanoutPage() {
 	if (isLoading && !data) {
 		content = <LoadingState />;
 	} else if (error && !data) {
-		content = <EmptyState message="Couldn't load query fan-out right now. Reload the page to try again." />;
+		content = <EmptyState message="暂时无法加载查询扩展数据，请重新加载页面后再试。" />;
 	} else if (!data || data.totalRuns === 0) {
 		// totalRuns counts only web-search-enabled runs — a brand whose models all
 		// run without web search lands here even with plenty of runs.
@@ -82,7 +80,7 @@ function QueryFanoutPage() {
 			<TooltipProvider delay={150}>
 				<div className="space-y-6">
 					<FanoutEngineStatusCard targets={trackedTargets} model={modelParam} />
-					<EmptyState message="No runs with web search enabled for the selected filters. Fan-out appears once your prompts have been run by an engine with web search." />
+					<EmptyState message="所选筛选条件下没有启用网页搜索的采样。等已开启网页搜索的引擎采样过你的提示词后，才会出现查询扩展数据。" />
 				</div>
 			</TooltipProvider>
 		);
@@ -94,7 +92,7 @@ function QueryFanoutPage() {
 				<div className="space-y-6">
 					<StatRow data={data} />
 					<FanoutEngineStatusCard targets={trackedTargets} model={modelParam} />
-					<EmptyState message="No web queries in this period — the engines you track didn't expose any searches for these prompts and filters." />
+					<EmptyState message="所选时间段内没有网页查询词——你追踪的引擎没有为这些提示词和筛选条件返回任何搜索记录。" />
 				</div>
 			</TooltipProvider>
 		);
@@ -109,13 +107,13 @@ function QueryFanoutPage() {
 					<Tabs value={tab} onValueChange={(v) => setTab(v as FanoutTab)} className="gap-4">
 						<TabsList className="max-w-full">
 							<TabsTrigger value="fanout" className="max-[380px]:text-xs">
-								Prompt Fan-Out
+								提示词扩展
 							</TabsTrigger>
 							<TabsTrigger value="top-queries" className="max-[380px]:text-xs">
-								Top Queries
+								热门查询词
 							</TabsTrigger>
 							<TabsTrigger value="words" className="max-[380px]:text-xs">
-								Query Words
+								查询词用词
 							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="fanout">
@@ -135,8 +133,8 @@ function QueryFanoutPage() {
 
 	return (
 		<PageHeader
-			title="Query Fan-Out"
-			subtitle="The web searches AI engines run when answering your prompts."
+			title="查询扩展"
+			subtitle="AI 引擎回答你的提示词时执行的网页搜索。"
 			infoContent={infoContent}
 		>
 			<FilterSection>
@@ -167,8 +165,7 @@ function RunsTooltip({ breakdown }: { breakdown: FanoutData["byModel"] }) {
 	return (
 		<>
 			<p>
-				Prompt runs that produced at least one web search. Some engines do not expose web searches, so this number may
-				be lower than expected.
+				产生了至少一次网页搜索的提示词采样。部分引擎不会公开网页搜索记录，所以该数字可能低于预期。
 			</p>
 			{breakdown.length > 0 && (
 				<div className="border-border/60 mt-2 space-y-0.5 border-t pt-2">
@@ -192,8 +189,7 @@ function UnknownRunsTooltip({ byModel }: { byModel: FanoutData["byModel"] }) {
 	return (
 		<>
 			<p>
-				Search-enabled runs without known queries. The engine may have chosen not to search at all, searched with just
-				the prompt itself, or searched without revealing its queries.
+				启用了搜索、但查询词未知的采样。引擎可能完全没有执行搜索，也可能只用提示词本身作搜索，或执行了搜索但没有公开查询词。
 			</p>
 			{rows.length > 0 && (
 				<div className="border-border/60 mt-2 space-y-0.5 border-t pt-2">
@@ -217,24 +213,24 @@ function StatRow({ data }: { data: FanoutData }) {
 	return (
 		<div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
 			<StatCard
-				label="Search Prompt Runs"
+				label="启用搜索的提示词采样"
 				value={data.totalRuns.toLocaleString()}
-				tip="How many times your prompts were run against engines configured with web search. An engine may still choose not to execute a search on a given run."
+				tip="你的提示词在已配置网页搜索的引擎上被采样的次数。单次采样中，引擎仍可能选择不执行搜索。"
 			/>
 			<StatCard
-				label="Prompt Runs w/ Unknown Queries"
+				label="查询词未知的提示词采样"
 				value={(data.totalRuns - data.fanoutRuns).toLocaleString()}
 				tip={<UnknownRunsTooltip byModel={data.byModel} />}
 			/>
 			<StatCard
-				label="Prompt Runs w/ Known Queries"
+				label="查询词已知的提示词采样"
 				value={data.fanoutRuns.toLocaleString()}
 				tip={<RunsTooltip breakdown={breakdown} />}
 			/>
 			<StatCard
-				label="Average Fan-Out"
+				label="平均扩展查询数"
 				value={data.avgQueriesPerFanoutRun.toLocaleString()}
-				tip="Average queries per run that had at least one web query."
+				tip="至少有一次网页查询词的采样中，平均每次的查询词数量。"
 			/>
 		</div>
 	);
@@ -338,20 +334,19 @@ function Prompts({ prompts }: { prompts: PromptFanoutStat[] }) {
 				<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
 					<div>
 						<CardTitle className="flex items-center gap-1.5 text-base">
-							Prompts
+							提示词
 							<InfoTip>
-								Each prompt's fan-out: how many searches it generates (Queries) and how many per run that searched
-								(Avg/Prompt Run). Expand a prompt to see the searches, with your prompt's keywords bolded.
+								每条提示词的扩展情况：共生成多少次搜索（查询词），以及在有搜索的采样中平均每次多少次（每次采样平均）。展开某条提示词可查看这些搜索，你的提示词中的关键词会加粗显示。
 							</InfoTip>
 						</CardTitle>
-						<CardDescription>The web searches each prompt triggers.</CardDescription>
+						<CardDescription>每条提示词触发的网页搜索。</CardDescription>
 					</div>
 					<div className="relative w-full shrink-0 sm:w-64">
 						<IconSearch className="text-muted-foreground pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2" />
 						<Input
 							value={search}
 							onChange={(e) => setSearch(e.target.value)}
-							placeholder="Search prompts..."
+							placeholder="搜索提示词..."
 							className="h-8 pl-8 text-sm"
 						/>
 					</div>
@@ -360,12 +355,12 @@ function Prompts({ prompts }: { prompts: PromptFanoutStat[] }) {
 			<CardContent>
 				<div className={cn(GRID, "text-muted-foreground/80 border-b py-2 text-[11px] font-medium")}>
 					<span />
-					<span className="uppercase tracking-wide">Prompt</span>
+					<span className="uppercase tracking-wide">提示词</span>
 					<span className="text-right">
-						<SortHead k="queries" label="Queries" sort={sort} setSort={setSort} />
+						<SortHead k="queries" label="查询词" sort={sort} setSort={setSort} />
 					</span>
 					<span className="text-right max-sm:hidden">
-						<SortHead k="avg" label="Avg/Prompt Run" sort={sort} setSort={setSort} />
+						<SortHead k="avg" label="每次采样平均" sort={sort} setSort={setSort} />
 					</span>
 				</div>
 				<div className="divide-border divide-y">
@@ -385,9 +380,9 @@ function Prompts({ prompts }: { prompts: PromptFanoutStat[] }) {
 									</span>
 									<span className="min-w-0">
 										<span className="line-clamp-2 text-sm font-medium sm:block sm:truncate" title={p.promptValue}>
-											{p.promptValue || "(untitled prompt)"}
+											{p.promptValue || "（未命名提示词）"}
 										</span>
-										<span className="text-muted-foreground text-xs">{p.uniqueQueries.toLocaleString()} variations</span>
+										<span className="text-muted-foreground text-xs">{p.uniqueQueries.toLocaleString()} 种变体</span>
 									</span>
 									<span className="text-right text-sm tabular-nums">{p.totalQueries.toLocaleString()}</span>
 									<span className="text-right text-sm tabular-nums max-sm:hidden">
@@ -401,7 +396,7 @@ function Prompts({ prompts }: { prompts: PromptFanoutStat[] }) {
 										))}
 										{p.uniqueQueries > p.variations.length && (
 											<div className="text-muted-foreground text-xs">
-												Top {p.variations.length} of {p.uniqueQueries.toLocaleString()} variations shown
+												仅显示前 {p.variations.length} 种变体，共 {p.uniqueQueries.toLocaleString()} 种
 											</div>
 										)}
 										<div className="pt-1">
@@ -413,7 +408,7 @@ function Prompts({ prompts }: { prompts: PromptFanoutStat[] }) {
 						);
 					})}
 					{rows.length === 0 && (
-						<div className="text-muted-foreground py-6 text-center text-sm">No prompts match your search.</div>
+						<div className="text-muted-foreground py-6 text-center text-sm">没有符合搜索条件的提示词。</div>
 					)}
 				</div>
 			</CardContent>
@@ -443,23 +438,22 @@ function TopQueries({ data }: { data: FanoutData }) {
 		<Card className="gap-4">
 			<CardHeader>
 				<CardTitle className="flex items-center gap-1.5 text-base">
-					Top Queries
+					热门查询词
 					<InfoTip>
-						The searches with the widest reach — sort by how many distinct prompts triggered them, or how many prompt
-						runs issued them. Expand a query to see the prompts behind it.
+						覆盖范围最广的搜索：可按触发它的去重提示词数量排序，也可按发起它的提示词采样次数排序。展开某条查询词可查看背后的提示词。
 					</InfoTip>
 				</CardTitle>
-				<CardDescription>The searches that recur across your prompts.</CardDescription>
+				<CardDescription>在你的多条提示词中反复出现的搜索。</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<div className={cn(TOP_GRID, "text-muted-foreground/80 border-b py-2 text-[11px] font-medium")}>
 					<span />
-					<span className="uppercase tracking-wide">Query</span>
+					<span className="uppercase tracking-wide">查询词</span>
 					<span className="text-right">
-						<SortHead k="prompts" label="Prompts" sort={sort} setSort={setSort} />
+						<SortHead k="prompts" label="提示词" sort={sort} setSort={setSort} />
 					</span>
 					<span className="text-right">
-						<SortHead k="runs" label="Prompt Runs" sort={sort} setSort={setSort} />
+						<SortHead k="runs" label="提示词采样" sort={sort} setSort={setSort} />
 					</span>
 				</div>
 				<div className="divide-border divide-y">
@@ -491,11 +485,11 @@ function TopQueries({ data }: { data: FanoutData }) {
 													search={{ tab: "web-queries" }}
 													className="min-w-0 truncate text-sm hover:underline"
 												>
-													{p.promptValue || "(untitled prompt)"}
+													{p.promptValue || "（未命名提示词）"}
 												</BrandPromptLink>
 												<span
 													className="text-muted-foreground shrink-0 text-sm tabular-nums"
-													title="Runs of this prompt that issued the search"
+													title="这条提示词中发起该搜索的采样次数"
 												>
 													{p.runs.toLocaleString()}×
 												</span>
@@ -507,7 +501,7 @@ function TopQueries({ data }: { data: FanoutData }) {
 						);
 					})}
 					{rows.length === 0 && (
-						<div className="text-muted-foreground py-6 text-center text-sm">No queries for this period.</div>
+						<div className="text-muted-foreground py-6 text-center text-sm">所选时间段内没有查询词。</div>
 					)}
 				</div>
 			</CardContent>

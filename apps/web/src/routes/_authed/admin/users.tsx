@@ -24,8 +24,8 @@ import { pageHead } from "@/lib/route-head";
 import { type AdminUser, listAdminUsersFn } from "@/server/admin";
 
 export const Route = createFileRoute("/_authed/admin/users")({
-	staticData: { crumb: "Users" },
-	head: pageHead({ title: "Users", description: "Find a user and view the app as they see it." }),
+	staticData: { crumb: "用户" },
+	head: pageHead({ title: "用户", description: "查找用户并以该用户的视角查看应用。" }),
 	component: AdminUsers,
 });
 
@@ -46,22 +46,20 @@ function AdminUsers() {
 	return (
 		<div className="space-y-8">
 			<div className="space-y-2">
-				<h1 className="text-3xl font-bold tracking-tight">Users</h1>
-				<p className="text-muted-foreground">Find a user and view the app as they see it</p>
+				<h1 className="text-3xl font-bold tracking-tight">用户</h1>
+				<p className="text-muted-foreground">查找用户并以该用户的视角查看应用</p>
 			</div>
 
 			<Card>
 				<CardHeader>
-					<CardTitle>All Users</CardTitle>
-					<CardDescription>
-						Impersonating signs you in as that user for up to an hour. Administrators can't be impersonated.
-					</CardDescription>
+					<CardTitle>全部用户</CardTitle>
+					<CardDescription>模拟登录会以该用户身份登录，最长持续一小时。管理员不可被模拟登录。</CardDescription>
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<Input
 						type="search"
-						aria-label="Search users"
-						placeholder="Search by name or email"
+						aria-label="搜索用户"
+						placeholder="按姓名或邮箱搜索"
 						value={search}
 						onChange={(e) => {
 							setSearch(e.target.value);
@@ -72,7 +70,7 @@ function AdminUsers() {
 
 					{error ? (
 						<p className="text-sm text-destructive" role="alert">
-							{error.message || "Couldn't load users"}
+							{error.message || "无法加载用户"}
 						</p>
 					) : isPending ? (
 						<div className="space-y-3">
@@ -81,18 +79,18 @@ function AdminUsers() {
 							))}
 						</div>
 					) : data.users.length === 0 ? (
-						<p className="py-8 text-center text-sm text-muted-foreground">No users match that search.</p>
+						<p className="py-8 text-center text-sm text-muted-foreground">没有匹配的用户。</p>
 					) : (
 						<div className={isPlaceholderData ? "opacity-60 transition-opacity" : "transition-opacity"}>
 							<div className="overflow-x-auto">
 								<Table>
 									<TableHeader>
 										<TableRow>
-											<TableHead>User</TableHead>
-											<TableHead>Organizations</TableHead>
-											<TableHead>Role</TableHead>
-											<TableHead>Joined</TableHead>
-											<TableHead className="text-right">Actions</TableHead>
+											<TableHead>用户</TableHead>
+											<TableHead>组织</TableHead>
+											<TableHead>角色</TableHead>
+											<TableHead>加入时间</TableHead>
+											<TableHead className="text-right">操作</TableHead>
 										</TableRow>
 									</TableHeader>
 									<TableBody>
@@ -134,22 +132,22 @@ function UserRow({ user, isViewer, onImpersonate }: { user: AdminUser; isViewer:
 				{user.organizations.length > 0 ? (
 					user.organizations.map((organization) => organization.name).join(", ")
 				) : (
-					<span className="text-muted-foreground">None</span>
+					<span className="text-muted-foreground">无</span>
 				)}
 			</TableCell>
 			<TableCell>
 				<div className="flex gap-1.5">
-					<Badge variant={isAdmin ? "default" : "secondary"}>{isAdmin ? "Admin" : "User"}</Badge>
-					{user.banned && <Badge variant="destructive">Banned</Badge>}
+					<Badge variant={isAdmin ? "default" : "secondary"}>{isAdmin ? "管理员" : "用户"}</Badge>
+					{user.banned && <Badge variant="destructive">已封禁</Badge>}
 				</div>
 			</TableCell>
 			<TableCell className="text-sm">{new Date(user.createdAt).toLocaleDateString()}</TableCell>
 			<TableCell className="text-right">
 				{isViewer ? (
-					<span className="text-sm text-muted-foreground">You</span>
+					<span className="text-sm text-muted-foreground">你</span>
 				) : (
 					<Button variant="outline" size="sm" disabled={isAdmin} onClick={onImpersonate} className="cursor-pointer">
-						Impersonate
+						模拟登录
 					</Button>
 				)}
 			</TableCell>
@@ -172,7 +170,7 @@ function ImpersonateDialog({ user, open, onClose }: { user: AdminUser | null; op
 		setError(null);
 		const result = await authClient.admin.impersonateUser({ userId: user.id });
 		if (result.error) {
-			setError(result.error.message || "Couldn't impersonate this user");
+			setError(result.error.message || "无法模拟登录该用户");
 			setStarting(false);
 			return;
 		}
@@ -183,10 +181,9 @@ function ImpersonateDialog({ user, open, onClose }: { user: AdminUser | null; op
 		<Dialog open={open} onOpenChange={(next) => !next && !starting && close()}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Impersonate {user?.name || user?.email}?</DialogTitle>
+					<DialogTitle>模拟登录 {user?.name || user?.email}？</DialogTitle>
 					<DialogDescription>
-						You'll be signed in as {user?.email} and anything you change is changed for them. Use the bar at the top of
-						the page to return to your own account.
+						你将以 {user?.email} 的身份登录，你的任何改动都会作用于该用户。可通过页面顶部的 返回栏回到你自己的账户。
 					</DialogDescription>
 				</DialogHeader>
 				{error && (
@@ -196,11 +193,11 @@ function ImpersonateDialog({ user, open, onClose }: { user: AdminUser | null; op
 				)}
 				<DialogFooter>
 					<Button variant="outline" onClick={close} disabled={starting} className="cursor-pointer">
-						Cancel
+						取消
 					</Button>
 					<Button onClick={start} disabled={starting} className="cursor-pointer">
 						{starting && <Spinner />}
-						Impersonate
+						模拟登录
 					</Button>
 				</DialogFooter>
 			</DialogContent>

@@ -44,7 +44,7 @@ export function TopDomainsCard({
 								</TooltipContent>
 							</Tooltip>
 						</CardTitle>
-						<CardDescription>Which domains LLMs reference most when responding to your prompts</CardDescription>
+						<CardDescription>大模型回答你的提示词时最常引用哪些域名</CardDescription>
 					</div>
 					<InputGroup className="h-8 shrink-0 sm:w-48">
 						<InputGroupInput
@@ -102,7 +102,7 @@ export function TopDomainsCard({
 					</div>
 				) : (
 					!list.isFetching && (
-						<p className="text-sm text-muted-foreground text-center py-4">No domains match the current filters.</p>
+						<p className="text-sm text-muted-foreground text-center py-4">没有符合当前筛选条件的域名。</p>
 					)
 				)}
 			</CardContent>

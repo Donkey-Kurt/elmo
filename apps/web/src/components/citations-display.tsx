@@ -74,14 +74,14 @@ function useCitationSections(citationData: CitationData) {
 
 	const urlSourceTabs = useMemo<{ key: string; label: string }[]>(
 		() => [
-			{ key: "all", label: "All Sources" },
+			{ key: "all", label: "全部来源" },
 			...chartSourceCategories.map((c) => ({ key: c as string, label: CATEGORY_CONFIG[c].label })),
 		],
 		[chartSourceCategories],
 	);
 	const urlPageTypeTabs = useMemo<{ key: string; label: string }[]>(
 		() => [
-			{ key: "all", label: "All Page Types" },
+			{ key: "all", label: "全部页面类型" },
 			...chartPageTypes.map((p) => ({ key: p as string, label: PAGE_TYPE_CONFIG[p].label })),
 		],
 		[chartPageTypes],
@@ -122,8 +122,8 @@ function CitationTrendCharts({
 		<>
 			{sourceSeries.length > 0 && (
 				<TrendAreaChart
-					title="Citation Categories"
-					tooltip="Share of citations by source category over time, as a percentage of all citations each day. Smoothed to account for staggered prompt schedules; Google AI Mode search/shopping are excluded (see the Google Shopping section)."
+					title="引用来源类别"
+					tooltip="按来源类别展示引用占比随时间的变化，数值为每日引用占当日全部引用的百分比。已做平滑处理以适配错开的提示词调度；Google AI Mode 的搜索与购物结果不计入（见 Google 购物栏目）。"
 					data={sourceSeries as unknown as Array<Record<string, number | string>>}
 					keys={chartSourceCategories}
 					meta={CATEGORY_META}
@@ -132,8 +132,8 @@ function CitationTrendCharts({
 
 			{pageTypeSeries.length > 0 && (
 				<TrendAreaChart
-					title="Citation Page Types"
-					tooltip="Share of citations by page type over time — what kind of page each citation points to, inferred from the URL and title."
+					title="引用页面类型"
+					tooltip="按页面类型展示引用占比随时间的变化——即每处引用指向哪种页面，由 URL 和标题推断。"
 					data={pageTypeSeries as unknown as Array<Record<string, number | string>>}
 					keys={chartPageTypes}
 					meta={PAGE_TYPE_META}

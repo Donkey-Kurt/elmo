@@ -22,7 +22,7 @@ export function parseModelFilter(value: string): { model: string; premium: boole
 }
 
 export function labelForModelFilter(value: string): string {
-	if (value === ALL_MODELS_VALUE) return "All models";
+	if (value === ALL_MODELS_VALUE) return "全部模型";
 	const parsed = parseModelFilter(value);
 	if (!parsed) return value;
 	return parsed.premium ? premiumModelLabel(parsed.model) : getModelMeta(parsed.model).label;

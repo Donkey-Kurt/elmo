@@ -20,7 +20,7 @@ export function ListPagination({ page, pageSize, totalItems, onPageChange }: Lis
 	return (
 		<div className="mt-3 flex items-center justify-between">
 			<span className="text-[11px] text-muted-foreground tabular-nums">
-				{start.toLocaleString()}–{end.toLocaleString()} of {totalItems.toLocaleString()}
+				第 {start.toLocaleString()}–{end.toLocaleString()} 条，共 {totalItems.toLocaleString()} 条
 			</span>
 			<div className="flex items-center gap-1.5">
 				<button
@@ -29,7 +29,7 @@ export function ListPagination({ page, pageSize, totalItems, onPageChange }: Lis
 					disabled={page === 0}
 					className={PAGER_BUTTON_CLASS}
 				>
-					Previous
+					上一页
 				</button>
 				<button
 					type="button"
@@ -37,7 +37,7 @@ export function ListPagination({ page, pageSize, totalItems, onPageChange }: Lis
 					disabled={page >= totalPages - 1}
 					className={PAGER_BUTTON_CLASS}
 				>
-					Next
+					下一页
 				</button>
 			</div>
 		</div>

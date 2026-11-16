@@ -28,17 +28,17 @@ import { pageHead } from "@/lib/route-head";
 import type { ShareOfVoiceEntry } from "@/server/analysis";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/share-of-voice")({
-	staticData: { crumb: "Share of Voice" },
-	head: pageHead({ description: "See how often AI engines mention you versus your competitors." }),
+	staticData: { crumb: "声量份额" },
+	head: pageHead({ description: "查看 AI 引擎提及你与竞品的频率对比。" }),
 	component: ShareOfVoicePage,
 });
 
 const formatPct = (share: number) => `${Math.round(share * 100)}%`;
 
 const TIPS = {
-	mentions: "Number of runs in which this brand was mentioned in the AI answer.",
-	share: "This brand's share of all brand + competitor mentions.",
-	prompts: "Number of distinct prompts this brand appeared in.",
+	mentions: "该品牌在 AI 回答中被提及的采样次数。",
+	share: "该品牌在你与竞品全部提及中所占的份额。",
+	prompts: "该品牌出现过的不同提示词数量。",
 };
 
 function ShareOfVoiceOverview({
@@ -58,7 +58,7 @@ function ShareOfVoiceOverview({
 		<div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
 			<Card>
 				<CardHeader>
-					<CardTitle>Share of Voice</CardTitle>
+					<CardTitle>声量份额</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<ShareOfVoiceDonut entries={entries} colors={colors} domainFor={domainFor} />
@@ -67,7 +67,7 @@ function ShareOfVoiceOverview({
 
 			<Card>
 				<CardHeader>
-					<CardTitle>Share of Voice Trends</CardTitle>
+					<CardTitle>声量份额趋势</CardTitle>
 				</CardHeader>
 				<CardContent>
 					{landscape ? (
@@ -83,7 +83,7 @@ function ShareOfVoiceOverview({
 							height={220}
 						/>
 					) : landscapeFailed ? (
-						<p className="py-8 text-center text-sm text-muted-foreground">Couldn't load the trends right now.</p>
+						<p className="py-8 text-center text-sm text-muted-foreground">暂时无法加载趋势数据。</p>
 					) : (
 						<Skeleton className="h-[250px] w-full" />
 					)}
@@ -116,10 +116,10 @@ function ShareOfVoicePage() {
 	const infoContent = (
 		<>
 			<p className="mb-2">
-				Share of voice is how often each brand is mentioned in the AI answers to your prompts. Mentions are counted per
-				run, so the brand and competitor figures use the same unit and are directly comparable.
+				声量份额衡量每个品牌在你的提示词对应的 AI
+				回答中被提及的频率。提及按采样次数统计，因此品牌与竞品的数字单位一致，可以直接比较。
 			</p>
-			<p>Competitors are the ones you track in settings. Switch the model filter to compare engines.</p>
+			<p>竞品即你在设置中追踪的对象。切换模型筛选即可对比不同引擎。</p>
 		</>
 	);
 
@@ -144,7 +144,7 @@ function ShareOfVoicePage() {
 			<Card>
 				<CardContent className="pt-6">
 					<div className="text-muted-foreground text-center py-8">
-						No mention data yet for the selected filters. Mentions appear once your prompts have been run.
+						所选筛选条件下暂无提及数据。提示词完成采样后才会出现提及。
 					</div>
 				</CardContent>
 			</Card>
@@ -162,22 +162,22 @@ function ShareOfVoicePage() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Share of Voice Leaderboard</CardTitle>
+						<CardTitle>声量份额排行</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<Table>
 							<TableHeader>
 								<TableRow>
 									<TableHead className="w-10 max-sm:w-8">#</TableHead>
-									<TableHead>Brand</TableHead>
+									<TableHead>品牌</TableHead>
 									<TableHead className="text-right max-sm:hidden">
-										<ColHead label="Mentions" tip={TIPS.mentions} right />
+										<ColHead label="提及" tip={TIPS.mentions} right />
 									</TableHead>
 									<TableHead className="w-[34%] max-sm:w-24">
-										<ColHead label="Share" tip={TIPS.share} />
+										<ColHead label="份额" tip={TIPS.share} />
 									</TableHead>
 									<TableHead className="text-right max-sm:hidden">
-										<ColHead label="Prompts" tip={TIPS.prompts} right />
+										<ColHead label="提示词" tip={TIPS.prompts} right />
 									</TableHead>
 								</TableRow>
 							</TableHeader>
@@ -192,7 +192,7 @@ function ShareOfVoicePage() {
 												<span className="truncate max-sm:max-w-24">{e.name}</span>
 												{e.isBrand && (
 													<Badge variant="secondary" className="text-xs">
-														You
+														你
 													</Badge>
 												)}
 											</span>
@@ -230,11 +230,7 @@ function ShareOfVoicePage() {
 	}
 
 	return (
-		<PageHeader
-			title="Share of Voice"
-			subtitle="How often AI engines mention you versus your competitors."
-			infoContent={infoContent}
-		>
+		<PageHeader title="声量份额" subtitle="AI 引擎提及你与竞品的频率对比。" infoContent={infoContent}>
 			<FilterSection>
 				<FilterBar availableTags={availableTags} trackedTargets={trackedTargets} showSearch={false} showModelSelector />
 			</FilterSection>

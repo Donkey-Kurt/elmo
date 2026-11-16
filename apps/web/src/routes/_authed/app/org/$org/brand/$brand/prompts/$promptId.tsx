@@ -269,7 +269,7 @@ function PromptHistoryPage() {
 		return (
 			<div className="space-y-6">
 				<div className="flex justify-between items-start">
-					<h1 className="text-3xl font-bold">Prompt Details</h1>
+					<h1 className="text-3xl font-bold">提示词详情</h1>
 					<LookbackSelector onLookbackChange={handleLookbackChange} />
 				</div>
 				<Card>
@@ -286,10 +286,10 @@ function PromptHistoryPage() {
 	if (!isMetaLoading && !promptMeta) {
 		return (
 			<div className="space-y-6">
-				<h1 className="text-3xl font-bold">Prompt Details</h1>
+				<h1 className="text-3xl font-bold">提示词详情</h1>
 				<Card>
 					<CardContent className="pt-6">
-						<div className="text-muted-foreground">No prompt data found.</div>
+						<div className="text-muted-foreground">未找到该提示词的数据。</div>
 					</CardContent>
 				</Card>
 			</div>
@@ -302,7 +302,7 @@ function PromptHistoryPage() {
 
 			<div className="border-b border-border">
 				<div className="flex items-end justify-between">
-					<nav className="-mb-px flex gap-6" aria-label="Tabs">
+					<nav className="-mb-px flex gap-6" aria-label="标签页">
 						{TABS.map(({ key, label }) => (
 							<button
 								key={key}
@@ -510,8 +510,8 @@ function WebQueriesTab({
 	return (
 		<Tabs defaultValue="fanout" className="gap-4">
 			<TabsList>
-				<TabsTrigger value="fanout">Prompt Fan-Out</TabsTrigger>
-				<TabsTrigger value="words">Query Words</TabsTrigger>
+				<TabsTrigger value="fanout">提示词扩展</TabsTrigger>
+				<TabsTrigger value="words">查询词</TabsTrigger>
 			</TabsList>
 			<TabsContent value="fanout">
 				<Card>
@@ -604,13 +604,13 @@ function ResponsesTab({
 
 	if (!sentimentFilterCounts || sentimentFilterCounts.all === 0) {
 		return (
-			<div className="py-12 text-center text-muted-foreground text-sm">No prompt runs found for this time period.</div>
+			<div className="py-12 text-center text-muted-foreground text-sm">该时间段内没有采样记录。</div>
 		);
 	}
 
 	return (
 		<div className="space-y-4">
-			<h3 className="text-base font-medium">Individual Prompt Runs</h3>
+			<h3 className="text-base font-medium">单次采样记录</h3>
 
 			<SentimentFilterCard
 				counts={sentimentFilterCounts}
@@ -621,7 +621,7 @@ function ResponsesTab({
 			/>
 
 			{runs.length === 0 && (
-				<div className="py-12 text-center text-muted-foreground text-sm">No runs match this filter.</div>
+				<div className="py-12 text-center text-muted-foreground text-sm">没有符合筛选条件的采样。</div>
 			)}
 
 			{runs.map((run) => (

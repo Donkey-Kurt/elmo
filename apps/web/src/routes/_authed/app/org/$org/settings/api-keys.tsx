@@ -60,14 +60,14 @@ import {
 export const Route = createFileRoute("/_authed/app/org/$org/settings/api-keys")({
 	loader: ({ context }): Promise<ApiKeysPageData> =>
 		listApiKeysFn({ data: { organizationId: context.organization.id } }),
-	staticData: { crumb: "API Keys" },
-	head: pageHead({ description: "Issue and revoke API keys for this organization." }),
+	staticData: { crumb: "API 密钥" },
+	head: pageHead({ description: "为本组织签发与吊销 API 密钥。" }),
 	component: ApiKeysSettingsPage,
 });
 
 const ACCESS_LABELS: Record<ApiKeyAccess, string> = {
-	read: "Read",
-	write: "Read/Write",
+	read: "只读",
+	write: "读写",
 };
 
 function formatDate(value: string | null, empty = "—"): string {
@@ -85,7 +85,7 @@ function isActive(key: ApiKeySummary): boolean {
 /** Why it stopped authenticating: the act somebody took if there was one, the
  * expiry that overtook it otherwise. */
 function inactiveReason(key: ApiKeySummary): string {
-	return key.enabled ? `Expired ${formatDate(key.expiresAt)}` : "Revoked";
+	return key.enabled ? `已于 ${formatDate(key.expiresAt)} 过期` : "已吊销";
 }
 
 function ApiKeysSettingsPage() {
@@ -116,7 +116,7 @@ function ApiKeysSettingsPage() {
 			setRevokeTarget(null);
 			await router.invalidate();
 		} catch (err) {
-			setRevokeError(err instanceof Error ? err.message : "Failed to revoke the API key");
+			setRevokeError(err instanceof Error ? err.message : "吊销 API 密钥失败");
 		} finally {
 			setRevoking(false);
 		}
@@ -129,7 +129,7 @@ function ApiKeysSettingsPage() {
 	return (
 		<div className="max-w-6xl space-y-8">
 			<header className="space-y-1">
-				<h1 className="text-3xl font-bold">API Keys</h1>
+				<h1 className="text-3xl font-bold">API 密钥</h1>
 				<p className="max-w-2xl text-muted-foreground">
 					Keys authenticate the{" "}
 					<Link to="/app/org/$org/settings/api" params={linkParams} className="underline underline-offset-4">
@@ -145,12 +145,12 @@ function ApiKeysSettingsPage() {
 
 			{issuedKey && <IssuedKeyCard value={issuedKey} />}
 
-			<DemoModeAlert>API access is disabled in demo mode.</DemoModeAlert>
+			<DemoModeAlert>演示模式下已禁用 API 访问。</DemoModeAlert>
 
 			{!isKeyAdmin && !readOnly && (
 				<Alert className="border-yellow-200 bg-yellow-50 text-yellow-800">
 					<IconAlertTriangle />
-					<AlertTitle>Limited Access</AlertTitle>
+					<AlertTitle>受限访问</AlertTitle>
 					<AlertDescription className="text-yellow-700">
 						Only organization admins can issue or revoke keys.
 					</AlertDescription>
@@ -159,7 +159,7 @@ function ApiKeysSettingsPage() {
 
 			<section className="space-y-3">
 				<div className="flex flex-wrap items-center justify-between gap-3">
-					<h2 className="text-lg font-semibold">Active</h2>
+					<h2 className="text-lg font-semibold">生效中</h2>
 					{canManage && (
 						<Button type="button" size="sm" onClick={() => setCreatingOpen(true)}>
 							<IconPlus className="size-4" />
@@ -194,8 +194,8 @@ function ApiKeysSettingsPage() {
 			{inactive.length > 0 && (
 				<section className="space-y-3">
 					<div className="space-y-1">
-						<h2 className="text-lg font-semibold text-muted-foreground">Inactive</h2>
-						<p className="text-sm text-muted-foreground">Revoked or expired — they no longer authenticate anything.</p>
+						<h2 className="text-lg font-semibold text-muted-foreground">已失效</h2>
+						<p className="text-sm text-muted-foreground">已吊销或已过期 —— 它们不再能通过任何认证。</p>
 					</div>
 					<KeyTable keys={inactive} brandNames={brandNames} inactive />
 				</section>
@@ -204,7 +204,7 @@ function ApiKeysSettingsPage() {
 			<Dialog open={creatingOpen} onOpenChange={setCreatingOpen}>
 				<DialogContent className="flex max-h-[85vh] flex-col gap-4 sm:max-w-2xl">
 					<DialogHeader className="shrink-0">
-						<DialogTitle>Create a key</DialogTitle>
+						<DialogTitle>创建密钥</DialogTitle>
 					</DialogHeader>
 					<CreateKeyForm
 						organizationId={organization.id}
@@ -224,8 +224,8 @@ function ApiKeysSettingsPage() {
 			>
 				<DialogContent>
 					<DialogHeader>
-						<DialogTitle>Revoke “{revokeTarget?.name ?? "Untitled key"}”?</DialogTitle>
-						<DialogDescription>This key will immediately and permanently have its access revoked.</DialogDescription>
+						<DialogTitle>确定吊销 “{revokeTarget?.name ?? "未命名密钥"}”？</DialogTitle>
+						<DialogDescription>该密钥的访问权限将立即被永久吊销。</DialogDescription>
 					</DialogHeader>
 					{revokeError && (
 						<Alert variant="destructive">
@@ -244,7 +244,7 @@ function ApiKeysSettingsPage() {
 							onClick={() => revokeTarget && handleRevoke(revokeTarget.id)}
 						>
 							{revoking ? <Spinner /> : null}
-							{revoking ? "Revoking…" : "Revoke"}
+							{revoking ? "吊销中…" : "吊销"}
 						</Button>
 					</DialogFooter>
 				</DialogContent>
@@ -293,7 +293,7 @@ function CreateKeyForm({
 			trackEvent("api_key_created", { access, restricted: restrictBrands });
 			onCreated(key);
 		} catch (err) {
-			setError(err instanceof Error ? err.message : "Failed to create the API key");
+			setError(err instanceof Error ? err.message : "创建 API 密钥失败");
 		} finally {
 			setCreating(false);
 		}
@@ -311,17 +311,17 @@ function CreateKeyForm({
 
 				<div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_10rem]">
 					<div className="space-y-2">
-						<Label htmlFor="key-name">Name</Label>
+						<Label htmlFor="key-name">名称</Label>
 						<Input
 							id="key-name"
-							placeholder="Reporting pipeline"
+							placeholder="报表流水线"
 							value={name}
 							onChange={(event) => setName(event.target.value)}
 							required
 						/>
 					</div>
 					<div className="space-y-2">
-						<Label htmlFor="key-expiry">Expires</Label>
+						<Label htmlFor="key-expiry">有效期</Label>
 						<Select
 							items={{
 								never: "Never",
@@ -334,7 +334,7 @@ function CreateKeyForm({
 								<SelectValue />
 							</SelectTrigger>
 							<SelectContent>
-								<SelectItem value="never">Never</SelectItem>
+								<SelectItem value="never">永不过期</SelectItem>
 								{expiryOptions.map((days) => (
 									<SelectItem key={days} value={String(days)}>
 										In {days} days
@@ -366,7 +366,7 @@ function CreateKeyForm({
 				</Button>
 				<Button type="submit" disabled={creating}>
 					{creating && <Spinner />}
-					{creating ? "Creating…" : "Create"}
+					{creating ? "创建中…" : "创建"}
 				</Button>
 			</DialogFooter>
 		</form>
@@ -376,7 +376,7 @@ function CreateKeyForm({
 function AccessPicker({ access, onAccess }: { access: ApiKeyAccess; onAccess: (access: ApiKeyAccess) => void }) {
 	return (
 		<section className="space-y-3">
-			<p className="text-sm font-medium">Access</p>
+			<p className="text-sm font-medium">访问权限</p>
 			<Tabs value={access} onValueChange={(value) => onAccess((value ?? "read") as ApiKeyAccess)}>
 				<TabsList>
 					<TabsTrigger value="read">{ACCESS_LABELS.read}</TabsTrigger>
@@ -408,19 +408,19 @@ function BrandPicker({
 
 	return (
 		<section className="space-y-3">
-			<p className="text-sm font-medium">Brand access</p>
+			<p className="text-sm font-medium">品牌范围</p>
 			<Tabs value={restricted ? "custom" : "all"} onValueChange={(value) => onRestricted(value === "custom")}>
 				<TabsList>
-					<TabsTrigger value="all">All brands</TabsTrigger>
-					<TabsTrigger value="custom">Specific brands</TabsTrigger>
+					<TabsTrigger value="all">全部品牌</TabsTrigger>
+					<TabsTrigger value="custom">指定品牌</TabsTrigger>
 				</TabsList>
 				<TabsContent value="all" className="pt-1 text-sm text-muted-foreground">
-					Every brand in this organization, including brands added later.
+					本组织内的全部品牌，包含之后新增的品牌。
 				</TabsContent>
 				<TabsContent value="custom" className="pt-1">
 					{brands.length === 0 ? (
 						<p className="text-sm text-muted-foreground">
-							This organization has no brands yet, so there is nothing to narrow the key to.
+							本组织还没有品牌，因此无法把密钥限定到具体品牌。
 						</p>
 					) : (
 						<BrandCombobox brandIds={brandIds} nameOf={nameOf} selected={selected} onSelected={onSelected} />
@@ -460,13 +460,13 @@ function BrandCombobox({
 							{ids.map((id) => (
 								<ComboboxChip key={id}>{nameOf(id)}</ComboboxChip>
 							))}
-							<ComboboxChipsInput placeholder={ids.length === 0 ? "Search brands…" : undefined} />
+							<ComboboxChipsInput placeholder={ids.length === 0 ? "搜索品牌…" : undefined} />
 						</>
 					)}
 				</ComboboxValue>
 			</ComboboxChips>
 			<ComboboxContent anchor={anchor}>
-				<ComboboxEmpty>No brands found.</ComboboxEmpty>
+				<ComboboxEmpty>未找到品牌。</ComboboxEmpty>
 				<ComboboxList>
 					{(id: string) => (
 						<ComboboxItem key={id} value={id}>
@@ -486,7 +486,7 @@ function IssuedKeyCard({ value }: { value: string }) {
 				<IconCircleCheck className="size-5" />
 				Key Created
 			</CardTitle>
-			<CopyField value={value} label="API Key" className="max-w-md flex-1" />
+			<CopyField value={value} label="API 密钥" className="max-w-md flex-1" />
 		</Card>
 	);
 }
@@ -495,7 +495,7 @@ function IssuedKeyCard({ value }: { value: string }) {
  * happens to hold them in. */
 function AccessCell({ scopes }: { scopes: readonly string[] }) {
 	const held = API_SCOPES.filter((scope) => scopes.includes(scope));
-	if (held.length === 0) return <span className="text-muted-foreground">No access</span>;
+	if (held.length === 0) return <span className="text-muted-foreground">无权限</span>;
 
 	return (
 		<div className="flex flex-wrap gap-1">
@@ -527,13 +527,13 @@ function KeyTable({
 					<TableRow className="hover:bg-transparent">
 						<TableHead className="w-[22%]">Name</TableHead>
 						<TableHead className="w-[10%]">Key</TableHead>
-						<TableHead className="w-[14%]">Access</TableHead>
-						<TableHead className="w-[12%]">Brands</TableHead>
-						<TableHead className="w-[10%]">Created</TableHead>
-						<TableHead className="w-[10%]">Last used</TableHead>
-						<TableHead className="w-[15%]">{inactive ? "Reason" : "Expires"}</TableHead>
+						<TableHead className="w-[14%]">权限</TableHead>
+						<TableHead className="w-[12%]">品牌</TableHead>
+						<TableHead className="w-[10%]">创建时间</TableHead>
+						<TableHead className="w-[10%]">最近使用</TableHead>
+						<TableHead className="w-[15%]">{inactive ? "原因" : "有效期"}</TableHead>
 						<TableHead className="w-[7%] text-right">
-							<span className="sr-only">Actions</span>
+							<span className="sr-only">操作</span>
 						</TableHead>
 					</TableRow>
 				</TableHeader>
@@ -541,7 +541,7 @@ function KeyTable({
 					{keys.map((key) => (
 						<TableRow key={key.id}>
 							<TableCell className={cn("truncate font-medium", !inactive && "text-foreground")}>
-								{key.name ?? "Untitled key"}
+								{key.name ?? "未命名密钥"}
 							</TableCell>
 							<TableCell>
 								<KeyCell start={key.start} />
@@ -553,12 +553,12 @@ function KeyTable({
 								<BrandsCell names={key.brandIds?.map((id) => brandNames.get(id) ?? id) ?? null} />
 							</TableCell>
 							<TableCell className="whitespace-nowrap">{formatDate(key.createdAt)}</TableCell>
-							<TableCell className="whitespace-nowrap">{formatDate(key.lastUsedAt, "Never")}</TableCell>
+							<TableCell className="whitespace-nowrap">{formatDate(key.lastUsedAt, "从未")}</TableCell>
 							<TableCell>
 								{inactive ? (
 									inactiveReason(key)
 								) : (
-									<span className="whitespace-nowrap">{formatDate(key.expiresAt, "Never")}</span>
+									<span className="whitespace-nowrap">{formatDate(key.expiresAt, "从未")}</span>
 								)}
 							</TableCell>
 							<TableCell className="text-right">{onRevoke && <RevokeButton onClick={() => onRevoke(key)} />}</TableCell>
@@ -593,7 +593,7 @@ function KeyCell({ start }: { start: string | null }) {
  * hold, so the ones it clips are a hover away rather than lost. */
 function BrandsCell({ names }: { names: string[] | null }) {
 	const { ref, truncated } = useIsTruncated<HTMLSpanElement>();
-	const label = names ? names.join(", ") : "All brands";
+	const label = names ? names.join(", ") : "全部品牌";
 
 	return (
 		<Tooltip disabled={!truncated}>
@@ -618,11 +618,11 @@ function RevokeButton({ onClick }: { onClick: () => void }) {
 						onClick={onClick}
 					>
 						<IconX className="size-4" />
-						<span className="sr-only">Revoke</span>
+						<span className="sr-only">吊销</span>
 					</Button>
 				}
 			/>
-			<TooltipContent>Revoke Key</TooltipContent>
+			<TooltipContent>吊销密钥</TooltipContent>
 		</Tooltip>
 	);
 }
@@ -638,7 +638,7 @@ function EmptyKeys({
 	hasInactive: boolean;
 	onCreate: () => void;
 }) {
-	const reason = readOnly ? "Keys can't be issued in demo mode." : "An organization admin can issue one.";
+	const reason = readOnly ? "演示模式下无法签发密钥。" : "需要组织管理员签发。";
 
 	return (
 		<div className="flex flex-col items-center gap-3 rounded-md border border-dashed px-6 py-12 text-center">
@@ -646,15 +646,15 @@ function EmptyKeys({
 				<IconKey className="size-5" />
 			</span>
 			<div className="space-y-1">
-				<p className="font-medium">{hasInactive ? "No active API keys" : "No API keys yet"}</p>
+				<p className="font-medium">{hasInactive ? "没有生效中的 API 密钥" : "还没有 API 密钥"}</p>
 				<p className="max-w-sm text-sm text-muted-foreground">
-					{canManage ? "Issue one to call the REST API or connect an MCP client." : reason}
+					{canManage ? "签发一个即可调用 REST API 或接入 MCP 客户端。" : reason}
 				</p>
 			</div>
 			{canManage && (
 				<Button type="button" onClick={onCreate}>
 					<IconPlus className="size-4" />
-					{hasInactive ? "Create a key" : "Create your first key"}
+					{hasInactive ? "创建密钥" : "创建第一个密钥"}
 				</Button>
 			)}
 		</div>

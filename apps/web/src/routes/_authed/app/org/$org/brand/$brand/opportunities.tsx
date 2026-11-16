@@ -18,8 +18,8 @@ import { useOpportunities } from "@/hooks/use-opportunities";
 import { pageHead } from "@/lib/route-head";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/opportunities")({
-	staticData: { crumb: "Opportunities" },
-	head: pageHead({ description: "AI-generated opportunities to earn more AI citations." }),
+	staticData: { crumb: "优化机会" },
+	head: pageHead({ description: "由 AI 生成、帮你获得更多 AI 引用的优化机会。" }),
 	component: OpportunitiesPage,
 });
 
@@ -27,18 +27,17 @@ function OpportunitiesPage() {
 	const brandId = useBrandId();
 	const { data, isLoading, error } = useOpportunities(brandId);
 
-	const infoContent = "Recommendations based on your visibility and citation metrics. Refreshed weekly.";
+	const infoContent = "基于你的可见度与引用指标生成的建议，每周刷新一次。";
 
 	let content: React.ReactNode;
 	if (isLoading) {
 		content = <LoadingState />;
 	} else if (error) {
-		content = <EmptyCard>Couldn't generate recommendations right now. Reload the page to try again.</EmptyCard>;
+		content = <EmptyCard>暂时无法生成建议，请重新加载页面后再试。</EmptyCard>;
 	} else if (!data || data.reason === "insufficient-data" || !data.report) {
 		content = (
 			<EmptyCard>
-				We need a bit more tracking data before we can recommend opportunities — check back once your prompts have run
-				for a few days.
+				我们还需要更多追踪数据，才能给出优化机会——等你的提示词运行几天后再来看看。
 			</EmptyCard>
 		);
 	} else {
@@ -47,8 +46,8 @@ function OpportunitiesPage() {
 
 	return (
 		<PageHeader
-			title="Opportunities"
-			subtitle="What to create, pitch, and seed to earn more AI citations — generated from your tracked answer data."
+			title="优化机会"
+			subtitle="该创作什么内容、向谁推荐、把内容投放到哪些渠道，才能获得更多 AI 引用——依据你追踪的回答数据生成。"
 			infoContent={infoContent}
 		>
 			<div className="space-y-6">
@@ -63,7 +62,7 @@ function LastEvaluatedAt({ date }: { date: string }) {
 	return (
 		<p className="flex items-center gap-1.5 text-sm text-muted-foreground">
 			<IconClock className="size-4" aria-hidden />
-			Last evaluated{" "}
+			上次评估{" "}
 			<time dateTime={date}>
 				{new Date(date).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}
 			</time>
@@ -84,7 +83,7 @@ function LoadingState() {
 		<div className="space-y-6">
 			<div className="flex items-center gap-2 text-sm text-muted-foreground">
 				<Spinner />
-				Analyzing your citation landscape and drafting your opportunities…
+				正在分析你的引用格局，并起草优化机会…
 			</div>
 			<div className="space-y-2">
 				<Skeleton className="h-6 w-2/3" />

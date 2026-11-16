@@ -21,7 +21,7 @@ import { listMcpToolsFn, type McpPageData } from "@/server/mcp";
 export const Route = createFileRoute("/_authed/app/org/$org/settings/mcp")({
 	loader: (): Promise<McpPageData> => listMcpToolsFn(),
 	staticData: { crumb: "MCP" },
-	head: pageHead({ description: "Connect an AI client to this deployment over MCP." }),
+	head: pageHead({ description: "通过 MCP 把 AI 客户端接入本部署。" }),
 	component: McpSettingsPage,
 });
 
@@ -70,7 +70,7 @@ function clientDocs(id: string, endpoint: string): ClientDocs[] {
 			label: "Codex",
 			signIn: { code: `codex mcp add ${id} --url ${endpoint}\ncodex mcp login ${id}` },
 			apiKey: {
-				note: "Codex reads the key from the environment rather than the config file.",
+				note: "Codex 从环境变量读取密钥，而不是从配置文件读取。",
 				code: `codex mcp add ${id} --url ${endpoint} \\\n  --bearer-token-env-var ${keyEnvVar}`,
 			},
 		},
@@ -80,8 +80,8 @@ function clientDocs(id: string, endpoint: string): ClientDocs[] {
 			signIn: {
 				note: (
 					<>
-						In <InlineCode>~/.cursor/mcp.json</InlineCode>. Cursor shows the server as needing login; sign in from
-						there. Older Cursor releases send a callback this deployment can't accept, so use a key if signing in fails.
+						写在 <InlineCode>~/.cursor/mcp.json</InlineCode> 中。Cursor 会把这个服务显示为需要登录；在那里登录即可。较旧的
+						Cursor 版本会发出本部署无法接受的回调，如果登录失败请改用密钥。
 					</>
 				),
 				code: json({ mcpServers: { [id]: { url: endpoint } } }),
@@ -94,8 +94,7 @@ function clientDocs(id: string, endpoint: string): ClientDocs[] {
 			signIn: {
 				note: (
 					<>
-						Or put it under <InlineCode>servers</InlineCode> in <InlineCode>mcp.json</InlineCode>. VS Code asks you to
-						sign in the first time it starts the server.
+						也可以放在 <InlineCode>mcp.json</InlineCode> 的 <InlineCode>servers</InlineCode> 下。VS Code 会在首次启动该服务时要求你登录。
 					</>
 				),
 				code: `code --add-mcp '${JSON.stringify({ name: id, type: "http", url: endpoint })}'`,
@@ -103,7 +102,7 @@ function clientDocs(id: string, endpoint: string): ClientDocs[] {
 			apiKey: {
 				note: (
 					<>
-						In <InlineCode>mcp.json</InlineCode>.
+						写在 <InlineCode>mcp.json</InlineCode> 中。
 					</>
 				),
 				code: json({ servers: { [id]: { type: "http", url: endpoint, headers: bearer } } }),
@@ -115,7 +114,7 @@ function clientDocs(id: string, endpoint: string): ClientDocs[] {
 			signIn: {
 				note: (
 					<>
-						In <InlineCode>opencode.json</InlineCode>, then <InlineCode>opencode mcp auth {id}</InlineCode>.
+						写在 <InlineCode>opencode.json</InlineCode> 中，然后执行 <InlineCode>opencode mcp auth {id}</InlineCode>。
 					</>
 				),
 				code: json({
@@ -126,7 +125,7 @@ function clientDocs(id: string, endpoint: string): ClientDocs[] {
 			apiKey: {
 				note: (
 					<>
-						In <InlineCode>opencode.json</InlineCode>.
+						写在 <InlineCode>opencode.json</InlineCode> 中。
 					</>
 				),
 				code: json({
@@ -162,18 +161,18 @@ function McpSettingsPage() {
 		<div className="max-w-4xl space-y-8">
 			<header className="space-y-1">
 				<h1 className="text-3xl font-bold">MCP</h1>
-				<p className="max-w-2xl text-muted-foreground">Connect any chat bot to {appName}.</p>
+				<p className="max-w-2xl text-muted-foreground">把任意聊天机器人接入 {appName}。</p>
 			</header>
 
-			<DemoModeAlert>MCP access is disabled in demo mode.</DemoModeAlert>
+			<DemoModeAlert>演示模式下已禁用 MCP 访问。</DemoModeAlert>
 
 			<section className="space-y-3">
-				<h2 className="text-lg font-semibold">Endpoint</h2>
-				<CopyField value={endpoint} label="Endpoint" className="max-w-xl" />
+				<h2 className="text-lg font-semibold">接入地址</h2>
+				<CopyField value={endpoint} label="接入地址" className="max-w-xl" />
 			</section>
 
 			<section className="space-y-3">
-				<h2 className="text-lg font-semibold">Connect</h2>
+				<h2 className="text-lg font-semibold">接入方式</h2>
 				<Tabs defaultValue={clients[0].value}>
 					<TabsList>
 						{clients.map((client) => (
@@ -184,8 +183,8 @@ function McpSettingsPage() {
 					</TabsList>
 					{clients.map((client) => (
 						<TabsContent key={client.value} value={client.value} className="space-y-6 pt-4">
-							<Snippet heading="Sign in with OAuth" snippet={client.signIn} />
-							<Snippet heading="Sign in with API Key" snippet={client.apiKey} />
+							<Snippet heading="使用 OAuth 登录" snippet={client.signIn} />
+							<Snippet heading="使用 API 密钥登录" snippet={client.apiKey} />
 						</TabsContent>
 					))}
 				</Tabs>
@@ -193,10 +192,10 @@ function McpSettingsPage() {
 
 			<section className="space-y-3">
 				<div className="space-y-1">
-					<h2 className="text-lg font-semibold">Tools</h2>
+					<h2 className="text-lg font-semibold">工具</h2>
 					{readOnlyDeployment && (
 						<p className="text-sm text-muted-foreground">
-							This deployment is read-only, so the tools that write are withheld from every key.
+							本部署为只读模式，因此所有密钥都不会获得写入类工具。
 						</p>
 					)}
 				</div>
@@ -204,9 +203,9 @@ function McpSettingsPage() {
 					<Table className="[&_td]:px-4 [&_th]:px-4">
 						<TableHeader>
 							<TableRow className="hover:bg-transparent">
-								<TableHead className="w-[22%]">Tool</TableHead>
-								<TableHead>What it does</TableHead>
-								<TableHead className="w-[24%]">Scope</TableHead>
+								<TableHead className="w-[22%]">工具</TableHead>
+								<TableHead>作用</TableHead>
+								<TableHead className="w-[24%]">权限范围</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>

@@ -4,8 +4,8 @@ import FullPageCard from "@/components/full-page-card";
 import { OrganizationDirectory } from "@/components/organization-directory";
 import { organizationsQuery } from "@/lib/organizations/queries";
 
-const TITLE = "404 Not Found";
-const SUBTITLE = "That page doesn't exist or moved.";
+const TITLE = "404 未找到";
+const SUBTITLE = "该页面不存在或已被移动。";
 
 export function NotFoundPage() {
 	const { data, isLoading } = useQuery(organizationsQuery);

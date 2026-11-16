@@ -75,12 +75,12 @@ export function PlanFeatureTable() {
 		<div className="overflow-x-auto pb-2">
 			<div className={GRID}>
 				<SectionHeading>Limits</SectionHeading>
-				<Row label="Brands" cell={(plan) => plan.maxBrands} />
-				<Row label="Tracked prompts" cell={(plan) => plan.maxPrompts} />
-				<Row label="Platforms per brand" cell={(plan) => plan.platformPicks} />
-				<Row label="Sampling" cell={(plan) => `${plan.standardRunsPerDay}×/day`} />
-				<Row label="Seats" cell={() => "Unlimited"} />
-				<Row label="API access" cell={() => true} />
+				<Row label="品牌" cell={(plan) => plan.maxBrands} />
+				<Row label="追踪的提示词" cell={(plan) => plan.maxPrompts} />
+				<Row label="每品牌平台数" cell={(plan) => plan.platformPicks} />
+				<Row label="采样" cell={(plan) => `${plan.standardRunsPerDay}×/day`} />
+				<Row label="席位" cell={() => "不限"} />
+				<Row label="API 访问" cell={() => true} />
 
 				<PlatformSection tier="scraped" />
 				<PlatformSection tier="api" />
@@ -92,11 +92,11 @@ export function PlanFeatureTable() {
 					</span>
 				</SectionHeading>
 				<Row
-					label="Included"
+					label="已包含"
 					cell={(plan) => (plan.premiumIncluded > 0 ? premiumPairings(plan.premiumIncluded) : false)}
 				/>
 				<Row
-					label="Buy more"
+					label="可加购"
 					cell={(plan) => (plan.premiumAddonAvailable ? `$${PREMIUM_ADDON_MONTHLY_USD}/mo each` : false)}
 				/>
 				{platformTierMembers("premium").map((member) => (
@@ -207,9 +207,9 @@ function Row({ label, cell }: { label: ReactNode; cell: (plan: PlanDefinition) =
 				return (
 					<div key={key} className="flex items-center justify-center border-b px-3 py-2 text-center text-sm">
 						{value === true ? (
-							<IconCheck className="size-4 text-emerald-600" aria-label="Included" />
+							<IconCheck className="size-4 text-emerald-600" aria-label="已包含" />
 						) : value === false ? (
-							<IconMinus className="size-4 text-muted-foreground/40" aria-label="Not included" />
+							<IconMinus className="size-4 text-muted-foreground/40" aria-label="未包含" />
 						) : (
 							<span className="tabular-nums">{value}</span>
 						)}

@@ -50,13 +50,13 @@ function NewOrganizationPage() {
 
 	return (
 		<FullPageCard
-			title="Create an organization"
-			subtitle="An organization holds its own brands, team, and plan."
+			title="创建组织"
+			subtitle="组织拥有自己的品牌、团队与套餐。"
 			showBackButton
 		>
 			<form onSubmit={handleSubmit} className="space-y-4">
 				<div className="space-y-2">
-					<Label htmlFor="organization-name">Organization Name</Label>
+					<Label htmlFor="organization-name">组织名称</Label>
 					<Input
 						id="organization-name"
 						value={name}

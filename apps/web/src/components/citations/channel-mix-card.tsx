@@ -141,7 +141,7 @@ function ChannelMixCard({ channelMix }: { channelMix: ChannelMix }) {
 						</thead>
 						<tbody>
 							<tr className="font-semibold [&>td]:bg-muted">
-								<td className="rounded-l-md py-2 pr-3 pl-2 whitespace-nowrap">All Channels</td>
+								<td className="rounded-l-md py-2 pr-3 pl-2 whitespace-nowrap">全部渠道</td>
 								<td className="py-2 pr-3 text-right whitespace-nowrap tabular-nums">
 									{totalCitations.toLocaleString()}
 									<span className="ml-1.5 inline-block w-9" />

@@ -28,7 +28,7 @@ import { BRAND_ROUTE_ID } from "@/lib/route-subject";
 import type { DashboardSummaryResponse } from "@/server/dashboard";
 
 function formatRelativeTime(dateString: string | null): string {
-	if (!dateString) return "Never";
+	if (!dateString) return "从未";
 
 	const date = new Date(dateString);
 	const now = new Date();
@@ -37,12 +37,12 @@ function formatRelativeTime(dateString: string | null): string {
 	const diffHours = Math.floor(diffMs / 3600000);
 	const diffDays = Math.floor(diffMs / 86400000);
 
-	if (diffMins < 1) return "Just now";
-	if (diffMins < 60) return `${diffMins}m ago`;
-	if (diffHours < 24) return `${diffHours}h ago`;
-	if (diffDays < 7) return `${diffDays}d ago`;
+	if (diffMins < 1) return "刚刚";
+	if (diffMins < 60) return `${diffMins} 分钟前`;
+	if (diffHours < 24) return `${diffHours} 小时前`;
+	if (diffDays < 7) return `${diffDays} 天前`;
 
-	return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+	return date.toLocaleDateString("zh-CN", { month: "short", day: "numeric" });
 }
 
 function formatRunFrequency(hours: number): string {
@@ -51,16 +51,16 @@ function formatRunFrequency(hours: number): string {
 	const remainingHours = hours % 24;
 
 	const parts: string[] = [];
-	if (weeks > 0) parts.push(`${weeks}w`);
-	if (days > 0) parts.push(`${days}d`);
-	if (remainingHours > 0) parts.push(`${remainingHours}h`);
+	if (weeks > 0) parts.push(`${weeks} 周`);
+	if (days > 0) parts.push(`${days} 天`);
+	if (remainingHours > 0) parts.push(`${remainingHours} 小时`);
 
-	return parts.length > 0 ? `~${parts.join(" ")}` : "~1h";
+	return parts.length > 0 ? `约 ${parts.join(" ")}` : "约 1 小时";
 }
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/")({
-	staticData: { crumb: "Overview" },
-	head: pageHead({ description: "How AI answers talk about your brand and your competitors." }),
+	staticData: { crumb: "总览" },
+	head: pageHead({ description: "AI 回答如何描述你的品牌与竞品。" }),
 	component: DashboardPage,
 });
 
@@ -90,10 +90,10 @@ function StatWithTooltip({
 }
 
 const STAT_PLACEHOLDERS = [
-	{ label: "prompts tracked", icon: IconList },
-	{ label: "evaluations", icon: IconActivity },
-	{ label: "run frequency", icon: IconClock },
-	{ label: "last updated", icon: IconRefresh },
+	{ label: "条提示词追踪中", icon: IconList },
+	{ label: "次采样", icon: IconActivity },
+	{ label: "采样频率", icon: IconClock },
+	{ label: "最后更新", icon: IconRefresh },
 ];
 
 function TrackingStats({
@@ -128,12 +128,12 @@ function TrackingStats({
 		<div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
 			<StatWithTooltip
 				icon={IconList}
-				label="prompts tracked"
+				label="条提示词追踪中"
 				value={totalPrompts.toLocaleString()}
 				tooltip={
 					trackedTargets.length > 0 ? (
 						<>
-							<p>Prompts monitored for AI visibility, each evaluated on:</p>
+							<p>为 AI 可见度追踪的提示词，每条在以下平台评估：</p>
 							<ul className="mt-1 space-y-0.5">
 								{trackedTargets.map((target) => (
 									<li key={target.value}>{labelForModelFilter(target.value)}</li>
@@ -141,19 +141,19 @@ function TrackingStats({
 							</ul>
 						</>
 					) : (
-						"Prompts monitored for AI visibility. No platforms are configured for this brand yet."
+						"为 AI 可见度追踪的提示词。该品牌尚未配置任何平台。"
 					)
 				}
 			/>
 			<StatWithTooltip
 				icon={IconActivity}
-				label="evaluations"
+				label="次采样"
 				value={totalRuns.toLocaleString()}
-				tooltip="Total number of times we have evaluated prompts against LLMs in the selected period. Each prompt is evaluated multiple times across different AI models."
+				tooltip="所选时间段内，把提示词提交给大模型评估的总次数。每条提示词都会在多个 AI 模型上重复评估多次。"
 			/>
 			<StatWithTooltip
 				icon={IconClock}
-				label="run frequency"
+				label="采样频率"
 				value={formatRunFrequency(delayHours)}
 				tooltip={
 					trackedTargets.length > 0 ? (
@@ -161,7 +161,7 @@ function TrackingStats({
 							{/* One rate for the brand is a summary, not the truth: a
 							    grounded call samples far less often than a scraped one,
 							    and self-hosted repeats every sample. */}
-							<p>How often each platform is sampled:</p>
+							<p>各平台的采样频率：</p>
 							<ul className="mt-1 space-y-0.5">
 								{trackedTargets.map((target) => (
 									<li key={target.value}>{describeTargetSchedule(target)}</li>
@@ -169,18 +169,18 @@ function TrackingStats({
 							</ul>
 						</>
 					) : (
-						"No platforms are configured for this brand yet."
+						"该品牌尚未配置任何平台。"
 					)
 				}
 			/>
 			<StatWithTooltip
 				icon={IconRefresh}
-				label="last updated"
+				label="最后更新"
 				value={formatRelativeTime(lastUpdatedAt)}
 				tooltip={
 					lastUpdatedAt
-						? `The last prompts we evaluated for your brand were run on ${new Date(lastUpdatedAt).toLocaleString()}`
-						: "No evaluations have been run yet."
+						? `最近一次针对你品牌的评估执行于 ${new Date(lastUpdatedAt).toLocaleString("zh-CN")}`
+						: "尚未执行任何评估。"
 				}
 			/>
 		</div>
@@ -195,24 +195,24 @@ function AwaitingFirstEvaluation({ totalPrompts, hasPrompts }: { totalPrompts: n
 	const params = useBrandParams();
 	const hasEnabledPrompts = totalPrompts > 0;
 	const message = hasEnabledPrompts
-		? "You are ready to track your AI visibility. We're currently running the first evaluation against AI models. This usually takes a few minutes."
+		? "已就绪，可以开始追踪 AI 可见度。我们正在执行首次针对 AI 模型的评估，通常需要几分钟。"
 		: hasPrompts
-			? "You have prompts configured but none are currently enabled. Add or enable some prompts to start tracking your AI visibility."
-			: "Set up prompts to start tracking your AI visibility. Once configured, we'll evaluate them against AI models automatically.";
+			? "你已配置提示词，但目前没有启用任何一条。添加或启用提示词即可开始追踪 AI 可见度。"
+			: "先配置提示词，才能开始追踪 AI 可见度。配置完成后，我们会自动把它们提交给 AI 模型评估。";
 
 	return (
 		<div className="flex flex-1 flex-col items-center justify-center p-8 max-w-xl mx-auto text-center">
 			<div className="rounded-full bg-muted p-4 mb-6">
 				<IconClock className="h-10 w-10 text-muted-foreground" />
 			</div>
-			<h2 className="text-2xl font-bold mb-3">{hasEnabledPrompts ? "Waiting for First Evaluation" : "No Data Yet"}</h2>
+			<h2 className="text-2xl font-bold mb-3">{hasEnabledPrompts ? "等待首次采样" : "暂无数据"}</h2>
 			<p className="text-muted-foreground mb-6 text-balance">{message}</p>
 			<div className="flex flex-col gap-3 w-full">
 				{hasEnabledPrompts && (
 					<div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
 						<div className="flex items-center gap-2">
 							<IconList className="h-5 w-5 text-muted-foreground" />
-							<span className="text-sm">Prompts configured and enabled</span>
+							<span className="text-sm">已配置并启用的提示词</span>
 						</div>
 						<span className="font-semibold">{totalPrompts.toLocaleString()}</span>
 					</div>
@@ -222,13 +222,13 @@ function AwaitingFirstEvaluation({ totalPrompts, hasPrompts }: { totalPrompts: n
 					params={params}
 					className={buttonVariants({ variant: "outline", className: "w-full" })}
 				>
-					{hasEnabledPrompts ? "View Your Prompts" : hasPrompts ? "Edit Prompts" : "Set Up Prompts"}{" "}
+					{hasEnabledPrompts ? "查看提示词" : hasPrompts ? "编辑提示词" : "设置提示词"}{" "}
 					<IconArrowRight className="h-4 w-4 ml-1" />
 				</Link>
 			</div>
 			{hasEnabledPrompts && (
 				<p className="text-xs text-muted-foreground mt-6">
-					Refresh this page in a few minutes to see your AI visibility data.
+					几分钟后刷新本页，即可看到你的 AI 可见度数据。
 				</p>
 			)}
 		</div>
@@ -239,10 +239,9 @@ function ResearchBrandData({ brandId, clientConfig }: { brandId: string; clientC
 	return (
 		<div className="space-y-6 max-w-2xl p-4">
 			<div className="space-y-2">
-				<h2 className="text-2xl font-bold">Research Brand Data</h2>
+				<h2 className="text-2xl font-bold">分析品牌数据</h2>
 				<p className="text-muted-foreground text-balance">
-					We will analyze your website and find the best generative AI prompts to track. This process may take a couple
-					of minutes.
+					我们会分析你的网站，找出最适合追踪的生成式 AI 提示词。这个过程可能需要几分钟。
 				</p>
 			</div>
 			<PromptWizard
@@ -274,7 +273,7 @@ function OverviewFigures({
 	if (failed) {
 		return (
 			<p className="py-8 text-center text-sm text-muted-foreground">
-				Couldn't load the overview right now. Reload the page to try again.
+				暂时无法加载总览。请刷新页面重试。
 			</p>
 		);
 	}
@@ -344,12 +343,11 @@ function DashboardPage() {
 			    landscape instead of the page. */}
 			<div className="flex w-full max-w-[1600px] flex-col gap-4 xl:h-[max(40rem,calc(100svh-8rem-2px))]">
 				<PageHeader
-					title="Overview"
-					subtitle="How AI answers talk about your brand and your competitors."
+					title="总览"
+					subtitle="AI 回答如何描述你的品牌与竞品。"
 					infoContent={
 						<p>
-							Each figure counts every prompt's latest answers, as of the end of the selected period, for the selected
-							models and tags. The change beside it is from the start of the period to its end.
+							每个数字统计所选模型与标签下、截至所选时间段结束时各提示词的最新回答；旁边的变化量表示从期初到期末的变动。
 						</p>
 					}
 				>

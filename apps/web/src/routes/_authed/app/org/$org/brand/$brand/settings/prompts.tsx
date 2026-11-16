@@ -48,7 +48,7 @@ function PromptsSettingsSkeleton() {
 }
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/settings/prompts")({
-	staticData: { crumb: "Prompts" },
+	staticData: { crumb: "提示词" },
 	loader: async ({ context }) => {
 		const [brandPrompts, premiumPool] = await Promise.all([
 			getPromptsForEditing({ data: { brandId: context.brandId } }),
@@ -68,7 +68,7 @@ export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/setting
 				: undefined,
 		};
 	},
-	head: pageHead({ description: "Add, edit, or remove tracked prompts." }),
+	head: pageHead({ description: "添加、编辑或删除追踪的提示词。" }),
 	pendingComponent: PromptsSettingsSkeleton,
 	component: PromptsSettingsPage,
 });

@@ -60,8 +60,8 @@ export function usePromptSuggestions({
 			if (fresh.length > 0) setPrompts((prev) => [...fresh, ...prev]);
 		},
 		onError: setError,
-		startErrorFallback: "Couldn't suggest prompts.",
-		timeoutMessage: "Suggesting prompts timed out. Please try again.",
+		startErrorFallback: "无法生成提示词建议。",
+		timeoutMessage: "生成提示词建议超时，请重试。",
 	});
 
 	const suggestedCount = prompts.filter((p) => p.suggested && !p.id).length;
@@ -92,8 +92,8 @@ type Suggestions = ReturnType<typeof usePromptSuggestions>;
 
 function runsLeftLabel(remaining: number | null) {
 	if (remaining === null) return null;
-	if (remaining <= 0) return "No runs left today";
-	return `${remaining} ${remaining === 1 ? "run" : "runs"} left today`;
+	if (remaining <= 0) return "今日次数已用完";
+	return `今日剩余 ${remaining} 次`;
 }
 
 function StatusMessage({ suggestions }: { suggestions: Suggestions }) {
@@ -101,7 +101,7 @@ function StatusMessage({ suggestions }: { suggestions: Suggestions }) {
 	if (running) {
 		return (
 			<span className="flex items-center gap-2 text-muted-foreground">
-				<Spinner /> Suggesting prompts. This usually takes about a minute.
+				<Spinner /> 正在生成提示词建议，通常约需一分钟。
 			</span>
 		);
 	}
@@ -118,7 +118,7 @@ function StatusMessage({ suggestions }: { suggestions: Suggestions }) {
 	if (nothingNew && suggestedCount === 0) {
 		return (
 			<span className="text-muted-foreground">
-				Nothing new this time. Everything suggested is already in your list.
+				本次没有新建议。所有建议都已在你的列表中。
 			</span>
 		);
 	}
@@ -126,9 +126,7 @@ function StatusMessage({ suggestions }: { suggestions: Suggestions }) {
 		<span className="flex items-center gap-2 text-muted-foreground">
 			<Sparkles className="size-4 shrink-0 text-primary" />
 			<span>
-				<strong className="text-foreground">{suggestedCount}</strong> suggested{" "}
-				{suggestedCount === 1 ? "prompt" : "prompts"} below. Remove any you don't want, then save to start tracking the
-				rest.
+				已生成 <strong className="text-foreground">{suggestedCount}</strong> 条建议提示词，见下方。移除不需要的，然后保存以开始追踪其余的。
 			</span>
 		</span>
 	);
@@ -142,7 +140,7 @@ function StatusActions({ suggestions }: { suggestions: Suggestions }) {
 			size="icon"
 			variant="ghost"
 			onClick={suggestions.clearNotice}
-			aria-label="Close"
+			aria-label="关闭"
 			className="size-8"
 		>
 			<X className="size-4" />
@@ -152,7 +150,7 @@ function StatusActions({ suggestions }: { suggestions: Suggestions }) {
 	if (running) {
 		return (
 			<Button type="button" size="sm" variant="ghost" onClick={suggestions.cancel}>
-				Cancel
+				取消
 			</Button>
 		);
 	}
@@ -170,11 +168,11 @@ function StatusActions({ suggestions }: { suggestions: Suggestions }) {
 				disabled={remaining !== null && remaining <= 0}
 				className="flex items-center gap-2"
 			>
-				<RefreshCw className="size-4" /> Suggest More
+				<RefreshCw className="size-4" /> 生成更多建议
 			</Button>
 			{suggestedCount > 0 ? (
 				<Button type="button" size="sm" variant="ghost" onClick={suggestions.dismissAll}>
-					Dismiss All
+					全部忽略
 				</Button>
 			) : (
 				close
@@ -233,7 +231,7 @@ export function SuggestionsReadyPill({
 			className="fixed top-20 left-1/2 z-20 flex -translate-x-1/2 cursor-pointer items-center gap-1.5 rounded-full border bg-background px-3 py-1.5 text-sm font-medium shadow-lg animate-in fade-in slide-in-from-top-2 hover:bg-accent"
 		>
 			<ArrowUp className="size-4" />
-			{arrived.count} {arrived.count === 1 ? "suggestion" : "suggestions"} added
+			已添加 {arrived.count} 条建议
 		</button>
 	);
 }

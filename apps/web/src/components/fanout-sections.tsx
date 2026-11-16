@@ -93,12 +93,12 @@ export function VariationLine({
 			{modelCounts?.length ? (
 				<span
 					className="text-muted-foreground shrink-0 text-right text-xs tabular-nums leading-6"
-					title="Times each engine ran this search"
+					title="各引擎执行此次搜索的次数"
 				>
 					{modelCounts.map((mc) => `${mc.count.toLocaleString()}× ${getModelDisplayName(mc.model)}`).join(" · ")}
 				</span>
 			) : (
-				<span className="text-muted-foreground shrink-0 text-sm tabular-nums" title="Times engines ran this search">
+				<span className="text-muted-foreground shrink-0 text-sm tabular-nums" title="各引擎执行此次搜索的次数">
 					{variation.count.toLocaleString()}×
 				</span>
 			)}
@@ -120,7 +120,7 @@ export function VariationsList({
 	modelCounts?: Map<string, VariationModelCount[]>;
 }) {
 	if (variations.length === 0) {
-		return <div className="text-muted-foreground py-4 text-sm">No web queries for this selection.</div>;
+		return <div className="text-muted-foreground py-4 text-sm">该选择下没有联网查询记录。</div>;
 	}
 	return (
 		<div className="space-y-2">
@@ -172,7 +172,7 @@ export function QueryWordsSection({ terms, wordChanges }: { terms: TermStat[]; w
 								Word Changes
 								<InfoTip>{WORD_TAB_HELP[tab]}</InfoTip>
 							</CardTitle>
-							<CardDescription>How engines rewrite your prompt wording.</CardDescription>
+							<CardDescription>各引擎如何改写你的提示词措辞。</CardDescription>
 						</div>
 						<div className="flex items-center gap-4">
 							<div className="flex items-center gap-2">

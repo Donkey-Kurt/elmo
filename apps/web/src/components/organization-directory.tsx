@@ -42,7 +42,7 @@ function OrganizationBlock({ organization }: { organization: OrganizationSummary
 					</span>
 					<IconSettings className="size-4 shrink-0 text-muted-foreground" />
 				</TooltipTrigger>
-				<TooltipContent>Organization Settings</TooltipContent>
+				<TooltipContent>组织设置</TooltipContent>
 			</Tooltip>
 
 			{children.length > 0 && (

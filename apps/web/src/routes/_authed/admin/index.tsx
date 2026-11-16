@@ -60,10 +60,10 @@ function formatDelayHours(hours: number): string {
 	const days = Math.floor((hours % (7 * 24)) / 24);
 	const remainingHours = hours % 24;
 	const parts: string[] = [];
-	if (weeks > 0) parts.push(`${weeks}w`);
-	if (days > 0) parts.push(`${days}d`);
-	if (remainingHours > 0) parts.push(`${remainingHours}h`);
-	return parts.length > 0 ? parts.join(" ") : "0h";
+	if (weeks > 0) parts.push(`${weeks}周`);
+	if (days > 0) parts.push(`${days}天`);
+	if (remainingHours > 0) parts.push(`${remainingHours}小时`);
+	return parts.length > 0 ? parts.join(" ") : "0小时";
 }
 
 function hoursToTimeUnits(hours: number) {
@@ -103,11 +103,11 @@ function DelayOverrideDialog({ brand, onUpdate }: { brand: BrandStats; onUpdate:
 		setError(null);
 		const totalHours = timeUnitsToHours(timeUnits);
 		if (totalHours === 0) {
-			setError("Please enter a delay value");
+			setError("请输入延迟时长");
 			return;
 		}
 		if (totalHours < 1) {
-			setError("Delay must be at least 1 hour");
+			setError("延迟至少为 1 小时");
 			return;
 		}
 		setIsUpdating(true);
@@ -116,7 +116,7 @@ function DelayOverrideDialog({ brand, onUpdate }: { brand: BrandStats; onUpdate:
 			onUpdate();
 			setOpen(false);
 		} catch (err) {
-			setError(writeError(err, "Failed to update"));
+			setError(writeError(err, "更新失败"));
 		} finally {
 			setIsUpdating(false);
 		}
@@ -130,7 +130,7 @@ function DelayOverrideDialog({ brand, onUpdate }: { brand: BrandStats; onUpdate:
 			onUpdate();
 			setOpen(false);
 		} catch (err) {
-			setError(writeError(err, "Failed to clear override"));
+			setError(writeError(err, "清除覆盖失败"));
 		} finally {
 			setIsUpdating(false);
 		}
@@ -143,18 +143,18 @@ function DelayOverrideDialog({ brand, onUpdate }: { brand: BrandStats; onUpdate:
 			</DialogTrigger>
 			<DialogContent className="max-w-2xl">
 				<DialogHeader>
-					<DialogTitle>Configure Job Delay for {brand.name}</DialogTitle>
+					<DialogTitle>配置 {brand.name} 的任务延迟</DialogTitle>
 					<DialogDescription>
-						Set a custom delay for how often prompt jobs run. Default is {formatDelayHours(defaultDelayHours)}.
+						自定义提示词任务的运行间隔。默认值为 {formatDelayHours(defaultDelayHours)}。
 					</DialogDescription>
 				</DialogHeader>
 				<div className="space-y-4 py-4">
 					<div className="space-y-3">
-						<Label>Custom Delay</Label>
+						<Label>自定义延迟</Label>
 						<div className="grid grid-cols-3 gap-4">
 							<div className="space-y-2">
 								<Label htmlFor="weeks" className="text-xs text-muted-foreground">
-									Weeks
+									周
 								</Label>
 								<Input
 									id="weeks"
@@ -168,7 +168,7 @@ function DelayOverrideDialog({ brand, onUpdate }: { brand: BrandStats; onUpdate:
 							</div>
 							<div className="space-y-2">
 								<Label htmlFor="days" className="text-xs text-muted-foreground">
-									Days
+									天
 								</Label>
 								<Input
 									id="days"
@@ -182,7 +182,7 @@ function DelayOverrideDialog({ brand, onUpdate }: { brand: BrandStats; onUpdate:
 							</div>
 							<div className="space-y-2">
 								<Label htmlFor="hours" className="text-xs text-muted-foreground">
-									Hours
+									小时
 								</Label>
 								<Input
 									id="hours"
@@ -196,12 +196,12 @@ function DelayOverrideDialog({ brand, onUpdate }: { brand: BrandStats; onUpdate:
 							</div>
 						</div>
 						<p className="text-sm text-muted-foreground">
-							Current: <strong>{formatDelayHours(currentDelay)}</strong>
-							{brand.delayOverrideHours !== null && " (custom)"}
-							{brand.delayOverrideHours === null && " (default)"}
+							当前：<strong>{formatDelayHours(currentDelay)}</strong>
+							{brand.delayOverrideHours !== null && "（自定义）"}
+							{brand.delayOverrideHours === null && "（默认）"}
 						</p>
 						<p className="text-sm text-muted-foreground">
-							Total: <strong>{formatDelayHours(timeUnitsToHours(timeUnits))}</strong>
+							合计：<strong>{formatDelayHours(timeUnitsToHours(timeUnits))}</strong>
 						</p>
 					</div>
 					{error && <p className="text-sm text-destructive">{error}</p>}
@@ -210,15 +210,15 @@ function DelayOverrideDialog({ brand, onUpdate }: { brand: BrandStats; onUpdate:
 					<div className="flex justify-between w-full">
 						{brand.delayOverrideHours !== null && (
 							<Button variant="outline" onClick={handleClearOverride} disabled={isUpdating} className="cursor-pointer">
-								Clear Override
+								清除覆盖
 							</Button>
 						)}
 						<div className="flex gap-2 ml-auto">
 							<Button variant="outline" onClick={() => setOpen(false)} disabled={isUpdating} className="cursor-pointer">
-								Cancel
+								取消
 							</Button>
 							<Button onClick={handleUpdate} disabled={isUpdating} className="cursor-pointer">
-								{isUpdating ? "Updating..." : "Update"}
+								{isUpdating ? "更新中..." : "更新"}
 							</Button>
 						</div>
 					</div>
@@ -300,15 +300,13 @@ function BrandStatsRow({ brand, onUpdate }: { brand: BrandStats; onUpdate: () =>
 						{new Date(brand.lastPromptRunAt).toLocaleDateString()}
 					</span>
 				) : (
-					<span className="text-muted-foreground">Never</span>
+					<span className="text-muted-foreground">从未</span>
 				)}
 			</TableCell>
 			<TableCell>
 				<div className="space-y-1">
 					<div className="font-medium">{formatDelayHours(currentDelayHours)}</div>
-					<span className="text-xs text-muted-foreground">
-						{brand.delayOverrideHours !== null ? "Custom" : "Default"}
-					</span>
+					<span className="text-xs text-muted-foreground">{brand.delayOverrideHours !== null ? "自定义" : "默认"}</span>
 				</div>
 			</TableCell>
 			<TableCell>
@@ -319,8 +317,8 @@ function BrandStatsRow({ brand, onUpdate }: { brand: BrandStats; onUpdate: () =>
 }
 
 export const Route = createFileRoute("/_authed/admin/")({
-	staticData: { crumb: "Brands" },
-	head: pageHead({ title: "Admin", description: "Monitor and manage brands, prompts, and scheduling." }),
+	staticData: { crumb: "品牌" },
+	head: pageHead({ title: "管理员", description: "监控并管理品牌、提示词与调度。" }),
 	component: AdminDashboard,
 });
 
@@ -342,7 +340,7 @@ function AdminDashboard() {
 			setPromptsOverTime(data.promptsOverTime || []);
 			setRunsOverTime(data.runsOverTime || []);
 		} catch (err) {
-			setError(err instanceof Error ? err.message : "An error occurred");
+			setError(err instanceof Error ? err.message : "发生错误");
 		} finally {
 			setLoading(false);
 		}
@@ -379,7 +377,7 @@ function AdminDashboard() {
 		return (
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-destructive">Error</CardTitle>
+					<CardTitle className="text-destructive">错误</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<p>{error}</p>
@@ -407,32 +405,32 @@ function AdminDashboard() {
 
 	const dateFormatter = (value: string) => {
 		const date = new Date(value);
-		return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+		return date.toLocaleDateString("zh-CN", { month: "short", day: "numeric" });
 	};
 
 	const tooltipLabelFormatter = (value: ReactNode) => {
 		const date = new Date(String(value));
-		return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+		return date.toLocaleDateString("zh-CN", { month: "long", day: "numeric", year: "numeric" });
 	};
 
 	return (
 		<div className="space-y-8">
 			<div className="flex items-center justify-between">
 				<div className="space-y-2">
-					<h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-					<p className="text-muted-foreground">Monitor and manage brands, prompts, and job scheduling</p>
+					<h1 className="text-3xl font-bold tracking-tight">管理员总览</h1>
+					<p className="text-muted-foreground">监控并管理品牌、提示词与任务调度</p>
 				</div>
 			</div>
 
 			<div className="grid gap-4 sm:grid-cols-2">
 				<Card>
 					<CardHeader>
-						<CardTitle>All Brands</CardTitle>
-						<CardDescription>Total: {totals.totalBrands} brands</CardDescription>
+						<CardTitle>全部品牌</CardTitle>
+						<CardDescription>合计：{totals.totalBrands} 个品牌</CardDescription>
 					</CardHeader>
 					<CardContent className="p-0 pb-4">
 						<ChartContainer
-							config={{ count: { label: "Total Brands", color: "#3b82f6" } }}
+							config={{ count: { label: "品牌合计", color: "#3b82f6" } }}
 							className="h-[120px] w-full px-4"
 						>
 							<ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 1, height: 1 }}>
@@ -466,14 +464,14 @@ function AdminDashboard() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Active Brands</CardTitle>
+						<CardTitle>活跃品牌</CardTitle>
 						<CardDescription>
-							With runs in last 30 days: {activeBrandsOverTime[activeBrandsOverTime.length - 1]?.count ?? 0}
+							近 30 天内有运行：{activeBrandsOverTime[activeBrandsOverTime.length - 1]?.count ?? 0}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="p-0 pb-4">
 						<ChartContainer
-							config={{ count: { label: "Active Brands", color: "#22c55e" } }}
+							config={{ count: { label: "活跃品牌", color: "#22c55e" } }}
 							className="h-[120px] w-full px-4"
 						>
 							<ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 1, height: 1 }}>
@@ -513,16 +511,16 @@ function AdminDashboard() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Prompts</CardTitle>
+						<CardTitle>提示词</CardTitle>
 						<CardDescription>
-							Active: {totals.activePrompts} | Total: {totals.totalPrompts}
+							活跃：{totals.activePrompts} | 合计：{totals.totalPrompts}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="p-0 pb-4">
 						<ChartContainer
 							config={{
-								enabled: { label: "Enabled", color: "#10b981" },
-								disabled: { label: "Disabled", color: "#ef4444" },
+								enabled: { label: "已启用", color: "#10b981" },
+								disabled: { label: "已停用", color: "#ef4444" },
 							}}
 							className="h-[120px] w-full px-4"
 						>
@@ -590,13 +588,13 @@ function AdminDashboard() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Runs</CardTitle>
+						<CardTitle>运行</CardTitle>
 						<CardDescription>
-							7d: {totals.promptRuns7Days.toLocaleString()} | 30d: {totals.promptRuns30Days.toLocaleString()}
+							7 天：{totals.promptRuns7Days.toLocaleString()} | 30 天：{totals.promptRuns30Days.toLocaleString()}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="p-0 pb-4">
-						<ChartContainer config={{ count: { label: "Runs", color: "#8b5cf6" } }} className="h-[120px] w-full px-4">
+						<ChartContainer config={{ count: { label: "运行", color: "#8b5cf6" } }} className="h-[120px] w-full px-4">
 							<ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 1, height: 1 }}>
 								<BarChart data={runsOverTime}>
 									<CartesianGrid strokeDasharray="3 3" vertical={false} />
@@ -623,23 +621,23 @@ function AdminDashboard() {
 
 			<Card>
 				<CardHeader>
-					<CardTitle>Brand Statistics</CardTitle>
-					<CardDescription>Detailed statistics and configuration for each brand</CardDescription>
+					<CardTitle>品牌统计</CardTitle>
+					<CardDescription>各品牌的详细统计与配置</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<div className="overflow-x-auto">
 						<Table>
 							<TableHeader>
 								<TableRow>
-									<TableHead>Brand</TableHead>
-									<TableHead className="text-right">Prompts</TableHead>
-									<TableHead className="text-right">Prompts (7d)</TableHead>
-									<TableHead className="text-right">Prompts (30d)</TableHead>
-									<TableHead className="text-right">Runs (7d)</TableHead>
-									<TableHead className="text-right">Runs (30d)</TableHead>
-									<TableHead>Last Run</TableHead>
-									<TableHead>Run Delay</TableHead>
-									<TableHead>Actions</TableHead>
+									<TableHead>品牌</TableHead>
+									<TableHead className="text-right">提示词</TableHead>
+									<TableHead className="text-right">提示词（7 天）</TableHead>
+									<TableHead className="text-right">提示词（30 天）</TableHead>
+									<TableHead className="text-right">运行（7 天）</TableHead>
+									<TableHead className="text-right">运行（30 天）</TableHead>
+									<TableHead>最近运行</TableHead>
+									<TableHead>运行间隔</TableHead>
+									<TableHead>操作</TableHead>
 								</TableRow>
 							</TableHeader>
 							<TableBody>

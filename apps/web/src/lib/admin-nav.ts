@@ -10,15 +10,15 @@ export function adminNavItems({
 	hasReportAccess: boolean;
 	reportsEnabled: boolean;
 }): NavItem[] {
-	const reports: NavItem = { title: "Reports", link: { to: "/reports" }, icon: IconReport };
+	const reports: NavItem = { title: "报告", link: { to: "/reports" }, icon: IconReport };
 
 	if (!isAdmin) return hasReportAccess && reportsEnabled ? [reports] : [];
 
 	return [
-		{ title: "Brands", link: { to: "/admin" }, icon: IconTable },
+		{ title: "品牌", link: { to: "/admin" }, icon: IconTable },
 		...(reportsEnabled ? [reports] : []),
-		{ title: "Users", link: { to: "/admin/users" }, icon: IconUsers },
-		{ title: "Workflows", link: { to: "/admin/workflows" }, icon: IconTimeline },
-		{ title: "Tools", link: { to: "/admin/tools" }, icon: IconTool },
+		{ title: "用户", link: { to: "/admin/users" }, icon: IconUsers },
+		{ title: "工作流", link: { to: "/admin/workflows" }, icon: IconTimeline },
+		{ title: "工具", link: { to: "/admin/tools" }, icon: IconTool },
 	];
 }

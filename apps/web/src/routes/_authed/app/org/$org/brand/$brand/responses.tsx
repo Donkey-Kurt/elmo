@@ -19,13 +19,13 @@ import { useSiteIcons } from "@/hooks/use-site-icons";
 import { pageHead } from "@/lib/route-head";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/responses")({
-	staticData: { crumb: "Responses" },
+	staticData: { crumb: "AI 回答" },
 	// Comma-joined IDs, like `tags`, so a filtered view stays linkable.
 	validateSearch: (search: Record<string, unknown>): ResponsesSearch => ({
 		prompts: typeof search.prompts === "string" && search.prompts ? search.prompts : undefined,
 		...validateSentimentSearch(search),
 	}),
-	head: pageHead({ description: "Read and search every AI answer to your prompts." }),
+	head: pageHead({ description: "阅读并搜索 AI 对每条提示词的全部回答。" }),
 	component: ResponsesPage,
 });
 
@@ -79,8 +79,7 @@ function ResponsesPage() {
 
 	const infoContent = (
 		<p>
-			Every answer the AI engines gave to your prompts. Search finds responses containing the exact text you type,
-			ignoring case.
+			AI 引擎对你每条提示词给出的全部回答。搜索会找出包含你输入的确切文字的回答，不区分大小写。
 		</p>
 	);
 
@@ -113,7 +112,7 @@ function ResponsesPage() {
 								search={{ tab: "responses" }}
 								className="font-medium hover:underline"
 							>
-								{match.promptValue || "(untitled prompt)"}
+								{match.promptValue || "（未命名提示词）"}
 							</BrandPromptLink>
 						}
 						brandName={brand?.name}
@@ -126,13 +125,13 @@ function ResponsesPage() {
 	}
 
 	return (
-		<PageHeader title="Responses" subtitle="Every AI answer to your prompts." infoContent={infoContent}>
+		<PageHeader title="AI 回答" subtitle="每条提示词得到的全部 AI 回答。" infoContent={infoContent}>
 			<FilterSection>
 				<FilterBar
 					availableTags={availableTags}
 					trackedTargets={trackedTargets}
 					showSearch
-					searchPlaceholder="Search responses..."
+					searchPlaceholder="搜索回答..."
 					showModelSelector
 					extraControls={
 						<PromptsFilterDropdown
@@ -168,14 +167,14 @@ function emptyMessage(
 	/** Answers the search finds before the sentiment filter; with some, it's the filter that left none. */
 	searchMatches: number | undefined,
 ): string | null {
-	if (error && !data) return "Couldn't load responses right now. Reload the page to try again.";
+	if (error && !data) return "暂时无法加载回答，请重新加载页面后再试。";
 	if (!data || data.totalRuns === 0) {
-		return "No responses for the selected filters yet. Responses appear once your prompts have been run.";
+		return "所选筛选条件下暂无回答。提示词运行后，回答才会出现。";
 	}
 	if (data.matches.length > 0) return null;
 	return data.query && !searchMatches
-		? `No responses contain "${data.query}" in this period.`
-		: "No responses match the selected filters in this period.";
+		? `所选时间段内没有包含“${data.query}”的回答。`
+		: "所选时间段内没有符合筛选条件的回答。";
 }
 
 function EmptyState({ message }: { message: string }) {

@@ -55,7 +55,7 @@ export default function BrandOnboarding({ organizationSlug, brandId, brandName, 
 				}),
 			);
 		} catch (err) {
-			setError(writeError(err, "Could not create the brand."));
+			setError(writeError(err, "无法创建品牌。"));
 		} finally {
 			setIsLoading(false);
 		}
@@ -79,7 +79,7 @@ export default function BrandOnboarding({ organizationSlug, brandId, brandName, 
 
 	if (step === "platforms" && platformState) {
 		return (
-			<FullPageCard title={`Setup ${brandName}`} subtitle="Choose which AI platforms to track">
+			<FullPageCard title={`设置 ${brandName}`} subtitle="选择要追踪的 AI 平台">
 				<PlatformSelectionStep
 					state={platformState}
 					selected={selected}
@@ -88,17 +88,17 @@ export default function BrandOnboarding({ organizationSlug, brandId, brandName, 
 					error={error}
 					onBack={() => setStep("website")}
 					onSubmit={() => createBrand([...selected])}
-					submitLabel={isLoading ? "Setting up..." : "Complete Setup"}
+					submitLabel={isLoading ? "设置中…" : "完成设置"}
 				/>
 			</FullPageCard>
 		);
 	}
 
 	return (
-		<FullPageCard title={`Setup ${brandName}`} subtitle="Configure your brand to get started" showBackButton={true}>
+		<FullPageCard title={`设置 ${brandName}`} subtitle="配置你的品牌，开始使用" showBackButton={true}>
 			<form action={handleWebsiteSubmit} className="space-y-4">
 				<div className="space-y-2">
-					<Label htmlFor="website">Website</Label>
+					<Label htmlFor="website">网站</Label>
 					<Input
 						id="website"
 						name="website"
@@ -109,7 +109,7 @@ export default function BrandOnboarding({ organizationSlug, brandId, brandName, 
 						value={website}
 						onChange={(e) => setWebsite(e.target.value)}
 					/>
-					<p className="text-xs text-muted-foreground">Enter your brand's website</p>
+					<p className="text-xs text-muted-foreground">输入你品牌的网站</p>
 				</div>
 
 				{error && (
@@ -119,7 +119,7 @@ export default function BrandOnboarding({ organizationSlug, brandId, brandName, 
 				)}
 
 				<Button type="submit" className="w-full" disabled={isLoading}>
-					{isLoading ? "Setting up..." : platformState ? "Continue" : "Complete Setup"}
+					{isLoading ? "设置中…" : platformState ? "继续" : "完成设置"}
 				</Button>
 			</form>
 		</FullPageCard>

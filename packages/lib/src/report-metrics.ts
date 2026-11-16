@@ -469,8 +469,8 @@ export function getSoVBadgeClasses(sov: number | null): {
 }
 
 export function getSoVLevel(sov: number | null): { label: string; description: string } {
-	if (sov === null) return { label: "No Data", description: "No mentions detected." };
-	if (sov >= 40) return { label: "Strong", description: "Your brand leads the conversation." };
-	if (sov >= 20) return { label: "Moderate", description: "Room for improvement." };
-	return { label: "Low", description: "Competitors dominate this space." };
+	if (sov === null) return { label: "无数据", description: "未检测到提及。" };
+	if (sov >= 40) return { label: "强势", description: "你的品牌主导了讨论。" };
+	if (sov >= 20) return { label: "中等", description: "还有提升空间。" };
+	return { label: "偏低", description: "竞品主导了这一领域。" };
 }

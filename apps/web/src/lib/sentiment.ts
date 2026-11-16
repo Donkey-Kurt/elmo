@@ -21,25 +21,25 @@ export type SentimentFilterCounts = Record<SentimentFilter, number> & { all: num
  */
 export const SENTIMENT_STYLES: Record<Sentiment, { label: string; color: string; text: string; soft: string }> = {
 	positive: {
-		label: "Positive",
+		label: "正面",
 		color: "#009E73",
 		text: "text-[#00795a]",
 		soft: "bg-[#009E73]/15",
 	},
 	neutral: {
-		label: "Neutral",
+		label: "中性",
 		color: "#cbd5e1",
 		text: "text-slate-500",
 		soft: "bg-slate-200/70",
 	},
 	mixed: {
-		label: "Mixed",
+		label: "混合",
 		color: "#E69F00",
 		text: "text-[#a66f00]",
 		soft: "bg-[#E69F00]/20",
 	},
 	negative: {
-		label: "Negative",
+		label: "负面",
 		color: "#D55E00",
 		text: "text-[#b34d00]",
 		soft: "bg-[#D55E00]/15",

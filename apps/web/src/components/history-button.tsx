@@ -23,7 +23,7 @@ export function HistoryButton({ promptId, tab }: HistoryButtonProps) {
 			)}
 		>
 			<GoStack className="size-3 mr-0.5" />
-			<span className="text-xs font-normal">View Details</span>
+			<span className="text-xs font-normal">查看详情</span>
 		</BrandPromptLink>
 	);
 }

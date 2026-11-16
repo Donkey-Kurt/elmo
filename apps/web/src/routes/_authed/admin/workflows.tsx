@@ -127,34 +127,34 @@ function formatDuration(ms: number): string {
 
 	if (weeks > 0) {
 		const remainingDays = days % 7;
-		return remainingDays > 0 ? `${weeks}w ${remainingDays}d` : `${weeks}w`;
+		return remainingDays > 0 ? `${weeks}周 ${remainingDays}天` : `${weeks}周`;
 	}
 	if (days > 0) {
 		const remainingHours = hours % 24;
-		return remainingHours > 0 ? `${days}d ${remainingHours}h` : `${days}d`;
+		return remainingHours > 0 ? `${days}天 ${remainingHours}小时` : `${days}天`;
 	}
 	if (hours > 0) {
 		const remainingMinutes = minutes % 60;
-		return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
+		return remainingMinutes > 0 ? `${hours}小时 ${remainingMinutes}分钟` : `${hours}小时`;
 	}
-	if (minutes > 0) return `${minutes}m`;
-	return `${seconds}s`;
+	if (minutes > 0) return `${minutes}分钟`;
+	return `${seconds}秒`;
 }
 
 function formatRelativeTime(dateStr: string | null): string {
-	if (!dateStr) return "Never";
+	if (!dateStr) return "从未";
 	const date = new Date(dateStr);
 	const now = new Date();
 	const diffMs = now.getTime() - date.getTime();
-	return `${formatDuration(diffMs)} ago`;
+	return `${formatDuration(diffMs)} 前`;
 }
 
 function formatFutureTime(timestamp: number | null): string {
-	if (!timestamp) return "Unknown";
+	if (!timestamp) return "未知";
 	const now = Date.now();
 	const diffMs = timestamp - now;
-	if (diffMs < 0) return "Overdue";
-	return `in ${formatDuration(diffMs)}`;
+	if (diffMs < 0) return "已逾期";
+	return `${formatDuration(diffMs)} 后`;
 }
 
 function QueueStatsCard({ stats, title }: { stats: QueueStats; title: string }) {
@@ -167,32 +167,32 @@ function QueueStatsCard({ stats, title }: { stats: QueueStats; title: string }) 
 					<Server className="h-4 w-4" />
 					{title}
 				</CardTitle>
-				<CardDescription>pg-boss Job Queue Status</CardDescription>
+				<CardDescription>pg-boss 任务队列状态</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<div className="grid grid-cols-3 gap-4 text-sm">
-					<div title="Jobs waiting to be picked up by a worker">
-						<p className="text-muted-foreground">Created</p>
+					<div title="等待 worker 领取的任务">
+						<p className="text-muted-foreground">已创建</p>
 						<p className="text-xl font-semibold text-blue-600">{stats.created}</p>
 					</div>
-					<div title="Jobs currently being processed">
-						<p className="text-muted-foreground">Active</p>
+					<div title="正在处理的任务">
+						<p className="text-muted-foreground">进行中</p>
 						<p className="text-xl font-semibold text-emerald-600">{stats.active}</p>
 					</div>
-					<div title="Jobs waiting to be retried after failure">
-						<p className="text-muted-foreground">Retry</p>
+					<div title="失败后等待重试的任务">
+						<p className="text-muted-foreground">重试</p>
 						<p className="text-xl font-semibold text-amber-600">{stats.retry}</p>
 					</div>
 					<div>
-						<p className="text-muted-foreground">Completed</p>
+						<p className="text-muted-foreground">已完成</p>
 						<p className="text-xl font-semibold">{stats.completed.toLocaleString()}</p>
 					</div>
 					<div>
-						<p className="text-muted-foreground">Failed</p>
+						<p className="text-muted-foreground">失败</p>
 						<p className={`text-xl font-semibold ${stats.failed > 0 ? "text-red-600" : ""}`}>{stats.failed}</p>
 					</div>
 					<div>
-						<p className="text-muted-foreground">Total Pending</p>
+						<p className="text-muted-foreground">待处理合计</p>
 						<p className="text-xl font-semibold text-violet-600">{stats.totalPending}</p>
 					</div>
 				</div>
@@ -205,10 +205,10 @@ function SchedulerCell({ info }: { info: SchedulerInfo }) {
 	if (!info.exists) {
 		return <span className="text-muted-foreground text-xs">&mdash;</span>;
 	}
-	const nextText = info.nextRunAt ? formatFutureTime(info.nextRunAt) : "Unknown";
+	const nextText = info.nextRunAt ? formatFutureTime(info.nextRunAt) : "未知";
 	return (
 		<div className="flex flex-col gap-0.5">
-			<span className="text-xs font-medium">Next: {nextText}</span>
+			<span className="text-xs font-medium">下次：{nextText}</span>
 		</div>
 	);
 }
@@ -222,7 +222,7 @@ function TargetStatus({ status }: { status?: TargetRunStatus }) {
 	if (!status) {
 		return <span className="text-muted-foreground">-</span>;
 	}
-	const lastRunText = status.lastRunAt ? formatRelativeTime(status.lastRunAt) : "Never";
+	const lastRunText = status.lastRunAt ? formatRelativeTime(status.lastRunAt) : "从未";
 
 	if (status.isOverdue) {
 		return (
@@ -260,7 +260,7 @@ function RetryButton({ promptId, onSuccess }: { promptId?: string; jobId?: strin
 			setSuccess("queued");
 			setTimeout(() => onSuccess(), 1000);
 		} catch (err) {
-			setError(writeError(err, "Failed to retry"));
+			setError(writeError(err, "重试失败"));
 		} finally {
 			setIsLoading(false);
 		}
@@ -270,7 +270,7 @@ function RetryButton({ promptId, onSuccess }: { promptId?: string; jobId?: strin
 		return (
 			<Button size="sm" variant="outline" disabled className="cursor-default">
 				<CheckCircle2 className="h-3 w-3 mr-1 text-emerald-500" />
-				{success === "recreated" ? "Scheduler Reset" : "Queued"}
+				{success === "recreated" ? "调度器已重置" : "已入队"}
 			</Button>
 		);
 	}
@@ -279,7 +279,7 @@ function RetryButton({ promptId, onSuccess }: { promptId?: string; jobId?: strin
 		<div className="flex flex-col gap-1">
 			<Button size="sm" variant="outline" onClick={handleRetry} disabled={isLoading} className="cursor-pointer text-xs">
 				{isLoading ? <Spinner className="mr-1 size-3" /> : <Play className="h-3 w-3 mr-1" />}
-				Retry
+				重试
 			</Button>
 			{error && <span className="text-xs text-red-500">{error}</span>}
 		</div>
@@ -310,18 +310,16 @@ function JobLogsPanel({ logs, loading, error }: { logs: string[]; loading: boole
 		return (
 			<div className="flex items-center gap-2 text-sm text-muted-foreground">
 				<Spinner />
-				Loading logs...
+				正在加载日志...
 			</div>
 		);
 	}
 	if (error) {
 		return (
-			<div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-800">
-				Error loading logs: {error}
-			</div>
+			<div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-800">加载日志出错：{error}</div>
 		);
 	}
-	if (logs.length === 0) return <p className="text-sm text-muted-foreground italic">No logs available</p>;
+	if (logs.length === 0) return <p className="text-sm text-muted-foreground italic">暂无日志</p>;
 
 	return (
 		<pre className="bg-muted rounded p-3 text-xs overflow-x-auto max-h-80 whitespace-pre-wrap">{logs.join("\n")}</pre>
@@ -357,7 +355,7 @@ function RetryJobFooter({
 				onRetrySuccess?.();
 			}, 1000);
 		} catch (err) {
-			setError(writeError(err, "Could not retry this job"));
+			setError(writeError(err, "无法重试此任务"));
 		} finally {
 			setIsLoading(false);
 		}
@@ -368,13 +366,13 @@ function RetryJobFooter({
 			{succeeded ? (
 				<div className="flex items-center gap-2 text-emerald-600">
 					<CheckCircle2 className="h-4 w-4" />
-					<span>Job queued for retry</span>
+					<span>任务已加入重试队列</span>
 				</div>
 			) : (
 				<>
 					<Button onClick={handleRetry} disabled={isLoading} className="cursor-pointer">
 						{isLoading ? <Spinner className="mr-2" /> : <Play className="h-4 w-4 mr-2" />}
-						Retry This Job
+						重试此任务
 					</Button>
 					{error && <span className="text-sm text-red-600">{error}</span>}
 				</>
@@ -399,7 +397,7 @@ function JobDetailsDialog({ job, onRetrySuccess }: { job: RecentJob; onRetrySucc
 					/>
 				}
 			>
-				View Logs
+				查看日志
 			</DialogTrigger>
 			<DialogContent className="max-w-[90vw] sm:max-w-[90vw] w-full max-h-[80vh] overflow-y-auto">
 				<DialogHeader>
@@ -409,33 +407,33 @@ function JobDetailsDialog({ job, onRetrySuccess }: { job: RecentJob; onRetrySucc
 						) : (
 							<CheckCircle2 className="h-5 w-5 text-emerald-500" />
 						)}
-						{isFailed ? "Failed Job Details" : "Completed Job Details"}
+						{isFailed ? "失败任务详情" : "已完成任务详情"}
 					</DialogTitle>
-					<DialogDescription>Job ID: {job.id}</DialogDescription>
+					<DialogDescription>任务 ID：{job.id}</DialogDescription>
 				</DialogHeader>
 				<div className="space-y-4">
 					<div className="grid grid-cols-2 gap-4 text-sm">
 						<div>
-							<p className="text-muted-foreground">Status</p>
+							<p className="text-muted-foreground">状态</p>
 							<Badge className={isFailed ? "bg-red-500" : "bg-emerald-600"}>{job.status}</Badge>
 						</div>
 						<div>
-							<p className="text-muted-foreground">Prompt ID</p>
-							<p className="font-mono text-xs">{job.data?.promptId || "N/A"}</p>
+							<p className="text-muted-foreground">提示词 ID</p>
+							<p className="font-mono text-xs">{job.data?.promptId || "暂无"}</p>
 						</div>
 						<div>
-							<p className="text-muted-foreground">Finished At</p>
-							<p>{job.finishedOn ? new Date(job.finishedOn).toLocaleString() : "Unknown"}</p>
+							<p className="text-muted-foreground">完成时间</p>
+							<p>{job.finishedOn ? new Date(job.finishedOn).toLocaleString() : "未知"}</p>
 						</div>
 					</div>
 					{isFailed && job.failedReason && (
 						<div>
-							<p className="text-muted-foreground mb-1">Error Message</p>
+							<p className="text-muted-foreground mb-1">错误信息</p>
 							<div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-800">{job.failedReason}</div>
 						</div>
 					)}
 					<div>
-						<p className="text-muted-foreground mb-1">Execution Logs</p>
+						<p className="text-muted-foreground mb-1">执行日志</p>
 						<JobLogsPanel logs={logs} loading={logsLoading} error={logsError} />
 					</div>
 					{isFailed && <RetryJobFooter job={job} onClose={() => setIsOpen(false)} onRetrySuccess={onRetrySuccess} />}
@@ -505,11 +503,11 @@ function BrandRow({
 				<TableCell className="text-center">
 					{brand.overduePrompts > 0 ? (
 						<Badge variant="destructive" className="bg-amber-500">
-							{brand.overduePrompts} overdue
+							{brand.overduePrompts} 个已逾期
 						</Badge>
 					) : (
 						<Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
-							All on schedule
+							全部按计划
 						</Badge>
 					)}
 				</TableCell>
@@ -521,16 +519,16 @@ function BrandRow({
 							<Table>
 								<TableHeader>
 									<TableRow>
-										<TableHead className="w-[250px]">Prompt</TableHead>
-										<TableHead className="text-center">Status</TableHead>
+										<TableHead className="w-[250px]">提示词</TableHead>
+										<TableHead className="text-center">状态</TableHead>
 										{brand.targetColumns.map((column) => (
 											<TableHead key={column.key} className="text-center">
 												{column.label}
 											</TableHead>
 										))}
-										<TableHead className="text-center">Prod Scheduler</TableHead>
-										<TableHead className="text-center">Last Job</TableHead>
-										<TableHead className="text-center">Actions</TableHead>
+										<TableHead className="text-center">生产调度器</TableHead>
+										<TableHead className="text-center">最近任务</TableHead>
+										<TableHead className="text-center">操作</TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
@@ -562,25 +560,25 @@ function BrandRow({
 													</TableCell>
 													<TableCell className="text-center">
 														{!prompt.enabled ? (
-															<Badge variant="outline">Disabled</Badge>
+															<Badge variant="outline">已停用</Badge>
 														) : (
 															<div className="flex flex-col items-center gap-1">
 																<Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
-																	Enabled
+																	已启用
 																</Badge>
 																{prompt.jobStatus === "active" && (
 																	<Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
-																		Active
+																		进行中
 																	</Badge>
 																)}
 																{prompt.jobStatus === "created" && (
 																	<Badge variant="secondary" className="bg-blue-100 text-blue-700">
-																		Queued
+																		已入队
 																	</Badge>
 																)}
 																{prompt.jobStatus === "retry" && (
 																	<Badge variant="secondary" className="bg-amber-100 text-amber-700">
-																		Retry
+																		重试
 																	</Badge>
 																)}
 															</div>
@@ -602,13 +600,13 @@ function BrandRow({
 													<TableCell className="text-center">
 														{showRetry && <RetryButton promptId={prompt.promptId} onSuccess={onRefresh} />}
 														{prompt.jobStatus === "active" && (
-															<span className="text-xs text-muted-foreground">Processing...</span>
+															<span className="text-xs text-muted-foreground">处理中...</span>
 														)}
 														{prompt.jobStatus === "created" && (
-															<span className="text-xs text-muted-foreground">In queue</span>
+															<span className="text-xs text-muted-foreground">排队中</span>
 														)}
 														{prompt.jobStatus === "retry" && (
-															<span className="text-xs text-muted-foreground">Retrying soon</span>
+															<span className="text-xs text-muted-foreground">即将重试</span>
 														)}
 													</TableCell>
 												</TableRow>
@@ -625,8 +623,8 @@ function BrandRow({
 }
 
 export const Route = createFileRoute("/_authed/admin/workflows")({
-	staticData: { crumb: "Workflows" },
-	head: pageHead({ description: "Monitor prompt scheduling and job execution." }),
+	staticData: { crumb: "工作流" },
+	head: pageHead({ description: "监控提示词调度与任务执行情况。" }),
 	component: WorkflowsPage,
 });
 
@@ -647,7 +645,7 @@ function WorkflowsPage() {
 			const result = await getWorkflowDataFn();
 			setData(result as any);
 		} catch (err) {
-			setError(err instanceof Error ? err.message : "An error occurred");
+			setError(err instanceof Error ? err.message : "发生错误");
 		} finally {
 			setLoading(false);
 			setIsRefreshing(false);
@@ -704,7 +702,7 @@ function WorkflowsPage() {
 		return (
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-destructive">Error</CardTitle>
+					<CardTitle className="text-destructive">错误</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<p>{error}</p>
@@ -733,13 +731,13 @@ function WorkflowsPage() {
 		<div className="space-y-8">
 			<div className="flex items-center justify-between">
 				<div className="space-y-2">
-					<h1 className="text-3xl font-bold tracking-tight">Workflows</h1>
-					<p className="text-muted-foreground">Monitor prompt scheduling, job execution, and worker health</p>
+					<h1 className="text-3xl font-bold tracking-tight">工作流</h1>
+					<p className="text-muted-foreground">监控提示词调度、任务执行与 worker 健康状态</p>
 				</div>
 				<div className="flex items-center gap-2">
 					<Button variant="outline" onClick={() => fetchData(true)} disabled={isRefreshing} className="cursor-pointer">
 						<RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
-						Refresh
+						刷新
 					</Button>
 				</div>
 			</div>
@@ -749,7 +747,7 @@ function WorkflowsPage() {
 					<CardHeader className="pb-2">
 						<CardTitle className="text-sm font-medium flex items-center gap-2">
 							<Activity className="h-4 w-4" />
-							Schedule Health
+							调度健康度
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -759,7 +757,7 @@ function WorkflowsPage() {
 							>
 								{data.summary.percentOnSchedule}%
 							</span>
-							<span className="text-muted-foreground text-sm">on schedule</span>
+							<span className="text-muted-foreground text-sm">按计划调度</span>
 						</div>
 						<Progress value={data.summary.percentOnSchedule} className="mt-2" />
 					</CardContent>
@@ -769,15 +767,15 @@ function WorkflowsPage() {
 					<CardHeader className="pb-2">
 						<CardTitle className="text-sm font-medium flex items-center gap-2">
 							<CheckCircle2 className="h-4 w-4 text-emerald-500" />
-							On Schedule
+							按计划
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="flex items-baseline gap-2">
 							<span className="text-3xl font-bold text-emerald-600">{data.summary.totalOnSchedule}</span>
-							<span className="text-muted-foreground text-sm">prompts</span>
+							<span className="text-muted-foreground text-sm">个提示词</span>
 						</div>
-						<p className="text-xs text-muted-foreground mt-1">of {data.summary.totalEnabled} enabled</p>
+						<p className="text-xs text-muted-foreground mt-1">共 {data.summary.totalEnabled} 个已启用</p>
 					</CardContent>
 				</Card>
 
@@ -789,7 +787,7 @@ function WorkflowsPage() {
 					<CardHeader className="pb-2">
 						<CardTitle className="text-sm font-medium flex items-center gap-2">
 							<AlertTriangle className={`h-4 w-4 ${overdueBreakdown.severe > 0 ? "text-red-500" : "text-amber-500"}`} />
-							Overdue &gt;30min
+							逾期超过 30 分钟
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -799,10 +797,10 @@ function WorkflowsPage() {
 							>
 								{overdueBreakdown.severe}
 							</span>
-							<span className="text-muted-foreground text-sm">prompts</span>
+							<span className="text-muted-foreground text-sm">个提示词</span>
 						</div>
 						<p className="text-xs text-muted-foreground mt-1">
-							{overdueBreakdown.total - overdueBreakdown.severe} additional recently expired
+							另有 {overdueBreakdown.total - overdueBreakdown.severe} 个近期过期
 						</p>
 					</CardContent>
 				</Card>
@@ -811,35 +809,35 @@ function WorkflowsPage() {
 					<CardHeader className="pb-2">
 						<CardTitle className="text-sm font-medium flex items-center gap-2">
 							<Clock className="h-4 w-4" />
-							Total Brands
+							品牌合计
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<div className="flex items-baseline gap-2">
 							<span className="text-3xl font-bold">{data.summary.totalBrands}</span>
-							<span className="text-muted-foreground text-sm">brands</span>
+							<span className="text-muted-foreground text-sm">个品牌</span>
 						</div>
-						<p className="text-xs text-muted-foreground mt-1">{data.summary.totalPrompts} total prompts</p>
+						<p className="text-xs text-muted-foreground mt-1">共 {data.summary.totalPrompts} 个提示词</p>
 					</CardContent>
 				</Card>
 			</div>
 
-			<QueueStatsCard stats={data.queue} title="Prompt Queue" />
+			<QueueStatsCard stats={data.queue} title="提示词队列" />
 
 			<Card>
 				<CardHeader>
-					<CardTitle>Brand Workflow Status</CardTitle>
-					<CardDescription>Click on a brand to expand and see individual prompt status</CardDescription>
+					<CardTitle>品牌工作流状态</CardTitle>
+					<CardDescription>点击品牌展开，查看各提示词状态</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<Table>
 						<TableHeader>
 							<TableRow>
-								<TableHead>Brand</TableHead>
-								<TableHead className="text-center">Prompts</TableHead>
-								<TableHead className="text-center">Run Frequency</TableHead>
-								<TableHead className="text-center">Health</TableHead>
-								<TableHead className="text-center">Status</TableHead>
+								<TableHead>品牌</TableHead>
+								<TableHead className="text-center">提示词</TableHead>
+								<TableHead className="text-center">运行频率</TableHead>
+								<TableHead className="text-center">健康度</TableHead>
+								<TableHead className="text-center">状态</TableHead>
 							</TableRow>
 						</TableHeader>
 						<TableBody>

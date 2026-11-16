@@ -38,7 +38,7 @@ export function WordCloud({
 	// center-weighted ordering below both assume descending counts.
 	const items = [...terms].sort((a, b) => b.count - a.count).slice(0, maxItems);
 	if (items.length === 0) {
-		return <div className="text-muted-foreground py-6 text-center text-sm">No terms for this period.</div>;
+		return <div className="text-muted-foreground py-6 text-center text-sm">该时间段内没有词条。</div>;
 	}
 
 	const counts = items.map((i) => i.count);

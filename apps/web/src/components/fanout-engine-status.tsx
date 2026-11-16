@@ -76,7 +76,7 @@ export function FanoutEngineStatusCard({ targets, model }: { targets: TrackedTar
 			<CardHeader className="max-sm:px-4">
 				<CardTitle className="flex items-center gap-1 text-base">
 					Query Availability
-					<InfoTip>Not every engine reveals the web searches it runs. Hover an engine for details.</InfoTip>
+					<InfoTip>并非每个引擎都会公开它执行的联网搜索。把鼠标悬停在引擎上查看详情。</InfoTip>
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex flex-wrap gap-2 text-sm max-sm:px-4">

@@ -23,18 +23,17 @@ import { METRIC_META } from "@/lib/overview-metrics";
 
 /** The headline cards define each measure for the brand alone; here it applies to every company. */
 const MEASURE_INFO: Record<LandscapeMetric, string> = {
-	visibility: "Visibility is the share of AI answers to your prompts that mention each company.",
-	share: "Share of voice is each company's share of every mention of you and your tracked competitors.",
-	sentiment: "Sentiment is how AI answers that mention each company speak of it, from 0 (negative) to 100 (positive).",
-	position:
-		"Position is where each company comes among the tracked companies an answer names, on average. 1 means named first, so lower is better.",
+	visibility: "可见度：提及该公司的 AI 回答，占你所有提示词回答的比例。",
+	share: "声量份额：在你与所追踪竞品的全部提及中，该公司所占的份额。",
+	sentiment: "情绪倾向：提及该公司的 AI 回答对它的态度，0 表示负面，100 表示正面。",
+	position: "排名位置：在回答提及的受追踪公司中，该公司平均排第几位。1 表示被排在首位，因此越低越好。",
 };
 
 function LandscapeInfo({ metric }: { metric: LandscapeMetric }) {
 	return (
 		<Tooltip>
 			<TooltipTrigger
-				aria-label="About the competitive landscape"
+				aria-label="关于竞争格局"
 				className="text-muted-foreground opacity-60 hover:opacity-100"
 			>
 				<IconInfoCircle className="size-3.5" />
@@ -42,8 +41,7 @@ function LandscapeInfo({ metric }: { metric: LandscapeMetric }) {
 			<TooltipContent className="max-w-72 space-y-1.5">
 				<p>{MEASURE_INFO[metric]}</p>
 				<p>
-					The chart shows how {METRIC_META[metric].short.toLowerCase()} has changed over time for your brand and the top{" "}
-					{CHARTED_COMPETITORS} competitors on it.
+					图表展示{METRIC_META[metric].short}在你的品牌与该指标上排名前 {CHARTED_COMPETITORS} 的竞品之间随时间的变化。
 				</p>
 			</TooltipContent>
 		</Tooltip>
@@ -61,7 +59,7 @@ function MetricSwitch({ value, onChange }: { value: LandscapeMetric; onChange: (
 	return (
 		<div
 			role="tablist"
-			aria-label="Measure"
+			aria-label="指标"
 			className="flex w-full rounded-lg bg-muted p-0.5 text-sm max-[380px]:text-xs sm:inline-flex sm:w-auto"
 		>
 			{LANDSCAPE_METRICS.map((metric) => (
@@ -161,9 +159,9 @@ export function ModelGrid({ landscape, metric }: { landscape: Landscape; metric:
 				<tr className="text-xs text-muted-foreground">
 					{/* Takes whatever width the panel has to spare, keeping the figures together on the right. */}
 					<th className="py-2.5 pl-4">
-						<span className="sr-only">Rank</span>
+						<span className="sr-only">排名</span>
 					</th>
-					<th className="w-full py-2.5 pr-4 pl-3 text-left font-medium">Company</th>
+					<th className="w-full py-2.5 pr-4 pl-3 text-left font-medium">公司</th>
 					<th className="px-2 py-2.5 font-medium" aria-sort={ariaSort(ALL_COLUMN)}>
 						<button
 							type="button"
@@ -174,7 +172,7 @@ export function ModelGrid({ landscape, metric }: { landscape: Landscape; metric:
 							)}
 						>
 							<SortArrow active={column === ALL_COLUMN} descending={descending} />
-							All
+							全部
 						</button>
 					</th>
 					{landscape.models.map((model) => {
@@ -259,7 +257,7 @@ export function CompetitiveLandscape({ landscape, loading }: { landscape?: Lands
 		<Card className="gap-0 xl:min-h-0 xl:flex-1 border-slate-200 bg-slate-50/70 py-0 shadow-none">
 			<CardHeader className="flex flex-row flex-wrap items-center justify-between gap-4 px-5 pt-4 pb-0">
 				<div className="flex items-center gap-2">
-					<CardTitle className="text-base">Competitive Landscape</CardTitle>
+					<CardTitle className="text-base">竞争格局</CardTitle>
 					<LandscapeInfo metric={metric} />
 				</div>
 				<MetricSwitch value={metric} onChange={setMetric} />

@@ -152,11 +152,11 @@ function PlanPicker({ paywall }: { paywall: PaywallRequired }) {
 	return (
 		<div className="mx-auto max-w-6xl space-y-8 p-8">
 			<div className="space-y-2 text-center">
-				<h1 className="text-3xl font-bold">Choose your plan</h1>
-				<p className="text-muted-foreground">Start tracking how AI answer engines talk about your brand.</p>
+				<h1 className="text-3xl font-bold">选择套餐</h1>
+				<p className="text-muted-foreground">开始追踪 AI 答案引擎如何谈论你的品牌。</p>
 				<div className="flex items-center justify-center gap-3 pt-2">
 					<span className={annual ? "text-muted-foreground" : "font-medium"}>Monthly</span>
-					<Switch checked={annual} onCheckedChange={setAnnual} aria-label="Annual billing" />
+					<Switch checked={annual} onCheckedChange={setAnnual} aria-label="按年计费" />
 					<span className={annual ? "font-medium" : "text-muted-foreground"}>
 						Annual <Badge variant="secondary">2 months free</Badge>
 					</span>

@@ -17,8 +17,8 @@ import { useBrandParams } from "@/hooks/use-route-params";
 import { pageHead } from "@/lib/route-head";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/citations")({
-	staticData: { crumb: "Citations" },
-	head: pageHead({ description: "See which sources LLMs cite in responses to your prompts." }),
+	staticData: { crumb: "引用来源" },
+	head: pageHead({ description: "查看大模型在回答你的提示词时引用了哪些来源。" }),
 	component: CitationsPage,
 });
 
@@ -55,15 +55,14 @@ function CitationsPage() {
 	const infoContent = (
 		<>
 			<p className="mb-2">
-				Citations are the links and sources that AI models include in their responses when answering your prompts. They
-				show which websites the AI considers authoritative or relevant to your topics.
+				引用来源是 AI 模型在回答你的提示词时附上的链接与来源，能看出 AI 认为哪些网站对你的主题具有权威性或相关性。
 			</p>
 			<p>
-				<strong>Competitor</strong> domains are only those you&apos;ve added to your{" "}
+				<strong>竞品</strong>域名仅指你已加入
 				<Link to="/app/org/$org/brand/$brand/settings/competitors" params={brandParams} className="underline">
-					tracked competitors list
+					追踪竞品列表
 				</Link>
-				. Other domains appear under their detected category (Google, Social Media, Institutional, or Other).
+				的域名。其他域名按识别出的类别显示（Google、社交媒体、机构或其他）。
 			</p>
 		</>
 	);
@@ -72,8 +71,8 @@ function CitationsPage() {
 
 	return (
 		<PageHeader
-			title="Citations"
-			subtitle="See which sources LLMs cite when responding to your prompts."
+			title="引用来源"
+			subtitle="查看大模型在回答你的提示词时引用了哪些来源。"
 			infoContent={infoContent}
 		>
 			<FilteredListShell
@@ -101,19 +100,19 @@ function CitationsPage() {
 					<Card>
 						<CardContent className="pt-6">
 							<div className="text-red-600 text-sm bg-red-50 p-3 rounded-md">
-								Failed to load citation data. Please try again.
+								加载引用来源数据失败，请重试。
 							</div>
 						</CardContent>
 					</Card>
 				}
 				totalCount={citationData?.totalCitations}
-				noMatchesTitle="No citations found for the selected filters."
-				noMatchesDescription="Try adjusting your filters or time period."
+				noMatchesTitle="所选筛选条件下未找到引用来源。"
+				noMatchesDescription="尝试调整筛选条件或时间段。"
 				emptyState={
 					<Card>
 						<CardContent className="pt-6">
 							<div className="text-muted-foreground text-center py-8">
-								No citations found. Citations are only available from prompts evaluated with web search enabled.
+								暂无引用来源。只有在启用网页搜索的情况下评估提示词，才会产生引用来源数据。
 							</div>
 						</CardContent>
 					</Card>

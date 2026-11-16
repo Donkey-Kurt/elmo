@@ -27,8 +27,8 @@ export const Route = createFileRoute("/auth/reset-password")({
 		const appName = getAppName(match);
 		return {
 			meta: [
-				{ title: buildTitle("Choose a new password", { appName }) },
-				{ name: "description", content: "Set a new password for your account." },
+				{ title: buildTitle("设置新密码", { appName }) },
+				{ name: "description", content: "为你的账户设置新密码。" },
 			],
 		};
 	},
@@ -69,7 +69,7 @@ export function ResetPasswordForm({
 		e.preventDefault();
 		setError(null);
 		if (newPassword !== confirmPassword) {
-			setError("Passwords do not match");
+			setError("两次输入的密码不一致");
 			return;
 		}
 		setLoading(true);
@@ -77,13 +77,13 @@ export function ResetPasswordForm({
 		try {
 			const result = await authClient.resetPassword({ newPassword, token: token as string });
 			if (result.error) {
-				setError(result.error.message ?? "Failed to reset password");
+				setError(result.error.message ?? "重置密码失败");
 				setLoading(false);
 				return;
 			}
 			navigate({ to: "/auth/login" });
 		} catch {
-			setError("Something went wrong. Please try again.");
+			setError("出错了，请重试。");
 			setLoading(false);
 		}
 	}
@@ -94,22 +94,22 @@ export function ResetPasswordForm({
 	if (linkError || !token) {
 		return (
 			<AuthSplitLayout
-				title="Reset link invalid or expired"
-				subtitle="Reset links are single-use and time-limited."
+				title="重置链接无效或已过期"
+				subtitle="重置链接仅可使用一次，且有有效期。"
 				pitch={panel}
 				footer={footer}
 			>
 				{/* The only thing to do from here, so it carries the weight the other
 				    pages give their submit button. */}
 				<Link to="/auth/forgot-password" className={buttonVariants({ className: "w-full" })}>
-					Request a new reset link
+					请求新的重置链接
 				</Link>
 			</AuthSplitLayout>
 		);
 	}
 
 	return (
-		<AuthSplitLayout title="Choose a new password" pitch={panel} footer={footer}>
+		<AuthSplitLayout title="设置新密码" pitch={panel} footer={footer}>
 			<form onSubmit={handleSubmit} className="space-y-4 w-full">
 				{error && (
 					<Alert variant="destructive">
@@ -117,11 +117,11 @@ export function ResetPasswordForm({
 					</Alert>
 				)}
 				<div className="space-y-2">
-					<Label htmlFor="new-password">New password</Label>
+					<Label htmlFor="new-password">新密码</Label>
 					<Input
 						id="new-password"
 						type="password"
-						placeholder="New password"
+						placeholder="新密码"
 						value={newPassword}
 						onChange={(e) => setNewPassword(e.target.value)}
 						required
@@ -131,11 +131,11 @@ export function ResetPasswordForm({
 					/>
 				</div>
 				<div className="space-y-2">
-					<Label htmlFor="confirm-password">Confirm password</Label>
+					<Label htmlFor="confirm-password">确认密码</Label>
 					<Input
 						id="confirm-password"
 						type="password"
-						placeholder="Confirm password"
+						placeholder="确认密码"
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
 						required
@@ -144,7 +144,7 @@ export function ResetPasswordForm({
 					/>
 				</div>
 				<Button type="submit" className="w-full" disabled={loading}>
-					{loading ? "Resetting..." : "Reset password"}
+					{loading ? "重置中…" : "重置密码"}
 				</Button>
 			</form>
 		</AuthSplitLayout>

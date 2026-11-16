@@ -57,8 +57,8 @@ export const Route = createFileRoute("/auth/login")({
 		const appName = getAppName(match);
 		return {
 			meta: [
-				{ title: buildTitle("Sign in", { appName }) },
-				{ name: "description", content: "Sign in to your account." },
+				{ title: buildTitle("登录", { appName }) },
+				{ name: "description", content: "登录你的账户。" },
 			],
 		};
 	},
@@ -109,12 +109,12 @@ export function SSOLogin({ destination = "/app" }: { destination?: string }) {
 			.then((result) => {
 				if (cancelled) return;
 				if (result.error) {
-					setError(result.error.message ?? "Failed to start sign-in");
+					setError(result.error.message ?? "启动登录失败");
 				}
 			})
 			.catch(() => {
 				if (!cancelled) {
-					setError("Something went wrong. Please try again.");
+					setError("出错了，请重试。");
 				}
 			});
 
@@ -125,7 +125,7 @@ export function SSOLogin({ destination = "/app" }: { destination?: string }) {
 
 	if (error) return <SignInFailed error={error} />;
 
-	return <FullPageCard title="Signing in..." subtitle="Redirecting to your identity provider" />;
+	return <FullPageCard title="正在登录…" subtitle="正在跳转到你的身份提供商" />;
 }
 
 export function DemoLogin({ destination = "/app" }: { destination?: string }) {
@@ -139,13 +139,13 @@ export function DemoLogin({ destination = "/app" }: { destination?: string }) {
 			.then((result) => {
 				if (cancelled) return;
 				if (result.error) {
-					setError(result.error.message ?? "Invalid email or password");
+					setError(result.error.message ?? "邮箱或密码无效");
 					return;
 				}
 				window.location.href = destination;
 			})
 			.catch(() => {
-				if (!cancelled) setError("Something went wrong. Please try again.");
+				if (!cancelled) setError("出错了，请重试。");
 			});
 
 		return () => {
@@ -155,18 +155,18 @@ export function DemoLogin({ destination = "/app" }: { destination?: string }) {
 
 	if (error) return <SignInFailed error={error} />;
 
-	return <FullPageCard title="Signing in..." subtitle="Opening the demo account" />;
+	return <FullPageCard title="正在登录…" subtitle="正在打开演示账户" />;
 }
 
 function SignInFailed({ error }: { error: string }) {
 	return (
-		<FullPageCard title="Sign in">
+		<FullPageCard title="登录">
 			<div className="w-full space-y-4">
 				<Alert variant="destructive">
 					<AlertDescription>{error}</AlertDescription>
 				</Alert>
 				<Button className="w-full" onClick={() => window.location.reload()}>
-					Try Again
+					重试
 				</Button>
 			</div>
 		</FullPageCard>
@@ -175,10 +175,10 @@ function SignInFailed({ error }: { error: string }) {
 
 function signInErrorMessage(error: { code?: string; message?: string }, isCloud?: boolean) {
 	if (isCloud && error.code === "EMAIL_NOT_VERIFIED") {
-		return "Please verify your email first — we just sent you a new verification link.";
+		return "请先验证你的邮箱——我们刚刚给你发送了一条新的验证链接。";
 	}
 	if (isCaptchaRejection(error)) return CAPTCHA_FAILED_MESSAGE;
-	return error.message ?? "Invalid email or password";
+	return error.message ?? "邮箱或密码无效";
 }
 
 function LastUsedBadge() {
@@ -187,7 +187,7 @@ function LastUsedBadge() {
 		<>
 			{" "}
 			<Badge variant="secondary" className="pointer-events-none absolute -top-3 right-3">
-				Last Used
+				最近使用
 			</Badge>
 		</>
 	);
@@ -237,7 +237,7 @@ export function EmailPasswordLogin({
 				if ((result.error as { error?: string }).error === "invalid_signature") {
 					// Through the router, so `destination` is recomputed.
 					navigate({ to: "/auth/login", search: {}, replace: true });
-					setError("That connection request expired. Sign in again, then start the connection from your MCP client.");
+					setError("该连接请求已过期。请重新登录，然后从你的 MCP 客户端重新发起连接。");
 					setLoading(false);
 					return;
 				}
@@ -248,15 +248,15 @@ export function EmailPasswordLogin({
 
 			window.location.href = destination;
 		} catch (err) {
-			setError(err instanceof CaptchaError ? err.message : "Something went wrong. Please try again.");
+			setError(err instanceof CaptchaError ? err.message : "出错了，请重试。");
 			setLoading(false);
 		}
 	}
 
 	return (
 		<AuthSplitLayout
-			title="Welcome back"
-			subtitle={isCloud ? "Check in on your AI visibility." : "Sign in to your Elmo instance."}
+			title="欢迎回来"
+			subtitle={isCloud ? "查看你的 AI 可见度。" : "登录你的 Elmo 实例。"}
 			pitch={<SalesPanel variant={isCloud ? "cloud" : "self-hosted"} source={source} />}
 			footer={<SalesFooterLinks source={source} />}
 		>
@@ -269,13 +269,13 @@ export function EmailPasswordLogin({
 						onClick={() => authClient.signIn.social({ provider: "google", callbackURL: destination })}
 					>
 						<IconBrandGoogle className="size-4" />
-						Continue with Google
+						使用 Google 继续
 						{lastLoginMethod === "google" && <LastUsedBadge />}
 					</Button>
 					<LegalConsentNotice action="continuing with Google" />
 					<div className="flex items-center gap-3">
 						<Separator className="flex-1" />
-						<span className="text-xs text-muted-foreground">or</span>
+						<span className="text-xs text-muted-foreground">或</span>
 						<Separator className="flex-1" />
 					</div>
 				</div>
@@ -287,7 +287,7 @@ export function EmailPasswordLogin({
 					</Alert>
 				)}
 				<div className="space-y-2">
-					<Label htmlFor="email">Email</Label>
+					<Label htmlFor="email">邮箱</Label>
 					<Input
 						id="email"
 						type="email"
@@ -301,17 +301,17 @@ export function EmailPasswordLogin({
 				</div>
 				<div className="space-y-2">
 					<div className="flex items-center justify-between">
-						<Label htmlFor="password">Password</Label>
+						<Label htmlFor="password">密码</Label>
 						{isCloud && (
 							<Link to="/auth/forgot-password" className="text-xs text-primary hover:underline">
-								Forgot password?
+								忘记密码？
 							</Link>
 						)}
 					</div>
 					<Input
 						id="password"
 						type="password"
-						placeholder="Password"
+						placeholder="密码"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						required
@@ -320,19 +320,19 @@ export function EmailPasswordLogin({
 				</div>
 				{turnstile.widget}
 				<Button type="submit" className="relative w-full" disabled={loading}>
-					{loading ? "Signing in..." : "Sign In"}
+					{loading ? "正在登录…" : "登录"}
 					{lastLoginMethod === "email" && <LastUsedBadge />}
 				</Button>
 			</form>
 			{canRegister && (
 				<p className="text-sm text-muted-foreground pt-4">
-					Don't have an account?{" "}
+					还没有账户？{" "}
 					<Link
 						to="/auth/register"
 						search={{ ...(returnTo ? { returnTo } : {}), ...attribution }}
 						className="text-primary hover:underline font-medium"
 					>
-						Create one
+						创建账户
 					</Link>
 				</p>
 			)}

@@ -12,17 +12,17 @@ import {
 } from "@/lib/lookback";
 
 const PRESET_LABELS: Record<LookbackPreset, string> = {
-	"1w": "Last 7 days",
-	"1m": "Last 30 days",
-	"3m": "Last 3 months",
-	"6m": "Last 6 months",
-	"1y": "Last 12 months",
-	all: "All time",
+	"1w": "最近 7 天",
+	"1m": "最近 30 天",
+	"3m": "最近 3 个月",
+	"6m": "最近 6 个月",
+	"1y": "最近 12 个月",
+	all: "全部时间",
 };
 
 // Calendar days are bare dates: read and write them in UTC so the viewer's
 // offset can never move a range end onto the neighbouring day.
-const rangeFormatter = new Intl.DateTimeFormat(undefined, {
+const rangeFormatter = new Intl.DateTimeFormat("zh-CN", {
 	month: "short",
 	day: "numeric",
 	year: "numeric",
@@ -34,8 +34,8 @@ export function formatLookbackLabel(lookback: LookbackPeriod): string {
 	if (!custom) return PRESET_LABELS[lookback as LookbackPreset];
 	const asDate = (date: string) => new Date(`${date}T00:00:00Z`);
 	if (custom.from && custom.to) return rangeFormatter.formatRange(asDate(custom.from), asDate(custom.to));
-	if (custom.from) return `Since ${rangeFormatter.format(asDate(custom.from))}`;
-	return `Until ${rangeFormatter.format(asDate(custom.to as string))}`;
+	if (custom.from) return `自 ${rangeFormatter.format(asDate(custom.from))} 起`;
+	return `截至 ${rangeFormatter.format(asDate(custom.to as string))}`;
 }
 
 // react-day-picker works in local Dates; the range is plain YYYY-MM-DD.
@@ -83,7 +83,7 @@ export function CustomRangeFields({
 	return (
 		<div className="flex items-center gap-2">
 			<DateField
-				label="Start date"
+				label="开始日期"
 				align="start"
 				value={from}
 				onChange={(date) => commit({ from: date, to })}
@@ -93,7 +93,7 @@ export function CustomRangeFields({
 			/>
 			<ArrowRight aria-hidden className="size-3.5 shrink-0 text-muted-foreground" />
 			<DateField
-				label="End date"
+				label="结束日期"
 				align="end"
 				value={to}
 				onChange={(date) => commit({ from, to: date })}
@@ -189,7 +189,7 @@ export function LookbackPicker({
 		<Popover open={open} onOpenChange={setOpen}>
 			<PopoverTrigger render={trigger} />
 			<PopoverContent align={align} className="w-80 p-0">
-				<div role="listbox" aria-label="Date range" className="py-1">
+				<div role="listbox" aria-label="日期范围" className="py-1">
 					{LOOKBACK_PERIODS.map((period) => (
 						<button
 							key={period}

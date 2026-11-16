@@ -109,27 +109,27 @@ function PromptsContent({ brandId }: { brandId: string | undefined }) {
 			errorState={
 				<Card className="p-6">
 					<div className="text-center text-muted-foreground">
-						<p className="mb-2">Failed to load prompts data</p>
-						<p className="text-sm">Try refreshing the page</p>
+						<p className="mb-2">提示词数据加载失败</p>
+						<p className="text-sm">请尝试刷新页面</p>
 					</div>
 				</Card>
 			}
 			totalCount={promptsSummary?.prompts?.length}
 			filteredCount={sortedPrompts.length}
-			noMatchesTitle="No prompts match your filters."
-			noMatchesDescription="Try adjusting your search or tag filters."
+			noMatchesTitle="没有符合筛选条件的提示词。"
+			noMatchesDescription="请尝试调整搜索关键词或标签筛选。"
 			emptyState={
 				<div className="border-2 border-dashed border-muted rounded-lg min-h-48 flex items-center justify-center">
 					<div className="text-center py-8 text-muted-foreground">
 						<Inbox className="h-12 w-12 mx-auto mb-4 opacity-50" />
-						<p className="mb-4">No prompts yet.</p>
+						<p className="mb-4">暂无提示词。</p>
 						<Link
 							to="/app/org/$org/brand/$brand/settings/prompts"
 							params={brandParams}
 							className={cn(buttonVariants({ size: "sm" }), "h-7 flex cursor-pointer")}
 						>
 							<IconEditCircle />
-							<span>Edit</span>
+							<span>编辑</span>
 						</Link>
 					</div>
 				</div>

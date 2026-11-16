@@ -4,7 +4,7 @@ import type { PerPromptDailyCompetitorRow, PerPromptDailyRuns } from "@/lib/roll
 
 /** A calendar day ("2026-03-04") as a chart labels it ("Mar 4"). */
 export const formatShortDate = (date: string) =>
-	new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+	new Date(`${date}T00:00:00Z`).toLocaleDateString("zh-CN", { month: "short", day: "numeric", timeZone: "UTC" });
 
 /** Charts key a series by id and label it by name; nothing else about a brand is read. */
 export interface ChartSubject {

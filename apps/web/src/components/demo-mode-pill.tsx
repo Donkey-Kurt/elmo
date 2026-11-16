@@ -19,7 +19,7 @@ export function DemoModePill() {
 				<IconInfoCircle className="size-3" />
 				Demo
 			</TooltipTrigger>
-			<TooltipContent>This is a read-only demo. Any edits will fail.</TooltipContent>
+			<TooltipContent>这是只读演示。任何修改都会失败。</TooltipContent>
 		</Tooltip>
 	);
 }

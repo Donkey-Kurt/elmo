@@ -93,10 +93,10 @@ function FlowList({
 				<li className="text-sm text-muted-foreground">
 					{onExpand ? (
 						<button type="button" onClick={onExpand} className="hover:text-foreground">
-							+ {more.name} · {more.value.toLocaleString()} citations
+							+ {more.name} · {more.value.toLocaleString()} 个引用来源
 						</button>
 					) : (
-						`+ ${more.name} · ${more.value.toLocaleString()} citations`
+						`+ ${more.name} · ${more.value.toLocaleString()} 个引用来源`
 					)}
 				</li>
 			)}
@@ -142,7 +142,7 @@ function EngineLegend({
 	onHover: (focus: Focus | null) => void;
 }) {
 	return (
-		<ul className="flex flex-wrap gap-1" aria-label="Engines">
+		<ul className="flex flex-wrap gap-1" aria-label="引擎">
 			{flow.engines.map(({ model }) => (
 				<li key={model}>
 					<button
@@ -229,7 +229,7 @@ function FlowView({
 						className="h-7 text-xs text-muted-foreground"
 						onClick={() => onExpandedChange(false)}
 					>
-						Show Top {DEFAULT_FLOW_LIMITS.maxPages} Pages
+						显示前 {DEFAULT_FLOW_LIMITS.maxPages} 个页面
 					</Button>
 				</div>
 			)}
@@ -253,12 +253,12 @@ function FlowBody({
 	expanded: boolean;
 	onExpandedChange: (expanded: boolean) => void;
 }) {
-	if (error && !flow) return <Placeholder>The Citation Flow couldn't load. Try again in a moment.</Placeholder>;
+	if (error && !flow) return <Placeholder>引用来源流向图加载失败，请稍后重试。</Placeholder>;
 	if (!domain && isLoadingDomains) return <Skeleton className="h-72 w-full" />;
-	if (!domain) return <Placeholder>No domains were cited under the current filters.</Placeholder>;
+	if (!domain) return <Placeholder>当前筛选条件下没有被引用的域名。</Placeholder>;
 	if (!flow) return <Skeleton className="h-72 w-full" />;
 	if (flow.totalCitations === 0) {
-		return <Placeholder>No AI answers cited {domain} under the current filters.</Placeholder>;
+		return <Placeholder>当前筛选条件下没有 AI 回答引用 {domain}。</Placeholder>;
 	}
 	return <FlowView flow={flow} {...view} />;
 }
@@ -314,22 +314,22 @@ export function CitationFlowCard({
 				<div className="flex flex-col gap-3 @xl/card-header:flex-row @xl/card-header:items-center @xl/card-header:justify-between">
 					<div className="min-w-0 space-y-1">
 						<CardTitle className="flex items-center gap-1.5">
-							Citation Flow
+							引用来源流向图
 							<Tooltip>
 								<TooltipTrigger render={<IconInfoCircle className="h-3.5 w-3.5 cursor-help text-muted-foreground" />} />
 								<TooltipContent className="max-w-xs text-sm font-normal">
 									<p className="mb-2">
-										Every citation of one domain, followed from the AI engine that cited it, through the part of the
-										site it points into, to the exact page. Pick your own site, a competitor or any source.
+										某个域名的每一条引用来源，都从引用它的 AI
+										引擎出发，经过所指向的站点分区，一直追踪到具体页面。可以选择你自己的站点、竞品或任意来源。
 									</p>
 									<p>
-										Subdomains are their own section; on the domain itself each top-level folder is one. Respects the
-										filters at the top of the page.
+										子域名单独作为一个分区；域名本身则以每个顶层文件夹作为一个分区。
+										此外，页面顶部的筛选条件同样适用。
 									</p>
 								</TooltipContent>
 							</Tooltip>
 						</CardTitle>
-						<CardDescription>Which engines cite a domain, and which of its pages they cite</CardDescription>
+						<CardDescription>哪些引擎引用了某个域名，以及它们引用了该域名的哪些页面</CardDescription>
 					</div>
 					<DomainPicker
 						domains={domains}

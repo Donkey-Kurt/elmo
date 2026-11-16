@@ -47,22 +47,22 @@ interface Pitch {
 }
 
 const CLOUD_PITCH: Pitch = {
-	headline: "Be the brand AI recommends.",
+	headline: "成为 AI 推荐的品牌。",
 	bullets: [
-		{ text: "Track your AI visibility on any model" },
-		{ text: "Benchmark against your competitors" },
-		{ text: "Analyze citations to find opportunities" },
-		{ text: `${RUNS_PER_DAY}× Profound's daily runs, same price` },
+		{ text: "在任何模型上追踪你的 AI 可见度" },
+		{ text: "与竞品进行基准对比" },
+		{ text: "分析引用来源，发现机会" },
+		{ text: `价格相同，日运行次数是 Profound 的 ${RUNS_PER_DAY} 倍` },
 	],
 };
 
 const SELF_HOSTED_PITCH: Pitch = {
-	headline: "Self-host your AEO.",
+	headline: "自托管你的 AEO。",
 	bullets: [
-		{ text: "Track your AI visibility on any model" },
-		{ text: "Unlimited prompts, brands, and seats" },
-		{ text: "Bring your own model and scraper keys" },
-		{ text: "Please star us on GitHub!", href: GITHUB_URL },
+		{ text: "在任何模型上追踪你的 AI 可见度" },
+		{ text: "提示词、品牌和席位不限数量" },
+		{ text: "使用自己的模型和抓取服务密钥" },
+		{ text: "请在 GitHub 上给我们一个 Star！", href: GITHUB_URL },
 	],
 };
 
@@ -102,7 +102,7 @@ export function SalesPanel({ variant, source }: { variant: SalesPanelVariant; so
 			<EngineStrip />
 
 			<OfferCard
-				question={variant === "self-hosted" ? "Don't want to self-host?" : "Try before you buy?"}
+				question={variant === "self-hosted" ? "不想自托管？" : "想先试用再购买？"}
 				offer={variant === "self-hosted" ? cloudOffer(source) : demoOffer(source)}
 			/>
 		</div>
@@ -113,7 +113,7 @@ export function SalesPanel({ variant, source }: { variant: SalesPanelVariant; so
 function EngineStrip() {
 	return (
 		<div>
-			<p className="font-mono text-[10px] uppercase leading-none tracking-[0.2em] text-muted-foreground">Tracking</p>
+			<p className="font-mono text-[10px] uppercase leading-none tracking-[0.2em] text-muted-foreground">追踪</p>
 			<ul className="mt-3 flex flex-wrap gap-1.5">
 				{ENGINES.map((engine) => (
 					<li
@@ -138,14 +138,14 @@ interface Offer {
 }
 
 const demoOffer = (source: ReferralSource): Offer => ({
-	label: "View Live Demo",
+	label: "查看在线演示",
 	href: demoSiteUrl(source),
 	icon: IconEye,
 	newTab: true,
 });
 
 const cloudOffer = (source: ReferralSource): Offer => ({
-	label: "Try Elmo Cloud",
+	label: "试用 Elmo Cloud",
 	href: cloudSignupUrl(source),
 	icon: IconCloud,
 });
@@ -186,7 +186,7 @@ function Quote() {
 			<blockquote className="text-pretty text-sm font-medium leading-relaxed">“{quote.quote}”</blockquote>
 			<figcaption className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
 				<span className="font-semibold text-foreground">{quote.author}</span>
-				<span>at</span>
+				<span>于</span>
 				<a
 					href={quote.companyUrl}
 					target="_blank"
@@ -212,10 +212,10 @@ export function SalesFooterLinks({ source }: { source: ReferralSource }): ReactN
 		<div className="flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-2">
 			<p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
 				<a href={marketingUrl("/docs", source)} className={linkClass}>
-					Docs
+					文档
 				</a>
 				<a href={cloudPricingUrl(source)} className={linkClass}>
-					Pricing
+					定价
 				</a>
 				<a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
 					GitHub

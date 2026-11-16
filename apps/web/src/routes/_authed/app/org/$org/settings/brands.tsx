@@ -6,8 +6,8 @@ import { organizationTree } from "@/lib/organizations/tree";
 import { pageHead } from "@/lib/route-head";
 
 export const Route = createFileRoute("/_authed/app/org/$org/settings/brands")({
-	staticData: { crumb: "Brands" },
-	head: pageHead({ description: "The brands this organization tracks." }),
+	staticData: { crumb: "品牌" },
+	head: pageHead({ description: "该组织追踪的品牌。" }),
 	component: OrganizationBrandsPage,
 });
 
@@ -17,10 +17,10 @@ function OrganizationBrandsPage() {
 
 	return (
 		<div className="max-w-2xl space-y-6">
-			<h1 className="text-3xl font-bold">Brands</h1>
+			<h1 className="text-3xl font-bold">品牌</h1>
 
 			<div className="flex flex-col gap-2">
-				{organization.brands.length === 0 && <p className="text-sm text-muted-foreground">No brands yet.</p>}
+				{organization.brands.length === 0 && <p className="text-sm text-muted-foreground">还没有品牌。</p>}
 
 				{children.map((row) => (
 					<Link

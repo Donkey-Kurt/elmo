@@ -104,7 +104,7 @@ function OpportunityCard({ o }: { o: Opportunity }) {
 				{open === "prompts" && (
 					<Panel>
 						{o.relatedPrompts.length === 0 ? (
-							<p className="px-1.5 py-1 text-xs text-muted-foreground">No specific prompts linked.</p>
+							<p className="px-1.5 py-1 text-xs text-muted-foreground">没有关联到具体提示词。</p>
 						) : (
 							o.relatedPrompts.map((p) => <PromptLink key={p.text} prompt={p} />)
 						)}
@@ -122,7 +122,7 @@ function OpportunityCard({ o }: { o: Opportunity }) {
 				{open === "comp" && (
 					<Panel>
 						{o.competitorCitations.length === 0 ? (
-							<p className="px-1.5 py-1 text-xs text-muted-foreground">No competitor pages cited for these prompts.</p>
+							<p className="px-1.5 py-1 text-xs text-muted-foreground">这些提示词没有引用任何竞品页面。</p>
 						) : (
 							o.competitorCitations.map((c) => <CiteLink key={c.url} page={c} />)
 						)}
@@ -167,7 +167,7 @@ export function OpportunitiesReport({ report }: { report: OpportunitiesReportDat
 
 			{report.risks.length > 0 && (
 				<section className="space-y-3">
-					<h2 className="text-base font-semibold">Reality Check</h2>
+					<h2 className="text-base font-semibold">现实核对</h2>
 					<BulletList items={report.risks} />
 				</section>
 			)}

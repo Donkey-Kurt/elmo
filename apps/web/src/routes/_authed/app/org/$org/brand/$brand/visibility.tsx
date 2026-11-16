@@ -5,12 +5,12 @@ import { coercePromptOrder, DEFAULT_PROMPT_ORDER, type PromptOrder } from "@/lib
 import { pageHead } from "@/lib/route-head";
 
 export const Route = createFileRoute("/_authed/app/org/$org/brand/$brand/visibility")({
-	staticData: { crumb: "Visibility" },
+	staticData: { crumb: "可见度" },
 	validateSearch: (search: Record<string, unknown>): { order?: PromptOrder } => {
 		const order = coercePromptOrder(search.order);
 		return order === DEFAULT_PROMPT_ORDER ? {} : { order };
 	},
-	head: pageHead({ description: "Track how LLMs respond to prompts about your brand." }),
+	head: pageHead({ description: "追踪大模型如何回答关于你品牌的提示词。" }),
 	component: VisibilityPage,
 });
 
@@ -19,18 +19,18 @@ function VisibilityPage() {
 
 	const infoContent = (
 		<>
-			Track how different LLMs respond to prompts related to your brand, products, and{" "}
+			查看不同大模型如何回答与你的品牌、产品及
 			<Link to="/app/org/$org/brand/$brand/settings/competitors" params={params} className="underline">
-				competitors
+				竞品
 			</Link>
-			.
+			相关的提示词。
 		</>
 	);
 
 	return (
 		<PromptsDisplay
-			pageTitle="Visibility"
-			pageDescription="See how LLMs are evaluating prompts related to your brand."
+			pageTitle="可见度"
+			pageDescription="查看大模型如何评估与你的品牌相关的提示词。"
 			pageInfoContent={infoContent}
 		/>
 	);

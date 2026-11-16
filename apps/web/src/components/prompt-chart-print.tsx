@@ -182,7 +182,7 @@ export function PromptChartPrint({
 			<PlaceholderCard {...placeholderProps}>
 				<div className="h-[250px] flex items-center justify-center">
 					<div className="flex flex-col items-center text-center max-w-xs">
-						<p className="text-sm font-medium text-muted-foreground print:text-xs">No brands found in responses</p>
+						<p className="text-sm font-medium text-muted-foreground print:text-xs">回答中未发现品牌</p>
 						<p className="text-xs text-muted-foreground/70 mt-1 print:text-[10px]">
 							Your brand and competitors weren't mentioned in the evaluated responses for this prompt.
 						</p>

@@ -38,14 +38,14 @@ function OrganizationPickerPage() {
 
 	if (organizations.length === 0) {
 		return (
-			<FullPageCard title="No organizations" subtitle="Your account isn't a member of an organization yet.">
-				<p className="text-center text-muted-foreground">Ask an admin to invite you, then reload this page.</p>
+			<FullPageCard title="没有组织" subtitle="你的账户还不属于任何组织。">
+				<p className="text-center text-muted-foreground">请管理员邀请你，然后刷新本页。</p>
 			</FullPageCard>
 		);
 	}
 
 	return (
-		<FullPageCard title="Organizations and Brands" subtitle="Modify organizations or navigate to brands.">
+		<FullPageCard title="组织与品牌" subtitle="管理组织或进入品牌。">
 			<OrganizationDirectory organizations={organizations} />
 		</FullPageCard>
 	);

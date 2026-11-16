@@ -81,7 +81,7 @@ export function ResponseCard({
 			<CardContent className="space-y-5">
 				{run.webQueries && run.webQueries.length > 0 && (
 					<div>
-						<span className="text-xs text-muted-foreground block mb-1.5">Web Queries</span>
+						<span className="text-xs text-muted-foreground block mb-1.5">联网查询</span>
 						<div className="flex flex-wrap gap-1.5">
 							{[...new Set<string>(run.webQueries)].map((query) => (
 								<Badge
@@ -97,12 +97,12 @@ export function ResponseCard({
 				)}
 
 				<div>
-					<span className="text-xs text-muted-foreground block mb-1.5">Brands Mentioned</span>
+					<span className="text-xs text-muted-foreground block mb-1.5">被提及的品牌</span>
 					<MentionedBrands companies={companies} selected={selected} onSelect={setSelected} domainFor={domainFor} />
 				</div>
 
 				<div>
-					<span className="text-xs text-muted-foreground block mb-1.5">LLM Response</span>
+					<span className="text-xs text-muted-foreground block mb-1.5">模型回答</span>
 					<div ref={answerRef} className="rounded-md border bg-muted/30 p-4 max-h-64 overflow-auto">
 						<ResponseMarkdown highlight={highlight} markRange={markRange}>
 							{text}
@@ -111,7 +111,7 @@ export function ResponseCard({
 				</div>
 
 				<div>
-					<span className="text-xs text-muted-foreground block mb-1.5">Raw Output</span>
+					<span className="text-xs text-muted-foreground block mb-1.5">原始输出</span>
 					<div className="rounded-md border bg-muted/20 p-4 max-h-64 overflow-auto">
 						<pre className="text-xs font-mono leading-relaxed whitespace-pre-wrap">
 							<Highlighted

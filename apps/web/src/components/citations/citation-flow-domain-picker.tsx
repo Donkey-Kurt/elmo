@@ -103,7 +103,7 @@ export function DomainPicker({
 						variant="outline"
 						size="sm"
 						className="w-full min-w-0 justify-between gap-2 font-normal @xl/card-header:w-64"
-						aria-label="Domain to analyze"
+						aria-label="要分析的域名"
 					/>
 				}
 			>
@@ -114,7 +114,7 @@ export function DomainPicker({
 			</ComboboxTrigger>
 			<ComboboxContent align="end" className="w-80">
 				<ComboboxInput showTrigger={false} placeholder="Search domains…" />
-				<ComboboxEmpty>No cited domains match.</ComboboxEmpty>
+				<ComboboxEmpty>没有匹配的已引用域名。</ComboboxEmpty>
 				<ComboboxList>
 					{(group: DomainGroup) => (
 						<ComboboxGroup key={group.value} items={group.items}>

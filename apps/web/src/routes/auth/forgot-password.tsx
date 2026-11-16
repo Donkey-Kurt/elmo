@@ -27,8 +27,8 @@ export const Route = createFileRoute("/auth/forgot-password")({
 		const appName = getAppName(match);
 		return {
 			meta: [
-				{ title: buildTitle("Reset password", { appName }) },
-				{ name: "description", content: "Request a password reset link." },
+				{ title: buildTitle("重置密码", { appName }) },
+				{ name: "description", content: "请求密码重置链接。" },
 			],
 		};
 	},
@@ -86,9 +86,9 @@ export function ForgotPasswordForm({ isCloud, submitted: initiallySubmitted = fa
 	if (submitted) {
 		return (
 			<AuthSplitLayout
-				title="Check your email"
+				title="查收邮箱"
 				subtitle={
-					email ? `If an account exists for ${email}, a reset link is on its way.` : "A reset link is on its way."
+					email ? `如果 ${email} 对应的账户存在，重置链接正在发送中。` : "重置链接正在发送中。"
 				}
 				pitch={panel}
 				footer={<SalesFooterLinks source={source} />}
@@ -100,8 +100,8 @@ export function ForgotPasswordForm({ isCloud, submitted: initiallySubmitted = fa
 
 	return (
 		<AuthSplitLayout
-			title="Reset your password"
-			subtitle="Enter your email and we'll send you a reset link."
+			title="重置你的密码"
+			subtitle="输入你的邮箱，我们会发送重置链接。"
 			pitch={panel}
 			footer={<SalesFooterLinks source={source} />}
 		>
@@ -112,7 +112,7 @@ export function ForgotPasswordForm({ isCloud, submitted: initiallySubmitted = fa
 					</Alert>
 				)}
 				<div className="space-y-2">
-					<Label htmlFor="email">Email</Label>
+					<Label htmlFor="email">邮箱</Label>
 					<Input
 						id="email"
 						type="email"
@@ -126,7 +126,7 @@ export function ForgotPasswordForm({ isCloud, submitted: initiallySubmitted = fa
 				</div>
 				{turnstile.widget}
 				<Button type="submit" className="w-full" disabled={loading}>
-					{loading ? "Sending..." : "Send reset link"}
+					{loading ? "发送中…" : "发送重置链接"}
 				</Button>
 			</form>
 			<div className="pt-4">
@@ -146,7 +146,7 @@ export function BackToSignIn() {
 	return (
 		<p className="text-sm text-muted-foreground">
 			<Link to="/auth/login" className="text-primary hover:underline font-medium">
-				Back to sign in
+				返回登录
 			</Link>
 		</p>
 	);

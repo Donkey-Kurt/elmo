@@ -40,7 +40,7 @@ export function PromptsFilterDropdown({
 				render={
 					<FilterTriggerButton
 						icon={<ListFilter className="size-3.5" />}
-						label="Prompts"
+						label="提示词"
 						active={selected.length > 0}
 						badgeCount={selected.length > 0 ? selected.length : undefined}
 					/>
@@ -48,14 +48,14 @@ export function PromptsFilterDropdown({
 			/>
 			<PopoverContent align="start" className="w-96 p-0">
 				<div className="flex items-center justify-between px-3 h-10 border-b">
-					<span className="font-medium text-sm">Prompts</span>
+					<span className="font-medium text-sm">提示词</span>
 					{selected.length > 0 && (
 						<button
 							type="button"
 							onClick={() => onChange([])}
 							className="text-xs text-muted-foreground hover:text-foreground cursor-pointer"
 						>
-							Clear
+							清除
 						</button>
 					)}
 				</div>
@@ -63,12 +63,12 @@ export function PromptsFilterDropdown({
 					<Input
 						value={search}
 						onChange={(e) => setSearch(e.target.value)}
-						placeholder="Search prompts..."
+						placeholder="搜索提示词..."
 						className="h-8 text-sm"
 					/>
 				</div>
 				{visible.length === 0 ? (
-					<p className="text-sm text-muted-foreground py-6 text-center">No prompts match</p>
+					<p className="text-sm text-muted-foreground py-6 text-center">没有匹配的提示词</p>
 				) : (
 					<div className="py-1 max-h-72 overflow-y-auto">
 						{visible.map((prompt) => {
@@ -88,7 +88,7 @@ export function PromptsFilterDropdown({
 									}`}
 								>
 									<Checkbox checked={checked} className="pointer-events-none mt-0.5" />
-									<span className="flex-1 line-clamp-2">{prompt.value || "(untitled prompt)"}</span>
+									<span className="flex-1 line-clamp-2">{prompt.value || "（未命名提示词）"}</span>
 								</button>
 							);
 						})}

@@ -22,8 +22,8 @@ import { pageHead } from "@/lib/route-head";
 import { createReportFn, getReportsFn } from "@/server/reports";
 
 export const Route = createFileRoute("/_authed/reports/")({
-	staticData: { crumb: "Reports", shell: "admin" },
-	head: pageHead({ description: "Generate and view one-time brand reports." }),
+	staticData: { crumb: "报告", shell: "admin" },
+	head: pageHead({ description: "生成并查看一次性品牌报告。" }),
 	beforeLoad: ({ context }) => {
 		if (!context.isAdmin && !context.hasReportAccess) throw notFound();
 	},
@@ -60,12 +60,12 @@ function ReportsPage() {
 				has_manual_prompts: Boolean(variables.manualPrompts),
 				brand_alias_count: variables.brandAliases.length,
 			});
-			setSuccess("Report request submitted successfully!");
+			setSuccess("报告请求已提交！");
 			setFormData({ brandName: "", brandAliases: [], brandWebsite: "", manualPrompts: "" });
 			queryClient.invalidateQueries({ queryKey: ["reports"] });
 		},
 		onError: (err: Error) => {
-			setSubmitError(err.message || "An error occurred");
+			setSubmitError(err.message || "发生错误");
 		},
 	});
 
@@ -100,21 +100,21 @@ function ReportsPage() {
 	return (
 		<div className="space-y-8">
 			<div className="space-y-2">
-				<h1 className="text-3xl font-bold tracking-tight">Reports</h1>
-				<p className="text-muted-foreground">Generate one-time brand reports.</p>
+				<h1 className="text-3xl font-bold tracking-tight">报告</h1>
+				<p className="text-muted-foreground">生成一次性品牌报告。</p>
 			</div>
 			<div className="space-y-6 max-w-4xl">
 				<div className="space-y-4">
-					<h2 className="text-2xl font-semibold">Create New Report</h2>
+					<h2 className="text-2xl font-semibold">新建报告</h2>
 
 					<form onSubmit={handleSubmit} className="space-y-4">
 						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 							<div className="space-y-2">
-								<Label htmlFor="brandName">Brand Name</Label>
+								<Label htmlFor="brandName">品牌名称</Label>
 								<Input
 									id="brandName"
 									type="text"
-									placeholder="Enter brand name"
+									placeholder="输入品牌名称"
 									value={formData.brandName}
 									onChange={(e) => setFormData({ ...formData, brandName: e.target.value })}
 									required
@@ -122,7 +122,7 @@ function ReportsPage() {
 								/>
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="brandWebsite">Brand Website</Label>
+								<Label htmlFor="brandWebsite">品牌网站</Label>
 								<Input
 									id="brandWebsite"
 									type="url"
@@ -137,29 +137,28 @@ function ReportsPage() {
 
 						<div className="space-y-2">
 							<Label>
-								Other Brand Names <span className="text-muted-foreground font-normal">(Optional)</span>
+								其他品牌名称 <span className="text-muted-foreground font-normal">（可选）</span>
 							</Label>
 							<TagsInput
 								value={formData.brandAliases}
 								onValueChange={(brandAliases) => setFormData({ ...formData, brandAliases })}
-								placeholder="Add a name variant..."
-								searchPlaceholder="Add a name variant..."
+								placeholder="添加名称变体..."
+								searchPlaceholder="添加名称变体..."
 								maxItems={10}
 								disabled={createMutation.isPending}
 							/>
 							<p className="text-xs text-muted-foreground">
-								Spellings, abbreviations, or product names the brand also goes by. A mention of any of them counts as a
-								brand mention.
+								品牌的其他拼写、缩写或产品名称。提及其中任意一项都计为一次 品牌提及。
 							</p>
 						</div>
 
 						<div className="space-y-2">
 							<Label htmlFor="manualPrompts">
-								Manual Prompts <span className="text-muted-foreground font-normal">(Optional)</span>
+								手动提示词 <span className="text-muted-foreground font-normal">（可选）</span>
 							</Label>
 							<Textarea
 								id="manualPrompts"
-								placeholder="Enter one prompt per line, up to 50"
+								placeholder="每行一个提示词，最多 50 条"
 								value={formData.manualPrompts}
 								onChange={(e) => setFormData({ ...formData, manualPrompts: e.target.value })}
 								disabled={createMutation.isPending}
@@ -169,24 +168,23 @@ function ReportsPage() {
 							<p className="text-xs text-muted-foreground">
 								{formData.manualPrompts.trim() ? (
 									<>
-										<strong>Note:</strong> Prompts will NOT be auto-generated. Using your{" "}
+										<strong>注意：</strong>提示词不会自动生成，将使用你填写的{" "}
 										{
 											formData.manualPrompts
 												.trim()
 												.split("\n")
 												.filter((line) => line.trim()).length
 										}{" "}
-										manual prompt
+										条手动提示词
 										{formData.manualPrompts
 											.trim()
 											.split("\n")
 											.filter((line) => line.trim()).length !== 1
-											? "s"
-											: ""}
-										.
+											? "。"
+											: "。"}
 									</>
 								) : (
-									"Leave empty to auto-generate prompts based on website analysis, competitors, and keywords."
+									"留空则根据网站分析、竞争对手与关键词自动生成提示词。"
 								)}
 							</p>
 						</div>
@@ -195,18 +193,18 @@ function ReportsPage() {
 						{success && <p className="text-sm text-green-600">{success}</p>}
 
 						<Button type="submit" disabled={createMutation.isPending} className="cursor-pointer">
-							{createMutation.isPending ? "Creating Report..." : "Create Report"}
+							{createMutation.isPending ? "创建中..." : "创建报告"}
 						</Button>
 					</form>
 				</div>
 
 				<div className="space-y-4">
-					<h2 className="text-2xl font-semibold">Report History</h2>
+					<h2 className="text-2xl font-semibold">报告历史</h2>
 
 					{error && (
 						<Card>
 							<CardContent className="py-8 text-center">
-								<p className="text-destructive">{error instanceof Error ? error.message : "Failed to load reports"}</p>
+								<p className="text-destructive">{error instanceof Error ? error.message : "加载报告失败"}</p>
 							</CardContent>
 						</Card>
 					)}
@@ -215,13 +213,13 @@ function ReportsPage() {
 						<div className="flex items-center justify-center py-8">
 							<div className="flex items-center space-x-2">
 								<Spinner className="size-6 text-primary" />
-								<span>Loading reports...</span>
+								<span>正在加载报告...</span>
 							</div>
 						</div>
 					) : !error && reports.length === 0 ? (
 						<Card>
 							<CardContent className="py-8 text-center">
-								<p className="text-muted-foreground">No reports found.</p>
+								<p className="text-muted-foreground">暂无报告。</p>
 							</CardContent>
 						</Card>
 					) : (
@@ -247,7 +245,7 @@ function ReportsPage() {
 													>
 														<Button variant="default" size="sm" className="cursor-pointer h-6 px-2 text-xs">
 															<ExternalLink className="size-3 mr-0.5" />
-															View Report
+															查看报告
 														</Button>
 													</Link>
 												) : (

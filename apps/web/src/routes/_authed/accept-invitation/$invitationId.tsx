@@ -52,7 +52,7 @@ function AcceptInvitationPage() {
 
 	if (loadError || !invitation) {
 		return (
-			<FullPageCard title="Invitation unavailable">
+			<FullPageCard title="邀请不可用">
 				<div className="space-y-4 w-full">
 					<Alert variant="destructive">
 						<AlertDescription>{loadError ?? "This invitation could not be loaded"}</AlertDescription>

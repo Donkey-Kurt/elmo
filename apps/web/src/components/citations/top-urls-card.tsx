@@ -172,7 +172,7 @@ export function TopUrlsCard({
 						);
 					})}
 					{list.totalItems === 0 && !list.isFetching && (
-						<p className="text-sm text-muted-foreground text-center pt-8 pb-4">No URLs match the current filters.</p>
+						<p className="text-sm text-muted-foreground text-center pt-8 pb-4">没有符合当前筛选条件的链接。</p>
 					)}
 				</div>
 				<ListPagination page={list.page} pageSize={maxUrls} totalItems={list.totalItems} onPageChange={list.setPage} />

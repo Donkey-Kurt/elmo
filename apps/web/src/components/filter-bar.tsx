@@ -173,7 +173,7 @@ function TagsDropdown({ availableTags }: { availableTags: readonly string[] }) {
 				render={
 					<FilterTriggerButton
 						icon={<TagIcon className="size-3.5" />}
-						label="Tags"
+						label="标签"
 						active={selected.length > 0}
 						badgeCount={selected.length > 0 ? selected.length : undefined}
 					/>
@@ -181,19 +181,19 @@ function TagsDropdown({ availableTags }: { availableTags: readonly string[] }) {
 			/>
 			<PopoverContent align="start" className="w-64 p-0" initialFocus={false}>
 				<div className="flex items-center justify-between px-3 h-10 border-b">
-					<span className="font-medium text-sm">Tags</span>
+					<span className="font-medium text-sm">标签</span>
 					{selected.length > 0 && (
 						<button
 							type="button"
 							onClick={() => commit([])}
 							className="text-xs text-muted-foreground hover:text-foreground cursor-pointer"
 						>
-							Clear
+							清除
 						</button>
 					)}
 				</div>
 				{availableTags.length === 0 ? (
-					<p className="text-sm text-muted-foreground py-6 text-center">No tags available</p>
+					<p className="text-sm text-muted-foreground py-6 text-center">暂无可用标签</p>
 				) : (
 					<div className="py-1 max-h-64 overflow-y-auto">
 						{availableTags.map((tag) => {
@@ -284,11 +284,11 @@ function SearchInput({
 				className="h-8 text-sm"
 			/>
 			<InputGroupAddon className="pl-2.5">
-				{searching ? <Spinner className="size-3.5" aria-label="Searching" /> : <Search className="size-3.5" />}
+				{searching ? <Spinner className="size-3.5" aria-label="搜索中" /> : <Search className="size-3.5" />}
 			</InputGroupAddon>
 			{local && (
 				<InputGroupAddon align="inline-end" className="pr-1.5">
-					<InputGroupButton size="icon-xs" onClick={clear} className="cursor-pointer" aria-label="Clear search">
+					<InputGroupButton size="icon-xs" onClick={clear} className="cursor-pointer" aria-label="清除搜索">
 						<X className="size-3.5" />
 					</InputGroupButton>
 				</InputGroupAddon>

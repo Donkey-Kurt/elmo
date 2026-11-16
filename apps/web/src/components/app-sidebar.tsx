@@ -54,19 +54,19 @@ function organizationGroups(
 ): NavGroup[] {
 	const params = orgLinkParams(organization);
 	const items: NavItem[] = [
-		{ title: "Organization", link: { to: "/app/org/$org/settings", params }, icon: IconBriefcase, exact: true },
-		{ title: "Brands", link: { to: "/app/org/$org/settings/brands", params }, icon: IconBuildings },
+		{ title: "组织", link: { to: "/app/org/$org/settings", params }, icon: IconBriefcase, exact: true },
+		{ title: "品牌", link: { to: "/app/org/$org/settings/brands", params }, icon: IconBuildings },
 	];
 
 	if (features?.teamInvites) {
-		items.push({ title: "Team", link: { to: "/app/org/$org/settings/members", params }, icon: IconUsers });
+		items.push({ title: "团队", link: { to: "/app/org/$org/settings/members", params }, icon: IconUsers });
 	}
 
 	if (features?.billing) {
-		items.push({ title: "Billing", link: { to: "/app/org/$org/settings/billing", params }, icon: IconCreditCard });
+		items.push({ title: "计费", link: { to: "/app/org/$org/settings/billing", params }, icon: IconCreditCard });
 	}
 
-	items.push({ title: "API Keys", link: { to: "/app/org/$org/settings/api-keys", params }, icon: IconKey });
+	items.push({ title: "API 密钥", link: { to: "/app/org/$org/settings/api-keys", params }, icon: IconKey });
 
 	const docs: NavItem[] = [
 		{ title: "API", link: { to: "/app/org/$org/settings/api", params }, icon: IconCode },
@@ -75,55 +75,55 @@ function organizationGroups(
 
 	// The skill is Elmo's, and whitelabel deployments never point users at Elmo.
 	if (mode !== "whitelabel") {
-		docs.push({ title: "Skill", link: { to: "/app/org/$org/settings/skill", params }, icon: IconSchool });
+		docs.push({ title: "技能", link: { to: "/app/org/$org/settings/skill", params }, icon: IconSchool });
 	}
 
 	return [
-		{ label: "Organization Settings", items },
-		{ label: "Docs", items: docs },
+		{ label: "组织设置", items },
+		{ label: "文档", items: docs },
 	];
 }
 
 function brandGroups(organization: OrganizationSummary, brand: BrandWithPrompts): NavGroup[] {
 	const params = brandLinkParams(organization, brand);
 	const dashboard: NavItem[] = [
-		{ title: "Overview", link: { to: "/app/org/$org/brand/$brand", params }, icon: IconDashboard, exact: true },
+		{ title: "总览", link: { to: "/app/org/$org/brand/$brand", params }, icon: IconDashboard, exact: true },
 	];
 
 	if (brand.onboarded) {
 		dashboard.push(
-			{ title: "Visibility", link: { to: "/app/org/$org/brand/$brand/visibility", params }, icon: IconChartBar },
+			{ title: "可见度", link: { to: "/app/org/$org/brand/$brand/visibility", params }, icon: IconChartBar },
 			{
-				title: "Share of Voice",
+				title: "声量份额",
 				link: { to: "/app/org/$org/brand/$brand/share-of-voice", params },
 				icon: IconSpeakerphone,
 			},
-			{ title: "Sentiment", link: { to: "/app/org/$org/brand/$brand/sentiment", params }, icon: IconMoodSmile },
-			{ title: "Responses", link: { to: "/app/org/$org/brand/$brand/responses", params }, icon: IconMessages },
-			{ title: "Query Fan-Out", link: { to: "/app/org/$org/brand/$brand/query-fan-out", params }, icon: IconSitemap },
-			{ title: "Citations", link: { to: "/app/org/$org/brand/$brand/citations", params }, icon: IconLink },
-			{ title: "Opportunities", link: { to: "/app/org/$org/brand/$brand/opportunities", params }, icon: IconTarget },
+			{ title: "情绪倾向", link: { to: "/app/org/$org/brand/$brand/sentiment", params }, icon: IconMoodSmile },
+			{ title: "AI 回答", link: { to: "/app/org/$org/brand/$brand/responses", params }, icon: IconMessages },
+			{ title: "查询扩展", link: { to: "/app/org/$org/brand/$brand/query-fan-out", params }, icon: IconSitemap },
+			{ title: "引用来源", link: { to: "/app/org/$org/brand/$brand/citations", params }, icon: IconLink },
+			{ title: "优化机会", link: { to: "/app/org/$org/brand/$brand/opportunities", params }, icon: IconTarget },
 		);
 	}
 
-	const groups: NavGroup[] = [{ label: "Dashboard", items: dashboard }];
+	const groups: NavGroup[] = [{ label: "看板", items: dashboard }];
 
 	if (brand.onboarded) {
 		groups.push({
-			label: "Settings",
+			label: "设置",
 			items: [
-				{ title: "Brand", link: { to: "/app/org/$org/brand/$brand/settings/brand", params }, icon: IconBuilding },
+				{ title: "品牌", link: { to: "/app/org/$org/brand/$brand/settings/brand", params }, icon: IconBuilding },
 				{
-					title: "Competitors",
+					title: "竞品",
 					link: { to: "/app/org/$org/brand/$brand/settings/competitors", params },
 					icon: IconBuildings,
 				},
 				{
-					title: "Prompts",
+					title: "提示词",
 					link: { to: "/app/org/$org/brand/$brand/settings/prompts", params },
 					icon: IconListDetails,
 				},
-				{ title: "LLMs", link: { to: "/app/org/$org/brand/$brand/settings/llms", params }, icon: IconCpu },
+				{ title: "模型", link: { to: "/app/org/$org/brand/$brand/settings/llms", params }, icon: IconCpu },
 			],
 		});
 	}
@@ -146,7 +146,7 @@ export function AppSidebar({ section, organization, brand }: AppSidebarProps) {
 	const groups: NavGroup[] = [
 		...(section === "brand" && organization && brand ? brandGroups(organization, brand) : []),
 		...(section === "organization" && organization ? organizationGroups(organization, features, mode) : []),
-		...(section === "admin" && adminItems.length > 0 ? [{ label: "Admin", items: adminItems }] : []),
+		...(section === "admin" && adminItems.length > 0 ? [{ label: "管理", items: adminItems }] : []),
 	];
 	const brandmark = (
 		<>
